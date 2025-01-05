@@ -1,0 +1,50 @@
+# Laravel 9.x / 10.x .gitignore file
+
+# Laravel directories
+/vendor/
+/node_modules/
+
+# Laravel specific files
+.env
+.env.*
+/public/storage
+/storage/*.key
+
+# Ignore IDE-specific files
+.idea/
+/.vscode/
+
+# Ignore system-specific files
+.DS_Store
+Thumbs.db
+
+# Ignore log files
+/storage/logs/*
+
+# Ignore compiled files
+/bootstrap/cache/*
+
+# Ignore cache files
+/.phpunit.result.cache
+
+# Ignore .env files (but you might want to add .env.local if you need it)
+*.env
+
+# Ignore the database file if SQLite is used
+/database/database.sqlite
+
+# Ignore Composer and NPM logs
+/composer.lock
+/npm-debug.log
+
+# Ignore test results
+phpunit.xml
+phpunit.xml.dist
+
+# Ignore compiled views
+/storage/framework/views/*
+
+# Ignore compiled assets and public directory files (but you can keep /public/css/ or /public/js if necessary)
+public/css/*
+public/js/*
+public/mix-manifest.json

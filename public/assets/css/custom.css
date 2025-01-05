@@ -1,0 +1,6 @@
+.cursor-pointer {
+    cursor: pointer;
+}
+.hover-product-card:hover {
+    background-color: rgb(218, 218, 218);
+}
