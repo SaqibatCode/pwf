@@ -136,7 +136,7 @@
                                             </a>
                                         </li>
                                         <li class="menu-item">
-                                            <a class="menu-link" href="{{ route('product.seller') }}">
+                                            <a class="menu-link" href="{{ route('product.index') }}">
                                                 <span class="menu-text">Add Product</span>
                                             </a>
                                         </li>

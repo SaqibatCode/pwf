@@ -8,27 +8,13 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\VerificationController;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
+
 
 Route::get('/', function () {
     return view('dashboard.admin.dashboard');
 });
 
 
-/*
-*
-Admin And Seller Authetication Routes
-*
-*/
 
 Route::controller(UserController::class)->group(function () {
     Route::get('portal', 'index')->name('portal');
@@ -45,11 +31,6 @@ Route::controller(VerificationController::class)->group(function () {
     Route::post('reject-user', 'reject_user')->name('verification.reject');
 });
 
-
-Route::controller(ProductController::class)->group(function () {
-    Route::get('add-product', 'index_seller')->name('product.seller');
-    Route::get('add-new-product', 'add_new_product')->name('product.new');
-});
 
 
 Route::controller(CategoryController::class)->group(function () {
@@ -97,9 +78,11 @@ Route::prefix('attributes')->name('attribute.')->controller(AttributeController:
     Route::post('{attributeId}/assign', 'storeCategoryAssignment')->name('storeCategoryAssignment');
 });
 
+Route::controller(ProductController::class)->group(function(){
+    Route::get('products', 'index')->name('product.index');
+    Route::get('add-new-product', 'show_add_new_product_page')->name('product.add.new');
+    Route::get('brands/{categoryId}', 'getBrands')->name('product.getBrands');
+    Route::get('/attributes-values/{categoryId}', 'getAttributesAndValues')->name('product.getAttributesAndValues');
+    Route::post('add-new-product', 'store')->name('product.add.new.store');
+});
 
-
-
-// Ajax Calls
-Route::get('/brands/{categoryId}', [ProductController::class, 'fetchBrands']);
-Route::get('/category/{categoryId}/attributes', [ProductController::class, 'getAttributesForCategory']);
