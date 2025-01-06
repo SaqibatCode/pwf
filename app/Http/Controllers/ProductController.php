@@ -49,6 +49,7 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
+
         try {
             // Validate input
             $validatedData = $request->validate([
@@ -87,6 +88,12 @@ class ProductController extends Controller
                 'user_id' => Auth::user()->id,
             ]);
 
+            if ($request->has('attribute')) {
+                foreach ($request->attribute as $attributeId => $value) {
+                    // Store the attribute-value pair for the product
+                    $product->attributes()->attach($attributeId, ['attribute_id' => $value]);
+                }
+            }
             // Handle file uploads
             if ($request->hasFile('file')) {
                 foreach ($request->file('file') as $file) {
