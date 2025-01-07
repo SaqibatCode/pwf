@@ -127,7 +127,17 @@
                                         {{ $pro->status }}
                                     </td>
                                     <td>
-                                        <a href="{{ route('product.edit', $pro->id) }}"><button class="btn btn-primary">Edit</button></a>
+                                        <a href="
+                                            @if($pro->condition == 'new')
+                                                {{ route('product.edit', $pro->id) }}
+                                            @elseif($pro->condition == 'used')
+                                                {{ route('product.used.edit', $pro->id) }}
+                                            @elseif($pro->condition == 'complete pc')
+
+                                            @elseif($pro->condition == 'laptop')
+
+                                            @endif
+                                        "><button class="btn btn-primary">Edit</button></a>
                                         <form class="d-inline" action="{{ route('product.destroy', $pro->id) }}" method="POST"
                                             onsubmit="return confirm('Are you sure you want to delete this product?');">
                                             @csrf

@@ -151,7 +151,18 @@
                                             <textarea name="reason" class="form-control" id="reason" cols="30" rows="4">{{ old('reason', $product->reason) }}</textarea>
                                         </div>
                                     </div>
-
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="repairedc" class="form-label">Is Your Product Repaired?
+                                                <input type="checkbox" {{ $product->reason !== null ? 'checked' : '' }} name="" id="repariedc"
+                                                    style="margin-left: 10px;margin-top:10px;">
+                                            </label>
+                                        </div>
+                                        <div class="form-group" id="rep" style="{{ $product->reason == null ? 'display: none;' : '' }}">
+                                            <label for="repaired" class="form-label">Reason For Reparing</label>
+                                            <textarea name="repaired" class="form-control" id="repaired" cols="30" rows="4">{{ $product->reason }}</textarea>
+                                        </div>
+                                    </div>
                                     {{-- Description --}}
                                     <div class="col-md-12">
                                         <div class="form-group">

@@ -23,6 +23,8 @@ class Product extends Model
         'slug',
         'user_id',
         'condition',
+        'reason',
+        'repaired'
 
         // Include any other fields here
     ];

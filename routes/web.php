@@ -80,13 +80,14 @@ Route::prefix('attributes')->name('attribute.')->controller(AttributeController:
 
 Route::controller(ProductController::class)->group(function () {
     Route::get('products', 'index')->name('product.index');
-    Route::get('add-new-product', 'show_add_new_product_page')->name('product.add.new');
+
     Route::get('brands/{categoryId}', 'getBrands')->name('product.getBrands');
     Route::get('/attributes-values/{categoryId}', 'getAttributesAndValues')->name('product.getAttributesAndValues');
-    Route::post('add-new-product', 'store')->name('product.add.new.store');
     Route::delete('/product/{id}', 'destroy')->name('product.destroy');
 
-    // New routes for editing and updating a product:
+    // New Product Routes
+    Route::get('add-new-product', 'show_add_new_product_page')->name('product.add.new');
+    Route::post('add-new-product', 'store')->name('product.add.new.store');
     Route::get('/product/{id}/edit', 'edit')->name('product.edit');
     Route::put('/product/{id}', 'update')->name('product.update');
 
@@ -94,4 +95,7 @@ Route::controller(ProductController::class)->group(function () {
     // Used Products Routes
     Route::get('add-used-product', 'show_add_used_product_page')->name('product.add.used');
     Route::post('add-new-product', 'store_used')->name('product.add.used.store');
+    Route::get('/product/{id}/edit-used', 'edit_used')->name('product.used.edit');
+    Route::put('/used-product/{id}', 'update_used')->name('product.used.update');
+
 });
