@@ -78,11 +78,15 @@ Route::prefix('attributes')->name('attribute.')->controller(AttributeController:
     Route::post('{attributeId}/assign', 'storeCategoryAssignment')->name('storeCategoryAssignment');
 });
 
-Route::controller(ProductController::class)->group(function(){
+Route::controller(ProductController::class)->group(function () {
     Route::get('products', 'index')->name('product.index');
     Route::get('add-new-product', 'show_add_new_product_page')->name('product.add.new');
     Route::get('brands/{categoryId}', 'getBrands')->name('product.getBrands');
     Route::get('/attributes-values/{categoryId}', 'getAttributesAndValues')->name('product.getAttributesAndValues');
     Route::post('add-new-product', 'store')->name('product.add.new.store');
-});
+    Route::delete('/product/{id}', 'destroy')->name('product.destroy');
 
+    // New routes for editing and updating a product:
+    Route::get('/product/{id}/edit', 'edit')->name('product.edit');
+    Route::put('/product/{id}', 'update')->name('product.update');
+});

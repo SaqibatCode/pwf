@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\support\Str;
+
 class Product extends Model
 {
     use HasFactory;
@@ -21,7 +22,8 @@ class Product extends Model
         'year_of_make',
         'slug',
         'user_id',
-        'condition'
+        'condition',
+
         // Include any other fields here
     ];
 
@@ -71,6 +73,7 @@ class Product extends Model
     }
     public function attributes()
     {
-        return $this->belongsToMany(Attribute::class, 'product_attributes');
+        return $this->belongsToMany(Attribute::class, 'product_attributes')
+            ->withPivot('attribute_value_id'); // Storing the attribute value ID
     }
 }

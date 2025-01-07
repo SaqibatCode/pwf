@@ -6,12 +6,16 @@ use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 
 class ProductController extends Controller
 {
     public function index()
     {
-        return view('dashboard.seller.products.index');
+        $product = Product::with(['category', 'pictures'])->latest()->paginate(10);
+        // return response()->json($product[0]);
+        return view('dashboard.seller.products.index', compact('product'));
     }
 
     public function show_add_new_product_page()
@@ -47,8 +51,11 @@ class ProductController extends Controller
         return response()->json($attributesWithValues);
     }
 
+
+
     public function store(Request $request)
     {
+        DB::beginTransaction();
 
         try {
             // Validate input
@@ -83,36 +90,44 @@ class ProductController extends Controller
                 'condition' => 'new',
                 'sale_price' => $validatedData['sp'],
                 'sku' => $validatedData['sku'],
-                'stock_quantity' => $validatedData['stock'],
+                'stock_quanity' => $validatedData['stock'],
                 'description' => $validatedData['description'],
                 'user_id' => Auth::user()->id,
             ]);
 
+            // Attach attributes
             if ($request->has('attribute')) {
                 foreach ($request->attribute as $attributeId => $value) {
-                    // Store the attribute-value pair for the product
-                    $product->attributes()->attach($attributeId, ['attribute_id' => $value]);
+                    $attributeValue = \App\Models\AttributeValue::find($value);
+
+                    if ($attributeValue) {
+                        $product->attributes()->attach($attributeId, [
+                            'attribute_value_id' => $attributeValue->id,
+                        ]);
+                    }
                 }
             }
+
             // Handle file uploads
             if ($request->hasFile('file')) {
                 foreach ($request->file('file') as $file) {
-                    // Get the path for the 'assets/images/products' folder
-                    $path = public_path('assets/images/products'); // Path where the files will be stored
+                    $path = public_path('images/products');
 
-                    // Check if the directory exists, if not, create it
+                    // Create the directory if it doesn't exist
                     if (!is_dir($path)) {
-                        mkdir($path, 0777, true); // Create the directory if it doesn't exist
+                        mkdir($path, 0777, true);
                     }
 
-                    // Store the file in the 'assets/images/products' directory
-                    $fileName = time() . '_' . $file->getClientOriginalName(); // Unique filename
+                    $fileName = time() . '_' . $file->getClientOriginalName();
                     $file->move($path, $fileName);
 
                     // Attach the image path to the product
-                    $product->pictures()->create(['image' => 'assets/images/products/' . $fileName]);
+                    $product->pictures()->create(['image' => 'images/products/' . $fileName]);
                 }
             }
+
+            // Commit the transaction
+            DB::commit();
 
             // Return success response
             return response()->json([
@@ -120,12 +135,165 @@ class ProductController extends Controller
                 'message' => 'Product added successfully!',
             ]);
         } catch (\Exception $e) {
-            // Handle any unexpected errors and return a detailed error response
+            // Rollback the transaction if any exception occurs
+            DB::rollBack();
+
+            // Return error response
             return response()->json([
                 'success' => false,
                 'message' => 'An error occurred while adding the product.',
                 'error' => $e->getMessage(),
-            ], 500); // Return HTTP 500 Internal Server Error
+            ], 500);
         }
+    }
+
+    public function edit($id)
+    {
+        // Fetch the product along with relationships
+        $product = Product::with(['category', 'brand', 'attributes', 'pictures'])
+            ->findOrFail($id);
+
+        // Get all categories for the dropdown
+        $categories = Category::all();
+
+        // Return a view (you can name it however you like)
+        // e.g. `edit-product.blade.php` inside the same folder structure
+        return view('dashboard.seller.products.types.add-new-product.edit-new-product', compact('product', 'categories'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        DB::beginTransaction();
+
+        try {
+            // Validate input
+            $validatedData = $request->validate([
+                'product_name'   => 'required|string|max:255',
+                'category_name'  => 'required|exists:categories,id',
+                'brand_name'     => 'required|exists:brands,id',
+                'warranty'       => 'required|string',
+                'price'          => 'required|numeric',
+                'sp'             => 'nullable|numeric',
+                'sku'            => 'required|string|max:255',
+                'stock'          => 'required|integer|min:0',
+
+                'year'           => 'required',
+                'description'    => 'nullable|string',
+                'remove_images' => 'array',         // optional array of picture IDs to remove
+                'remove_images.*' => 'numeric',     // each must be a number (the picture ID)
+                'file'   => 'nullable|array|max:10', // up to 10 new files
+                'file.*' => 'file|mimes:jpeg,png,jpg|max:2048',
+            ]);
+
+            // Find existing product
+            $product = Product::findOrFail($id);
+
+            // Update product fields
+            $product->update([
+                'product_name'   => $validatedData['product_name'],
+                'category_id'    => $validatedData['category_name'],
+                'brand_id'       => $validatedData['brand_name'],
+                'warranty'       => $validatedData['warranty'],
+                'price'          => $validatedData['price'],
+                'sale_price'     => $validatedData['sp'],
+                'sku'            => $validatedData['sku'],
+                'stock_quanity'  => $validatedData['stock'],
+                'year_of_make'   => $validatedData['year'],
+                'description'    => $validatedData['description'],
+                // 'reason' is optional in your table; include it if you store it:
+                'reason'         => $validatedData['reason'] ?? null,
+            ]);
+
+            // Detach existing attribute pivot data
+            $product->attributes()->detach();
+
+            // If attributes are provided, re-attach them
+            if ($request->has('attribute')) {
+                foreach ($request->attribute as $attributeId => $value) {
+                    $attributeValue = \App\Models\AttributeValue::find($value);
+
+                    if ($attributeValue) {
+                        $product->attributes()->attach($attributeId, [
+                            'attribute_value_id' => $attributeValue->id,
+                        ]);
+                    }
+                }
+            }
+
+            // 4) Remove any pictures marked for deletion
+            $removeImages = $request->input('remove_images', []);
+            if (!empty($removeImages)) {
+                // Eager load pictures to avoid N+1
+                $product->load('pictures');
+
+                foreach ($product->pictures as $pic) {
+                    if (in_array($pic->id, $removeImages)) {
+                        // Delete the file from disk
+                        $imagePath = public_path($pic->image);
+                        if (File::exists($imagePath)) {
+                            File::delete($imagePath);
+                        }
+                        // Delete the record from DB
+                        $pic->delete();
+                    }
+                }
+            }
+
+            // 5) Handle uploading new pictures
+            if ($request->hasFile('file')) {
+                foreach ($request->file('file') as $file) {
+                    $path = public_path('images/products');
+                    if (!is_dir($path)) {
+                        mkdir($path, 0777, true);
+                    }
+
+                    $fileName = time() . '_' . $file->getClientOriginalName();
+                    $file->move($path, $fileName);
+
+                    $product->pictures()->create([
+                        'image' => 'images/products/' . $fileName
+                    ]);
+                }
+            }
+
+            DB::commit();
+
+            // Return a JSON response if you're handling this via AJAX
+            return response()->json([
+                'success' => true,
+                'message' => 'Product updated successfully.',
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred while updating the product.',
+                'error'   => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function destroy($id)
+    {
+        // Find the product by ID
+        $product = Product::findOrFail($id);
+
+        // Delete the associated pictures (if any)
+        foreach ($product->pictures as $picture) {
+            // Delete the image file from the server
+            $imagePath = public_path($picture->image);
+            if (File::exists($imagePath)) {
+                File::delete($imagePath);  // Delete the image file from the server
+            }
+            // Delete the picture record from the database
+            $picture->delete();
+        }
+
+        // Delete the product
+        $product->delete();
+
+        // Redirect to the product list with a success message
+        return redirect()->route('product.index')->with('success', 'Product Deleted Successfully.');
     }
 }
