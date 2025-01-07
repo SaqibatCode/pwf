@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->string('product_name');
             $table->text('description');
-            $table->text('reason_to_sell');
             $table->decimal('price', 10, 2);
             $table->decimal('sale_price', 10,2)->nullable();
             $table->integer('stock_quanity')->default(0);
@@ -23,8 +22,8 @@ return new class extends Migration
             $table->string('sku')->unique();
             $table->enum('product_type', ['new', 'used', 'complete_pc', 'laptop']);
             $table->enum('status', ['pending', 'approved', 'rejected', 'sold out'])->default('pending');
-            $table->foreignId('category_id')->constrained()->onDelete('cascade')->nullable();
-            $table->foreignId('brand_id')->constrained()->onDelete('cascade')->nullable();
+            $table->foreignId('category_id')->nullable()->constrained()->onDelete('cascade');
+            $table->foreignId('brand_id')->nullable()->constrained()->onDelete('cascade');
             $table->foreignId('user_id')->constrained()->onDelete('cascade'); // linked to the seller
             $table->string('warranty')->nullable();
             $table->string('condition')->nullable();

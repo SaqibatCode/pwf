@@ -23,6 +23,11 @@ class ProductController extends Controller
         $category = Category::all();
         return view('dashboard.seller.products.types.add-new-product.add-new-product', compact('category'));
     }
+    public function show_add_used_product_page()
+    {
+        $category = Category::all();
+        return view('dashboard.seller.products.types.add-used-product.add-used-product', compact('category'));
+    }
 
     public function getBrands($categoryId)
     {
@@ -53,6 +58,102 @@ class ProductController extends Controller
 
 
 
+    public function store_used(Request $request)
+    {
+        DB::beginTransaction();
+
+        try {
+            // Validate input
+            $validatedData = $request->validate([
+                'product_name' => 'required|string|max:255',
+                'category_name' => 'required|exists:categories,id',
+                'brand_name' => 'required|exists:brands,id',
+                'warranty' => 'required|string',
+                'price' => 'required|numeric',
+                'sp' => 'nullable|numeric',
+                'sku' => 'required|string|max:255',
+                'stock' => 'required|integer|min:0',
+                'reason' => 'nullable|string',
+                'year' => 'required',
+                'description' => 'nullable|string',
+                'repaired' => 'nullable|string',
+                'file' => 'required|array|min:4|max:10', // Max 10 files
+                'file.*' => 'file|mimes:jpeg,png,jpg|max:2048', // Secure file types & size validation
+            ]);
+
+            $sellerName = Auth::user()->first_name;
+            $slug = Product::generateSlug($validatedData['product_name'], $sellerName);
+
+            // Store product data
+            $product = Product::create([
+                'product_name' => $validatedData['product_name'],
+                'category_id' => $validatedData['category_name'],
+                'brand_id' => $validatedData['brand_name'],
+                'slug' => $slug,
+                'reason' => $validatedData['reason'],
+                'repaired'=>$validatedData['repaired'],
+                'warranty' => $validatedData['warranty'],
+                'price' => $validatedData['price'],
+                'year_of_make' => $validatedData['year'],
+                'condition' => 'used',
+                'sale_price' => $validatedData['sp'],
+                'sku' => $validatedData['sku'],
+                'stock_quanity' => $validatedData['stock'],
+                'description' => $validatedData['description'],
+                'user_id' => Auth::user()->id,
+            ]);
+
+            // Attach attributes
+            if ($request->has('attribute')) {
+                foreach ($request->attribute as $attributeId => $value) {
+                    $attributeValue = \App\Models\AttributeValue::find($value);
+
+                    if ($attributeValue) {
+                        $product->attributes()->attach($attributeId, [
+                            'attribute_value_id' => $attributeValue->id,
+                        ]);
+                    }
+                }
+            }
+
+            // Handle file uploads
+            if ($request->hasFile('file')) {
+                foreach ($request->file('file') as $file) {
+                    $path = public_path('images/products');
+
+                    // Create the directory if it doesn't exist
+                    if (!is_dir($path)) {
+                        mkdir($path, 0777, true);
+                    }
+
+                    $fileName = time() . '_' . $file->getClientOriginalName();
+                    $file->move($path, $fileName);
+
+                    // Attach the image path to the product
+                    $product->pictures()->create(['image' => 'images/products/' . $fileName]);
+                }
+            }
+
+            // Commit the transaction
+            DB::commit();
+
+            // Return success response
+            return response()->json([
+                'success' => true,
+                'message' => 'Product added successfully!',
+            ]);
+        } catch (\Exception $e) {
+            // Rollback the transaction if any exception occurs
+            DB::rollBack();
+
+            // Return error response
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred while adding the product.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
     public function store(Request $request)
     {
         DB::beginTransaction();
@@ -88,6 +189,7 @@ class ProductController extends Controller
                 'price' => $validatedData['price'],
                 'year_of_make' => $validatedData['year'],
                 'condition' => 'new',
+                'reason' => $validatedData['reason'],
                 'sale_price' => $validatedData['sp'],
                 'sku' => $validatedData['sku'],
                 'stock_quanity' => $validatedData['stock'],

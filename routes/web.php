@@ -89,4 +89,9 @@ Route::controller(ProductController::class)->group(function () {
     // New routes for editing and updating a product:
     Route::get('/product/{id}/edit', 'edit')->name('product.edit');
     Route::put('/product/{id}', 'update')->name('product.update');
+
+
+    // Used Products Routes
+    Route::get('add-used-product', 'show_add_used_product_page')->name('product.add.used');
+    Route::post('add-new-product', 'store_used')->name('product.add.used.store');
 });
