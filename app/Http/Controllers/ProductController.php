@@ -55,6 +55,19 @@ class ProductController extends Controller
         return response()->json($attributesWithValues);
     }
 
+    public function findCategoryBySlug($slug)
+    {
+        // Find the category by slug
+        $category = Category::where('slug', $slug)->with('brands')->first(); // Eager load the brands
+
+        if (!$category) {
+            return response()->json(['message' => 'Category not found'], 404);
+        }
+
+        return response()->json([
+            'category' => $category
+        ]);
+    }
 
     /*****************************************************
      *
@@ -532,7 +545,7 @@ class ProductController extends Controller
         }
     }
 
-     /*****************************************************
+    /*****************************************************
      *
      *
      * Complete Pc Product Product Functions
@@ -540,15 +553,15 @@ class ProductController extends Controller
      *
      *****************************************************/
 
-     public function show_add_complete_pc_product_page()
-     {
-         $category = Category::all();
-         return view('dashboard.seller.products.types.add-complete-pc-build.add-complete-pc-build', compact('category'));
-     }
+    public function show_add_complete_pc_product_page()
+    {
+        $category = Category::all();
+        return view('dashboard.seller.products.types.add-complete-pc-build.add-complete-pc-build', compact('category'));
+    }
 
 
 
-     /*****************************************************
+    /*****************************************************
      *
      *
      * Common Product Functions

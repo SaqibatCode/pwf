@@ -84,6 +84,7 @@ Route::controller(ProductController::class)->group(function () {
     Route::get('brands/{categoryId}', 'getBrands')->name('product.getBrands');
     Route::get('/attributes-values/{categoryId}', 'getAttributesAndValues')->name('product.getAttributesAndValues');
     Route::delete('/product/{id}', 'destroy')->name('product.destroy');
+    Route::get('/categoryget/{slug}', 'findCategoryBySlug')->name('category.findBySlug');
 
     // New Product Routes
     Route::get('add-new-product', 'show_add_new_product_page')->name('product.add.new');
@@ -98,4 +99,7 @@ Route::controller(ProductController::class)->group(function () {
     Route::get('/product/{id}/edit-used', 'edit_used')->name('product.used.edit');
     Route::put('/used-product/{id}', 'update_used')->name('product.used.update');
 
+
+    // Complete Pc Routes
+    Route::get('add-complete-pc', 'show_add_complete_pc_product_page')->name('product.add.completepc');
 });

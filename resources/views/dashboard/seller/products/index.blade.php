@@ -50,7 +50,7 @@
 
                 </div>
                 <div class="col-md-6">
-                    <a href="">
+                    <a href="{{ route('product.add.completepc') }}">
                         <div class="card">
                             <div class="card-body d-flex justify-content-center align-items-center flex-column">
                                 <img src="{{ asset('assets/images/computer.png') }}" width="150" alt=""
