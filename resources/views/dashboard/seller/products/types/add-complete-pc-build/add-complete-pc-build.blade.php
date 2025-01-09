@@ -663,159 +663,159 @@
             // Form structure based on selected component
             if (selectedComponent === 'Keyboard') {
                 componentForm = `
-                <div class="col-md-12" id="keyboard-form">
-                    <h4>Keyboard</h4>
-                    <div class="row">
-                        <!-- Keyboard Form Fields -->
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label for="keyboard_name" class="form-label">Keyboard Name</label>
-                                <input type="text" name="keyboard_name" id="keyboard_name" class="form-control">
+                    <div class="col-md-12" id="keyboard-form">
+                        <h4>Keyboard</h4>
+                        <div class="row">
+                            <!-- Keyboard Form Fields -->
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="keyboard_name" class="form-label">Keyboard Name</label>
+                                    <input type="text" name="keyboard_name" id="keyboard_name" class="form-control">
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label for="keyboard_brand" class="form-label">Keyboard Brand</label>
-                                <select name="keyboard_brand" id="keyboard_brand" class="form-control">
-                                    <option value="">Select Keyboard Brand</option>
-                                    <option value="Logitech">Logitech</option>
-                                    <option value="Razer">Razer</option>
-                                    <option value="Corsair">Corsair</option>
-                                </select>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="keyboard_brand" class="form-label">Keyboard Brand</label>
+                                    <select name="keyboard_brand" id="keyboard_brand" class="form-control">
+                                        <option value="">Select Keyboard Brand</option>
+                                        <option value="Logitech">Logitech</option>
+                                        <option value="Razer">Razer</option>
+                                        <option value="Corsair">Corsair</option>
+                                    </select>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label for="keyboard_condition" class="form-label">Keyboard Condition</label>
-                                <select name="keyboard_condition" id="keyboard_condition" class="form-control">
-                                    <option value="">Select Condition</option>
-                                    <option value="New">New</option>
-                                    <option value="Used">Used</option>
-                                </select>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="keyboard_condition" class="form-label">Keyboard Condition</label>
+                                    <select name="keyboard_condition" id="keyboard_condition" class="form-control">
+                                        <option value="">Select Condition</option>
+                                        <option value="New">New</option>
+                                        <option value="Used">Used</option>
+                                    </select>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-3">
-                            <button class="btn btn-danger" id="delete-keyboard-form">Delete</button>
+                            <div class="col-md-3">
+                                <button class="btn btn-danger delete-btn" data-component="Keyboard">Delete</button>
+                            </div>
                         </div>
                     </div>
-                </div>
-            `;
+                `;
             } else if (selectedComponent === 'Monitor') {
                 componentForm = `
-                <div class="col-md-12" id="monitor-form">
-                    <h4>Monitor</h4>
-                    <div class="row">
-                        <!-- Monitor Form Fields -->
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label for="monitor_name" class="form-label">Monitor Name</label>
-                                <input type="text" name="monitor_name" id="monitor_name" class="form-control">
+                    <div class="col-md-12" id="monitor-form">
+                        <h4>Monitor</h4>
+                        <div class="row">
+                            <!-- Monitor Form Fields -->
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="monitor_name" class="form-label">Monitor Name</label>
+                                    <input type="text" name="monitor_name" id="monitor_name" class="form-control">
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label for="monitor_brand" class="form-label">Monitor Brand</label>
-                                <select name="monitor_brand" id="monitor_brand" class="form-control">
-                                    <option value="">Select Monitor Brand</option>
-                                    <option value="Samsung">Samsung</option>
-                                    <option value="LG">LG</option>
-                                    <option value="Dell">Dell</option>
-                                </select>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="monitor_brand" class="form-label">Monitor Brand</label>
+                                    <select name="monitor_brand" id="monitor_brand" class="form-control">
+                                        <option value="">Select Monitor Brand</option>
+                                        <option value="Samsung">Samsung</option>
+                                        <option value="LG">LG</option>
+                                        <option value="Dell">Dell</option>
+                                    </select>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label for="monitor_size" class="form-label">Monitor Size</label>
-                                <select name="monitor_size" id="monitor_size" class="form-control">
-                                    <option value="">Select Size</option>
-                                    <option value="24in">24 inches</option>
-                                    <option value="27in">27 inches</option>
-                                    <option value="32in">32 inches</option>
-                                </select>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="monitor_size" class="form-label">Monitor Size</label>
+                                    <select name="monitor_size" id="monitor_size" class="form-control">
+                                        <option value="">Select Size</option>
+                                        <option value="24in">24 inches</option>
+                                        <option value="27in">27 inches</option>
+                                        <option value="32in">32 inches</option>
+                                    </select>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-3">
-                            <button class="btn btn-danger" id="delete-monitor-form">Delete</button>
+                            <div class="col-md-3">
+                                <button class="btn btn-danger delete-btn" data-component="Monitor">Delete</button>
+                            </div>
                         </div>
                     </div>
-                </div>
-            `;
+                `;
             } else if (selectedComponent === 'Mouse') {
                 componentForm = `
-                <div class="col-md-12" id="mouse-form">
-                    <h4>Mouse</h4>
-                    <div class="row">
-                        <!-- Mouse Form Fields -->
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label for="mouse_name" class="form-label">Mouse Name</label>
-                                <input type="text" name="mouse_name" id="mouse_name" class="form-control">
+                    <div class="col-md-12" id="mouse-form">
+                        <h4>Mouse</h4>
+                        <div class="row">
+                            <!-- Mouse Form Fields -->
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="mouse_name" class="form-label">Mouse Name</label>
+                                    <input type="text" name="mouse_name" id="mouse_name" class="form-control">
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label for="mouse_brand" class="form-label">Mouse Brand</label>
-                                <select name="mouse_brand" id="mouse_brand" class="form-control">
-                                    <option value="">Select Mouse Brand</option>
-                                    <option value="Logitech">Logitech</option>
-                                    <option value="Razer">Razer</option>
-                                </select>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="mouse_brand" class="form-label">Mouse Brand</label>
+                                    <select name="mouse_brand" id="mouse_brand" class="form-control">
+                                        <option value="">Select Mouse Brand</option>
+                                        <option value="Logitech">Logitech</option>
+                                        <option value="Razer">Razer</option>
+                                    </select>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label for="mouse_type" class="form-label">Mouse Type</label>
-                                <select name="mouse_type" id="mouse_type" class="form-control">
-                                    <option value="">Select Mouse Type</option>
-                                    <option value="Wireless">Wireless</option>
-                                    <option value="Wired">Wired</option>
-                                </select>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="mouse_type" class="form-label">Mouse Type</label>
+                                    <select name="mouse_type" id="mouse_type" class="form-control">
+                                        <option value="">Select Mouse Type</option>
+                                        <option value="Wireless">Wireless</option>
+                                        <option value="Wired">Wired</option>
+                                    </select>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-3">
-                            <button class="btn btn-danger" id="delete-mouse-form">Delete</button>
+                            <div class="col-md-3">
+                                <button class="btn btn-danger delete-btn" data-component="Mouse">Delete</button>
+                            </div>
                         </div>
                     </div>
-                </div>
-            `;
+                `;
             } else if (selectedComponent === 'Headphones') {
                 componentForm = `
-                <div class="col-md-12" id="headphones-form">
-                    <h4>Headphones</h4>
-                    <div class="row">
-                        <!-- Headphones Form Fields -->
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label for="headphones_name" class="form-label">Headphones Name</label>
-                                <input type="text" name="headphones_name" id="headphones_name" class="form-control">
+                    <div class="col-md-12" id="headphones-form">
+                        <h4>Headphones</h4>
+                        <div class="row">
+                            <!-- Headphones Form Fields -->
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="headphones_name" class="form-label">Headphones Name</label>
+                                    <input type="text" name="headphones_name" id="headphones_name" class="form-control">
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label for="headphones_brand" class="form-label">Headphones Brand</label>
-                                <select name="headphones_brand" id="headphones_brand" class="form-control">
-                                    <option value="">Select Headphones Brand</option>
-                                    <option value="Sony">Sony</option>
-                                    <option value="Bose">Bose</option>
-                                </select>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="headphones_brand" class="form-label">Headphones Brand</label>
+                                    <select name="headphones_brand" id="headphones_brand" class="form-control">
+                                        <option value="">Select Headphones Brand</option>
+                                        <option value="Sony">Sony</option>
+                                        <option value="Bose">Bose</option>
+                                    </select>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label for="headphones_condition" class="form-label">Headphones Condition</label>
-                                <select name="headphones_condition" id="headphones_condition" class="form-control">
-                                    <option value="">Select Condition</option>
-                                    <option value="New">New</option>
-                                    <option value="Used">Used</option>
-                                </select>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="headphones_condition" class="form-label">Headphones Condition</label>
+                                    <select name="headphones_condition" id="headphones_condition" class="form-control">
+                                        <option value="">Select Condition</option>
+                                        <option value="New">New</option>
+                                        <option value="Used">Used</option>
+                                    </select>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-3">
-                            <button class="btn btn-danger" id="delete-headphones-form">Delete</button>
+                            <div class="col-md-3">
+                                <button class="btn btn-danger delete-btn" data-component="Headphones">Delete</button>
+                            </div>
                         </div>
                     </div>
-                </div>
-            `;
+                `;
             }
 
             // Append the selected component form to the additional component section
@@ -824,10 +824,10 @@
 
         // Event delegation for delete button functionality
         document.getElementById('additional_component').addEventListener('click', function(event) {
-            if (event.target && event.target.classList.contains('btn-danger')) {
-                // Find the form to delete
-                const formId = event.target.id.replace('delete-', '') + '-form';
-                const formToDelete = document.getElementById(formId);
+            if (event.target && event.target.classList.contains('delete-btn')) {
+                // Find the form to delete based on the data-component attribute
+                const componentType = event.target.getAttribute('data-component').toLowerCase();
+                const formToDelete = document.getElementById(`${componentType}-form`);
 
                 // Remove the form from the DOM
                 formToDelete.remove();
@@ -835,7 +835,7 @@
                 // Re-enable the corresponding option in the dropdown
                 const addComponentSelect = document.getElementById('add_component');
                 for (let i = 0; i < addComponentSelect.options.length; i++) {
-                    if (addComponentSelect.options[i].value === formId.replace('-form', '').capitalize()) {
+                    if (addComponentSelect.options[i].value === componentType) {
                         addComponentSelect.options[i].removeAttribute('disabled');
                         break;
                     }
