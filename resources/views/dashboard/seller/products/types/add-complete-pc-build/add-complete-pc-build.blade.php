@@ -262,13 +262,17 @@
                                                     </div>
                                                     <div class="col-md-3">
                                                         <div class="form-group">
-                                                            <label for="ram_condition"
-                                                                class="form-label">Condition</label>
-                                                            <select name="ram_condition" id="ram_condition"
+                                                            <label for="ram_dimm"
+                                                                class="form-label">Ram Dimm Type</label>
+                                                            <select name="ram_dimm" id="ram_dimm"
                                                                 class="form-control">
-                                                                <option value="">Select Condition</option>
-                                                                <option value="New">New</option>
-                                                                <option value="Used">Used</option>
+                                                                <option value="">Select Dimm Type</option>
+                                                                <option value="DDR1">DDR1</option>
+                                                                <option value="DDR2">DDR2</option>
+                                                                <option value="DDR2">DDR3</option>
+                                                                <option value="DDR2">DDR4</option>
+                                                                <option value="DDR2">DDR5</option>
+                                                                <option value="DDR2">DDR6</option>
                                                             </select>
                                                         </div>
                                                     </div>
@@ -413,16 +417,65 @@
                                                     </div>
                                                 </div>
                                             </div>
+
+                                            <!-- PSU -->
+                                            <div class="col-md-12">
+                                                <h4>Power Supply Unit (PSU)</h4>
+                                                <div class="row">
+                                                    <div class="col-md-3">
+                                                        <div class="form-group">
+                                                            <label for="psu_name" class="form-label">PSU Name</label>
+                                                            <input type="text" name="psu_name" id="psu_name"
+                                                                class="form-control">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <div class="form-group">
+                                                            <label for="psu_brand" class="form-label">PSU Brand</label>
+                                                            <select name="psu_brand" data-slug="psu" id="psu_brand"
+                                                                class="form-control">
+                                                                <option value="">Select PSU Brand</option>
+                                                                <option value="Corsair">Corsair</option>
+                                                                <option value="EVGA">EVGA</option>
+                                                                <option value="Seasonic">Seasonic</option>
+                                                                <!-- Add more brands as needed -->
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <div class="form-group">
+                                                            <label for="psu_condition"
+                                                                class="form-label">Condition</label>
+                                                            <select name="psu_condition" id="psu_condition"
+                                                                class="form-control">
+                                                                <option value="">Select Condition</option>
+                                                                <option value="New">New</option>
+                                                                <option value="Used">Used</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <div class="form-group">
+                                                            <label for="psu_watt" class="form-label">Psu Watt</label>
+                                                            <input type="text" name="psu_watt" id="psu_watt"
+                                                                class="form-control">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+
                                             <div class="col-md-12 my-5">
                                                 <h4>Add More Component</h4>
                                                 <select name="add_component" class="form-control" id="add_component">
                                                     <option value="Keyboard">Keyboard</option>
                                                     <option value="Monitor">Monitor</option>
                                                     <option value="Mouse">Mouse</option>
-                                                    <option value="Headpone">Headpones</option>
+                                                    <option value="Headphones">Headphones</option>
                                                 </select>
-                                                <button class="btn btn-success" id="add-more-component">Add
-                                                    Component</button>
+                                                <a class="btn btn-success" id="add-more-component">Add
+                                                    Component</a>
                                             </div>
                                             <!-- Additonal Components -->
                                             <div id="additional_component" class="row">
@@ -522,7 +575,6 @@
                 url: '/categoryget/' + slug, // API endpoint to get category by slug
                 method: 'GET',
                 success: function(data) {
-                    console.log(data);
                     // Check if the category and its brands exist in the response
                     if (data && data.category && data.category.brands && data.category.brands
                         .length > 0) {
@@ -556,9 +608,10 @@
             getCategoriesBySlug('graphic-cards', 'graphics_card_brand');
             getCategoriesBySlug('motherboards', 'motherboard_brand');
             getCategoriesBySlug('rams', 'ram_brand');
-            getCategoriesBySlug('storage', 'storage_brand');
+            getCategoriesBySlug('storage', 'storage_brand_1');
             getCategoriesBySlug('cases', 'case_brand');
             getCategoriesBySlug('cooling', 'cooler_brand');
+            getCategoriesBySlug('psu', 'psu_brand');
         });
     </script>
 
@@ -699,7 +752,9 @@
                             </div>
                         </div>
                     </div>
-                `;
+                `
+                getCategoriesBySlug('Keyboards', `keyboard_brand`);
+                ;
             } else if (selectedComponent === 'Monitor') {
                 componentForm = `
                     <div class="col-md-12" id="monitor-form">
@@ -739,7 +794,9 @@
                             </div>
                         </div>
                     </div>
-                `;
+                `
+                getCategoriesBySlug('Monitors', `monitor_brand`);
+                ;
             } else if (selectedComponent === 'Mouse') {
                 componentForm = `
                     <div class="col-md-12" id="mouse-form">
@@ -777,7 +834,9 @@
                             </div>
                         </div>
                     </div>
-                `;
+                `
+                getCategoriesBySlug('Mouse', `mouse_brand`);
+                ;
             } else if (selectedComponent === 'Headphones') {
                 componentForm = `
                     <div class="col-md-12" id="headphones-form">
@@ -815,7 +874,9 @@
                             </div>
                         </div>
                     </div>
-                `;
+                `
+                getCategoriesBySlug('Headphones', `headphones_brand`);
+                ;
             }
 
             // Append the selected component form to the additional component section
@@ -870,12 +931,13 @@
 
                 // Send AJAX request
                 $.ajax({
-                    url: '/add-new-product', // Your URL for handling uploads
+                    url: '/add-complete-pc', // Your URL for handling uploads
                     method: 'POST',
                     data: formData,
                     contentType: false,
                     processData: false,
                     success: function(response) {
+                        console.log(response);
                         if (response.success) {
                             alert('Product added successfully!');
                             window.location.href =

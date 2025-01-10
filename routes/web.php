@@ -102,4 +102,5 @@ Route::controller(ProductController::class)->group(function () {
 
     // Complete Pc Routes
     Route::get('add-complete-pc', 'show_add_complete_pc_product_page')->name('product.add.completepc');
+    Route::post('add-complete-pc', 'store_complete_pc')->name('product.add.complete.pc');
 });

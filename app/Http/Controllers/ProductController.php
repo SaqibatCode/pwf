@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\CompletePcPart;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -559,7 +560,215 @@ class ProductController extends Controller
         return view('dashboard.seller.products.types.add-complete-pc-build.add-complete-pc-build', compact('category'));
     }
 
+    public function store_complete_pc(Request $request)
+    {
+        DB::beginTransaction();
 
+        try {
+            // Validate input
+            $validatedData = $request->validate([
+                '_token' => 'required|string',
+                'product_name' => 'required|string|max:255',
+                'warranty' => 'required|string',
+                'sku' => 'required|string|max:255',
+                'year' => 'required|integer|min:1900|max:' . date('Y'),
+                'process_name' => 'required|string|max:255',
+                'process_brand' => 'required|string|max:255',
+                'process_gen_year' => 'required|integer|min:1900|max:' . date('Y'),
+                'process_gen' => 'required|string|max:255',
+                'graphics_card_name' => 'required|string|max:255',
+                'graphics_card_brand' => 'required|string|max:255',
+                'graphics_card_memory' => 'required|string|max:10',
+                'graphics_card_condition' => 'required|string|in:New,Used',
+                'motherboard_name' => 'required|string|max:255',
+                'motherboard_brand' => 'required|string|max:255',
+                'motherboard_condition' => 'required|string|in:New,Used',
+                'ram_name' => 'required|string|max:255',
+                'ram_brand' => 'required|string|max:255',
+                'ram_memory' => 'required|string|max:10',
+                'ram_dimm' => 'required|string',
+                'storage_name' => 'required|array|min:1',
+                'storage_name.*' => 'required|string|max:255',
+                'storage_brand' => 'required|array|min:1',
+                'storage_brand.*' => 'required|string|max:255',
+                'storage_type' => 'required|array|min:1',
+                'storage_type.*' => 'required|string|in:HDD,SSD,NVMe',
+                'storage_capacity' => 'required|array|min:1',
+                'storage_capacity.*' => 'required|string|max:10',
+                'case_name' => 'required|string|max:255',
+                'case_brand' => 'required|string|max:255',
+                'case_condition' => 'required|string|in:New,Used',
+                'cooler_name' => 'required|string|max:255',
+                'cooler_brand' => 'required|string|max:255',
+                'cooler_condition' => 'required|string|in:New,Used',
+                'psu_name' => 'required|string|max:255',
+                'psu_brand' => 'required|string|max:255',
+                'psu_condition' => 'required|string',
+                'psu_watt' => 'required|string',
+                'price' => 'required|numeric|min:0',
+                'sp' => 'nullable|numeric|min:0',
+                'reason' => 'nullable|string|max:500',
+                'description' => 'required|string|max:1000',
+                'file' => 'required|array|min:4|max:10',
+                'file.*' => 'file|mimes:jpeg,png,jpg|max:2048',
+                'keyboard_name' => 'nullable|string|max:255',
+                'keyboard_brand' => 'nullable|required_with:keyboard_name|string|max:255',
+                'keyboard_condition' => 'nullable|required_with:keyboard_name|string|in:New,Used',
+                'monitor_name' => 'nullable|string|max:255',
+                'monitor_brand' => 'nullable|required_with:monitor_name|string|max:255',
+                'monitor_size' => 'nullable|required_with:monitor_name|string|max:10',
+                'mouse_name' => 'nullable|string|max:255',
+                'mouse_brand' => 'nullable|required_with:mouse_name|string|max:255',
+                'mouse_type' => 'nullable|required_with:mouse_name|string|max:255',
+            ]);
+
+
+            $sellerName = Auth::user()->first_name;
+            $slug = Product::generateSlug($validatedData['product_name'], $sellerName);
+
+            // Store product data
+            $product = Product::create([
+                'product_name' => $validatedData['product_name'],
+                'slug' => $slug,
+                'warranty' => $validatedData['warranty'],
+                'price' => $validatedData['price'],
+                'year_of_make' => $validatedData['year'],
+                'sale_price' => $validatedData['sp'],
+                'sku' => $validatedData['sku'],
+                'stock_quanity' => 1,
+                'description' => $validatedData['description'],
+                'user_id' => Auth::user()->id,
+            ]);
+            $pcPartsData = [
+                ['key' => 'process_name', 'value' => $validatedData['process_name']],
+                ['key' => 'process_brand', 'value' => $validatedData['process_brand']],
+                ['key' => 'process_gen', 'value' => $validatedData['process_gen']],
+                ['key' => 'process_gen_year', 'value' => $validatedData['process_gen_year']],
+
+                ['key' => 'graphics_card_name', 'value' => $validatedData['graphics_card_name']],
+                ['key' => 'graphics_card_brand', 'value' => $validatedData['graphics_card_brand']],
+                ['key' => 'graphics_card_condition', 'value' => $validatedData['graphics_card_condition']],
+                ['key' => 'graphics_card_memory', 'value' => $validatedData['graphics_card_memory']],
+
+                ['key' => 'motherboard_name', 'value' => $validatedData['motherboard_name']],
+                ['key' => 'motherboard_brand', 'value' => $validatedData['graphics_card_memory']],
+                ['key' => 'motherboard_condition', 'value' => $validatedData['graphics_card_memory']],
+
+                ['key' => 'ram_name', 'value' => $validatedData['ram_name']],
+                ['key' => 'ram_brand', 'value' => $validatedData['ram_brand']],
+                ['key' => 'ram_dimm', 'value' => $validatedData['ram_dimm']],
+                ['key' => 'ram_memory', 'value' => $validatedData['ram_memory']],
+
+
+                ['key' => 'case_name', 'value' => $validatedData['case_name']],
+                ['key' => 'case_condition', 'value' => $validatedData['case_condition']],
+                ['key' => 'case_brand', 'value' => $validatedData['case_brand']],
+
+                ['key' => 'cooler_name', 'value' => $validatedData['cooler_name']],
+                ['key' => 'cooler_condition', 'value' => $validatedData['cooler_condition']],
+                ['key' => 'cooler_brand', 'value' => $validatedData['cooler_brand']],
+
+                ['key' => 'psu_name', 'value' => $validatedData['psu_name']],
+                ['key' => 'psu_brand', 'value' => $validatedData['psu_brand']],
+                ['key' => 'psu_condition', 'value' => $validatedData['psu_condition']],
+            ];
+
+
+            $additionalPartsData = [];
+
+            // Handle Keyboard
+            if (!empty($validatedData['keyboard_name'])) {
+                $additionalPartsData[] = ['key' => 'keyboard_name', 'value' => $validatedData['keyboard_name']];
+                $additionalPartsData[] = ['key' => 'keyboard_brand', 'value' => $validatedData['keyboard_brand'] ?? ''];
+                $additionalPartsData[] = ['key' => 'keyboard_condition', 'value' => $validatedData['keyboard_condition'] ?? ''];
+            }
+
+            // Handle Monitor
+            if (!empty($validatedData['monitor_name'])) {
+                $additionalPartsData[] = ['key' => 'monitor_name', 'value' => $validatedData['monitor_name']];
+                $additionalPartsData[] = ['key' => 'monitor_brand', 'value' => $validatedData['monitor_brand'] ?? ''];
+                $additionalPartsData[] = ['key' => 'monitor_size', 'value' => $validatedData['monitor_size'] ?? ''];
+            }
+
+            // Handle Mouse
+            if (!empty($validatedData['mouse_name'])) {
+                $additionalPartsData[] = ['key' => 'mouse_name', 'value' => $validatedData['mouse_name']];
+                $additionalPartsData[] = ['key' => 'mouse_brand', 'value' => $validatedData['mouse_brand'] ?? ''];
+                $additionalPartsData[] = ['key' => 'mouse_type', 'value' => $validatedData['mouse_type'] ?? ''];
+            }
+            $pcPartsData = array_merge($pcPartsData, $additionalPartsData);
+            // For Storage
+
+            $storageData = [];
+
+            // Required first storage entry
+            $storageData[] = ['key' => 'storage_brand', 'value' => $validatedData['storage_brand'][0]];
+            $storageData[] = ['key' => 'storage_capacity', 'value' => $validatedData['storage_capacity'][0]];
+            $storageData[] = ['key' => 'storage_name', 'value' => $validatedData['storage_name'][0]];
+            $storageData[] = ['key' => 'storage_type', 'value' => $validatedData['storage_type'][0]];
+
+            // Check for second storage entry
+            if (!empty($validatedData['storage_brand'][1])) {
+                $storageData[] = ['key' => 'storage_brand', 'value' => $validatedData['storage_brand'][1]];
+                $storageData[] = ['key' => 'storage_capacity', 'value' => $validatedData['storage_capacity'][1]];
+                $storageData[] = ['key' => 'storage_name', 'value' => $validatedData['storage_name'][1]];
+                $storageData[] = ['key' => 'storage_type', 'value' => $validatedData['storage_type'][1]];
+            }
+
+            // Check for third storage entry
+            if (!empty($validatedData['storage_brand'][2])) {
+                $storageData[] = ['key' => 'storage_brand', 'value' => $validatedData['storage_brand'][2]];
+                $storageData[] = ['key' => 'storage_capacity', 'value' => $validatedData['storage_capacity'][2]];
+                $storageData[] = ['key' => 'storage_name', 'value' => $validatedData['storage_name'][2]];
+                $storageData[] = ['key' => 'storage_type', 'value' => $validatedData['storage_type'][2]];
+            }
+
+            $pcPartsData = array_merge($pcPartsData, $storageData);
+
+
+
+            $product->parts()->createMany($pcPartsData);
+
+
+            // Handle file uploads
+            if ($request->hasFile('file')) {
+                foreach ($request->file('file') as $file) {
+                    $path = public_path('images/products');
+
+                    // Create the directory if it doesn't exist
+                    if (!is_dir($path)) {
+                        mkdir($path, 0777, true);
+                    }
+
+                    $fileName = time() . '_' . $file->getClientOriginalName();
+                    $file->move($path, $fileName);
+
+                    // Attach the image path to the product
+                    $product->pictures()->create(['image' => 'images/products/' . $fileName]);
+                }
+            }
+
+            // Commit the transaction
+            DB::commit();
+
+            // Return success response
+            return response()->json([
+                'success' => true,
+                'message' => 'Product added successfully!',
+            ]);
+        } catch (\Exception $e) {
+            // Rollback the transaction if any exception occurs
+            DB::rollBack();
+
+            // Return error response
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred while adding the product.',
+                'error' => $e->getMessage(),
+            ], 500);
+            return response()->json($req->all());
+        }
+    }
 
     /*****************************************************
      *

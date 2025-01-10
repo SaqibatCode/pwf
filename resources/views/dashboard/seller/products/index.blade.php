@@ -115,7 +115,11 @@
                                         @endif
                                     </td>
                                     <td>
-                                        {{ $pro->category->name }}
+                                        @if($pro->category)
+                                            {{ $pro->category->name }}
+                                        @else
+                                            Complete Pc Build
+                                        @endif
                                     </td>
                                     <td>
                                         {{ $pro->stock_quanity }}

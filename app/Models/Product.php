@@ -57,7 +57,9 @@ class Product extends Model
     {
         return $this->belongsTo(Category::class);
     }
-
+    public function parts(){
+        return $this->hasMany(CompletePcPart::class);
+    }
     // Each product belongs to a brand
     public function brand()
     {
