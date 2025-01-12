@@ -4,14 +4,16 @@ use App\Http\Controllers\AttributeController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\StoreFrontController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VerificationController;
 use Illuminate\Support\Facades\Route;
 
 
-
-Route::get('/', function () {
-    return view('dashboard.admin.dashboard');
+Route::controller(StoreFrontController::class)->group(function(){
+    Route::get('/', 'index');
+    Route::get('product/{slug}', 'show_product')->name('show.product');
+    Route::get('/shop', 'show_shop')->name('show.shop');
 });
 
 
@@ -95,7 +97,7 @@ Route::controller(ProductController::class)->group(function () {
 
     // Used Products Routes
     Route::get('add-used-product', 'show_add_used_product_page')->name('product.add.used');
-    Route::post('add-new-product', 'store_used')->name('product.add.used.store');
+    Route::post('add-used-product', 'store_used')->name('product.add.used.store');
     Route::get('/product/{id}/edit-used', 'edit_used')->name('product.used.edit');
     Route::put('/used-product/{id}', 'update_used')->name('product.used.update');
 
@@ -103,4 +105,5 @@ Route::controller(ProductController::class)->group(function () {
     // Complete Pc Routes
     Route::get('add-complete-pc', 'show_add_complete_pc_product_page')->name('product.add.completepc');
     Route::post('add-complete-pc', 'store_complete_pc')->name('product.add.complete.pc');
+    Route::get('/product/{id}/edit-complete-pc', 'edit_complete_pc')->name('product.complete.pc.edit');
 });

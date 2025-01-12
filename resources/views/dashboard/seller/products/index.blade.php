@@ -132,14 +132,14 @@
                                     </td>
                                     <td>
                                         <a href="
-                                            @if($pro->condition == 'new')
+                                            @if($pro->product_type == 'new')
                                                 {{ route('product.edit', $pro->id) }}
-                                            @elseif($pro->condition == 'used')
+                                            @elseif($pro->product_type == 'used')
                                                 {{ route('product.used.edit', $pro->id) }}
-                                            @elseif($pro->condition == 'complete pc')
-
-                                            @elseif($pro->condition == 'laptop')
-
+                                            @elseif($pro->product_type == 'complete_pc')
+                                                {{ route('product.complete.pc.edit', $pro->id) }}
+                                            @elseif($pro->product_type == 'laptop')
+                                                TEST
                                             @endif
                                         "><button class="btn btn-primary">Edit</button></a>
                                         <form class="d-inline" action="{{ route('product.destroy', $pro->id) }}" method="POST"

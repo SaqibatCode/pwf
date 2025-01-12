@@ -277,6 +277,7 @@
                     contentType: false,
                     processData: false,
                     success: function(response) {
+                        console.log(response);
                         if (response.success) {
                             alert('Product added successfully!');
                             window.location.href =

@@ -86,6 +86,7 @@ class UserController extends Controller
             'phone'       => 'required|string|min:11|unique:users,phone',
             'password'    => 'required|string|min:8',
             'terms'       => 'accepted',
+            'city'        => 'required',
         ], $messages);
 
         $user = User::create([
@@ -97,6 +98,7 @@ class UserController extends Controller
             'dob'          => Carbon::createFromFormat('d/m/Y', $validatedData['dob'])->format('Y-m-d'),
             'address'      => $validatedData['address'],
             'cnic'         => $validatedData['cnic'],
+            'city'         => $validatedData['city'],
             'phone'        => $validatedData['phone'],
             'password'     => Hash::make($validatedData['password']),
             'verification' => 'Unverified', // or set based on your logic

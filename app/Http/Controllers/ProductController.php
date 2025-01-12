@@ -125,6 +125,8 @@ class ProductController extends Controller
                 'stock_quanity' => $validatedData['stock'],
                 'description' => $validatedData['description'],
                 'user_id' => Auth::user()->id,
+                'product_type' => 'new',
+                'repaired' => null
             ]);
 
             // Attach attributes
@@ -373,6 +375,7 @@ class ProductController extends Controller
                 'price' => $validatedData['price'],
                 'year_of_make' => $validatedData['year'],
                 'condition' => 'used',
+                'product_type' => 'used',
                 'sale_price' => $validatedData['sp'],
                 'sku' => $validatedData['sku'],
                 'stock_quanity' => $validatedData['stock'],
@@ -575,7 +578,7 @@ class ProductController extends Controller
                 'process_name' => 'required|string|max:255',
                 'process_brand' => 'required|string|max:255',
                 'process_gen_year' => 'required|integer|min:1900|max:' . date('Y'),
-                'process_gen' => 'required|string|max:255',
+                'process_condition' => 'required|string|max:255',
                 'graphics_card_name' => 'required|string|max:255',
                 'graphics_card_brand' => 'required|string|max:255',
                 'graphics_card_memory' => 'required|string|max:10',
@@ -637,12 +640,13 @@ class ProductController extends Controller
                 'sku' => $validatedData['sku'],
                 'stock_quanity' => 1,
                 'description' => $validatedData['description'],
+                'product_type' => 'complete_pc',
                 'user_id' => Auth::user()->id,
             ]);
             $pcPartsData = [
                 ['key' => 'process_name', 'value' => $validatedData['process_name']],
                 ['key' => 'process_brand', 'value' => $validatedData['process_brand']],
-                ['key' => 'process_gen', 'value' => $validatedData['process_gen']],
+                ['key' => 'process_condition', 'value' => $validatedData['process_condition']],
                 ['key' => 'process_gen_year', 'value' => $validatedData['process_gen_year']],
 
                 ['key' => 'graphics_card_name', 'value' => $validatedData['graphics_card_name']],
@@ -651,7 +655,7 @@ class ProductController extends Controller
                 ['key' => 'graphics_card_memory', 'value' => $validatedData['graphics_card_memory']],
 
                 ['key' => 'motherboard_name', 'value' => $validatedData['motherboard_name']],
-                ['key' => 'motherboard_brand', 'value' => $validatedData['graphics_card_memory']],
+                ['key' => 'motherboard_brand', 'value' => $validatedData['motherboard_brand']],
                 ['key' => 'motherboard_condition', 'value' => $validatedData['graphics_card_memory']],
 
                 ['key' => 'ram_name', 'value' => $validatedData['ram_name']],
@@ -770,6 +774,12 @@ class ProductController extends Controller
         }
     }
 
+
+    public function edit_complete_pc($id){
+        $completePc = Product::with(['parts', 'pictures'])->findOrFail($id);
+        return view('dashboard.seller.products.types.add-complete-pc-build.edit-complete-pc-build', compact('completePc'));
+        // return response()->json();
+    }
     /*****************************************************
      *
      *

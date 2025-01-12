@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->date('dob');
             $table->string('address');
+            $table->string('city');
             $table->string('cnic');
             $table->string('phone')->unique();
             $table->string('password');

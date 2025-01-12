@@ -291,7 +291,7 @@
 
                 // Send AJAX request
                 $.ajax({
-                    url: '/add-new-product', // Your URL for handling uploads
+                    url: '/add-used-product', // Your URL for handling uploads
                     method: 'POST',
                     data: formData,
                     contentType: false,
