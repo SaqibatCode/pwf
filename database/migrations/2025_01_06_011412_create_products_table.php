@@ -20,6 +20,8 @@ return new class extends Migration
             $table->integer('stock_quanity')->default(0);
             $table->string('slug')->unique();
             $table->string('sku')->unique();
+            $table->text('reason')->nullable();
+            $table->text('reparied')->nullable();
             $table->enum('product_type', ['new', 'used', 'complete_pc', 'laptop']);
             $table->enum('status', ['pending', 'approved', 'rejected', 'sold out'])->default('pending');
             $table->foreignId('category_id')->nullable()->constrained()->onDelete('cascade');

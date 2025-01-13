@@ -68,8 +68,8 @@
                                                     <input type="text"
                                                         class="form-control @error('last_name') is-invalid @enderror"
                                                         id="last_name" name="last_name"
-                                                        placeholder="Enter your last name" value="{{ old('last_name') }}"
-                                                        required />
+                                                        placeholder="Enter your last name"
+                                                        value="{{ old('last_name') }}" required />
                                                     @error('last_name')
                                                         <div class="invalid-feedback">{{ $message }}</div>
                                                     @enderror
@@ -124,7 +124,38 @@
                                                         <div class="invalid-feedback">{{ $message }}</div>
                                                     @enderror
                                                 </div>
-
+                                                <!-- Cities of Pakistan -->
+                                                <div class="mb-3">
+                                                    <label for="city" class="form-label">City</label>
+                                                    <select class="form-control @error('city') is-invalid @enderror"
+                                                        id="city" name="city" required>
+                                                        <option value="" selected disabled>Select your city
+                                                        </option>
+                                                        <option value="Karachi">Karachi</option>
+                                                        <option value="Lahore">Lahore</option>
+                                                        <option value="Islamabad">Islamabad</option>
+                                                        <option value="Rawalpindi">Rawalpindi</option>
+                                                        <option value="Peshawar">Peshawar</option>
+                                                        <option value="Quetta">Quetta</option>
+                                                        <option value="Multan">Multan</option>
+                                                        <option value="Faisalabad">Faisalabad</option>
+                                                        <option value="Hyderabad">Hyderabad</option>
+                                                        <option value="Sialkot">Sialkot</option>
+                                                        <option value="Gujranwala">Gujranwala</option>
+                                                        <option value="Bahawalpur">Bahawalpur</option>
+                                                        <option value="Sukkur">Sukkur</option>
+                                                        <option value="Abbottabad">Abbottabad</option>
+                                                        <option value="Mardan">Mardan</option>
+                                                        <option value="Gilgit">Gilgit</option>
+                                                        <option value="Muzaffarabad">Muzaffarabad</option>
+                                                        <option value="Mirpur">Mirpur</option>
+                                                        <option value="Larkana">Larkana</option>
+                                                        <option value="Nawabshah">Nawabshah</option>
+                                                    </select>
+                                                    @error('city')
+                                                        <div class="invalid-feedback">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
                                                 <!-- Phone Number (Format: +92-315-853-9620) -->
                                                 <div class="mb-3">
                                                     <label for="phone" class="form-label">Phone Number</label>

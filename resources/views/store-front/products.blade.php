@@ -134,7 +134,7 @@
                                     @endif
                                 </div>
                                 <div class="img flex flex-col justify-center items-center mb-4 overflow-hidden">
-                                    <img src="{{ asset('store-front/images/products/graphic-cards/image-1.png') }}"
+                                    <img src="{{ asset($product->pictures[0]->image) }}"
                                         alt="{{ $product->product_name }}" class="max-w-64">
                                 </div>
                                 <div>

@@ -37,9 +37,14 @@
     <section class="bg-gray-100 px-4 font-unbounded">
         <div class="container mx-auto py-4">
             <p class="text-sm">
-                <a href="#" class="text-skin-secondary">Home</a> / <a href="#"
-                    class="text-skin-secondary">Shop</a>
-                / <a href="/{{ $product->category->slug }}" class="text-skin-secondary">{{ $product->category->name }}</a> /
+                <a href="#" class="text-skin-secondary">Home</a> /
+                <a href="#" class="text-skin-secondary">Shop</a> /
+                @if ($product->category)
+                    <a href="/{{ $product->category->slug }}" class="text-skin-secondary">{{ $product->category->name }}</a>
+                    /
+                @else
+                    <span>Category: Not Available</span> /
+                @endif
                 <span>{{ $product->product_name }}</span>
             </p>
         </div>
@@ -55,8 +60,14 @@
                     <h2 class="text-skin-primary text-2xl font-bold mb-3">{{ $product->product_name }}</h2>
 
                     <ul class="flex flex-col sm:flex-row text-sm text-gray-600">
-                        <li class="pl-0 sm:px-4 sm:border-r border-black">Brand: <a href="/{{ $product->brand->slug }}"
-                                class="text-skin-secondary">{{ $product->brand->name }}</a>
+                        <li class="pl-0 sm:px-4 sm:border-r border-black">
+                            @if ($product->brand)
+                                Brand: <a href="/{{ $product->brand->slug }}"
+                                    class="text-skin-secondary">{{ $product->brand->name }}</a>
+                            @else
+                                Brand: Not Available
+                            @endif
+                        </li>
                         </li>
                         <li class="sm:px-4 sm:border-r border-black"><a href="">1 Review</a></li>
                         <li class="sm:px-4">SKU: {{ $product->sku }}</li>
@@ -148,34 +159,41 @@
                             <p>{{ $product->description }}</p>
                         </ul>
                     </div>
+
                     <div class="py-6 border-b flex flex-col sm:flex-row items-start sm:items-end gap-4 sm:gap-6">
-                        <div class="">
-                            <span class="text-gray-600 text-sm">Quantity:</span>
-                            <div class="flex rounded-md border gap-4 items-center text-base p-1 w-max">
-                                <button class="px-2">-</button>
-                                <div>1</div>
-                                <button class="px-2">+</button>
+                        <form action="{{ route('cart.add', $product) }}" method="POST" class="flex items-center gap-6">
+                            @csrf
+
+                            <!-- Quantity Section -->
+                            <div class="flex items-center gap-4">
+                                <span class="text-gray-600 text-sm">Quantity:</span>
+                                <div class="flex items-center justify-center bg-gray-100 rounded-md p-1">
+                                    <!-- Quantity Input -->
+                                    <input type="number" name="quantity" id="quantity" value="1" min="1"
+                                        class="px-4 py-2 border rounded-md w-16 text-lg font-semibold text-gray-700">
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="flex gap-6 items-center">
-                            <button class="btn-1 px-12">Add To Cart</button>
-
-
-                        </div>
+                            <!-- Add to Cart Button -->
+                            <button type="submit"
+                                class="btn-1 px-8 py-2 bg-blue-600 text-white rounded-md text-lg font-medium hover:bg-blue-700 transition-colors duration-300">
+                                Add To Cart
+                            </button>
+                        </form>
                     </div>
+                    @if (session('cart_message'))
+                        <div class="mt-4 text-green-600 font-semibold">
+                            {{ session('cart_message') }}
+                        </div>
+                    @endif
                     <div class="py-6 flex flex-col gap-1">
-                        <p class="text-sm">Category: <a href="#"
-                                class="text-skin-secondary transition-all duration-300 hover:text-skin-primary">{{ $product->category->name }}</a>
-                        </p>
-                        {{-- <p class="text-sm">Tags:
-                            <a href="#"
-                                class="text-gray-500 transition-all duration-300 hover:text-skin-primary">Laptop,</a>
-                            <a href="#"
-                                class="text-gray-500 transition-all duration-300 hover:text-skin-primary">Retina,</a>
-                            <a href="#"
-                                class="text-gray-500 transition-all duration-300 hover:text-skin-primary">Wireless</a>
-                        </p> --}}
+                        @if ($product->category)
+                            <p class="text-sm">Category: <a href="/{{ $product->category->slug }}"
+                                    class="text-skin-secondary transition-all duration-300 hover:text-skin-primary">{{ $product->category->name }}</a>
+                            </p>
+                        @else
+                            <p class="text-sm">Category: Not Available</p>
+                        @endif
                     </div>
                 </div>
 

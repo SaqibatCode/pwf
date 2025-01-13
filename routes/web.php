@@ -1,22 +1,54 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AttributeController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\SellerPaymentMethodController;
 use App\Http\Controllers\StoreFrontController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\UserProfileController;
 use App\Http\Controllers\VerificationController;
+use App\Models\SellerPaymentMethod;
 use Illuminate\Support\Facades\Route;
 
 
-Route::controller(StoreFrontController::class)->group(function(){
+Route::controller(StoreFrontController::class)->group(function () {
     Route::get('/', 'index');
     Route::get('product/{slug}', 'show_product')->name('show.product');
     Route::get('/shop', 'show_shop')->name('show.shop');
 });
 
+Route::get('profile/{slug}', [UserProfileController::class, 'index'])->name('user.profile');
+Route::put('/profile', [UserProfileController::class, 'update'])->name('profile.update');
 
+Route::prefix('payment-methods')->name('payment_methods.')->group(function () {
+    Route::get('/', [SellerPaymentMethodController::class, 'index'])->name('index');
+    Route::post('/', [SellerPaymentMethodController::class, 'store'])->name('store');
+    Route::delete('{id}', [SellerPaymentMethodController::class, 'destroy'])->name('destroy');
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('cart', [OrderController::class, 'showCart'])->name('cart.show');
+    Route::post('cart/add/{product}', [OrderController::class, 'addToCart'])->name('cart.add');
+    Route::post('cart/update', [OrderController::class, 'updateCart'])->name('cart.update');
+    Route::post('cart/remove', [OrderController::class, 'removeCart'])->name('cart.remove');
+    Route::delete('cart/empty', [OrderController::class, 'emptyCart'])->name('cart.empty');
+    Route::post('order', [OrderController::class, 'store'])->name('order.store');
+    Route::get('/order/success', [OrderController::class, 'success'])->name('order.success');
+});
+
+Route::controller(AdminController::class)->group(function () {
+    Route::get('/all-sellers', 'all_sellers')->name('admin.show.sellers');
+    Route::get('/all-products', 'all_products')->name('admin.show.all.products');
+    Route::get('/pending-products', 'pending_products')->name('admin.show.pending.products');
+    Route::get('/approved-products', 'approved_products')->name('admin.show.approved.products');
+    Route::get('/rejected-products', 'rejected_products')->name('admin.show.rejected.products');
+    Route::post('/approve-product/{id}', 'approve_product')->name('admin.approve.product');
+    Route::post('/reject-product/{id}', 'reject_product')->name('admin.reject.product');
+});
 
 Route::controller(UserController::class)->group(function () {
     Route::get('portal', 'index')->name('portal');
@@ -82,6 +114,10 @@ Route::prefix('attributes')->name('attribute.')->controller(AttributeController:
 
 Route::controller(ProductController::class)->group(function () {
     Route::get('products', 'index')->name('product.index');
+    Route::get('seller/approved-products', 'approved_products')->name('seller.approved.products');
+    Route::get('seller/pending-products', 'pending_products')->name('seller.pending.products');
+    Route::get('seller/rejected-products', 'reject_products')->name('seller.rejected.products');
+
 
     Route::get('brands/{categoryId}', 'getBrands')->name('product.getBrands');
     Route::get('/attributes-values/{categoryId}', 'getAttributesAndValues')->name('product.getAttributesAndValues');

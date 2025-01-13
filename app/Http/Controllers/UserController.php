@@ -67,6 +67,7 @@ class UserController extends Controller
 
     public function register_seller(Request $request)
     {
+
         $messages = [
             'dob.before_or_equal' => 'You must be at least 18 years old to register.',
 
@@ -88,7 +89,6 @@ class UserController extends Controller
             'terms'       => 'accepted',
             'city'        => 'required',
         ], $messages);
-
         $user = User::create([
             'first_name'   => $validatedData['first_name'],
             'last_name'    => $validatedData['last_name'],

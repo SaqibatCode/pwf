@@ -24,7 +24,8 @@ class Product extends Model
         'user_id',
         'condition',
         'reason',
-        'repaired'
+        'repaired',
+        'product_type'
 
         // Include any other fields here
     ];

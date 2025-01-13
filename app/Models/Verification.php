@@ -12,6 +12,7 @@ class Verification extends Model
         'user_id',
         'cnic_front_picture',
         'cnic_back_picture',
+        'cnic_holding_selfie',
         'shop_name',
         'shop_picture',
         'shop_business_card_picture',

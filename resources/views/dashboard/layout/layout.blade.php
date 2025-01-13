@@ -110,17 +110,16 @@
                 <!--- Sidemenu -->
                 <div id="sidebar-menu">
                     <!-- Left Menu Start -->
-                    <ul class="metismenu list-unstyled" id="side-menu">
-                        <li class="menu-title">Menu</li>
-                        <li class="menu-item">
-                            <a href="{{ route('portal') }}" data-bs-toggle="collapse" class="menu-link waves-effect"
-                                aria-expanded="true">
-                                <span class="menu-icon"><i class="bx bx-file"></i></span>
-                                <span class="menu-text"> Dashboard </span>
-                            </a>
-                        </li>
-
-                        @if (Auth::user()->type == 'seller')
+                    @if (Auth::user()->type == 'seller')
+                        <ul class="metismenu list-unstyled" id="side-menu">
+                            <li class="menu-title">Menu</li>
+                            <li class="menu-item">
+                                <a href="{{ route('portal') }}" data-bs-toggle="collapse" class="menu-link waves-effect"
+                                    aria-expanded="true">
+                                    <span class="menu-icon"><i class="bx bx-file"></i></span>
+                                    <span class="menu-text"> Dashboard </span>
+                                </a>
+                            </li>
                             <li class="menu-item">
                                 <a href="#menuExpages" data-bs-toggle="collapse" class="menu-link waves-effect"
                                     aria-expanded="true">
@@ -131,30 +130,239 @@
                                 <div class="collapse show" id="menuExpages" style="">
                                     <ul class="sub-menu">
                                         <li class="menu-item">
+                                            <a class="menu-link" href="{{ route('product.index') }}">
+                                                <span class="menu-text">Add Products</span>
+                                            </a>
+                                        </li>
+                                        <li class="menu-item">
+                                            <a class="menu-link" href="{{ route('seller.approved.products') }}">
+                                                <span class="menu-text">Approved Products</span>
+                                            </a>
+                                        </li>
+                                        <li class="menu-item">
+                                            <a class="menu-link" href="{{ route('seller.pending.products') }}">
+                                                <span class="menu-text">Pending Products</span>
+                                            </a>
+                                        </li>
+                                        <li class="menu-item">
+                                            <a class="menu-link" href="{{ route('seller.rejected.products') }}">
+                                                <span class="menu-text">Rejected Products</span>
+                                            </a>
+                                        </li>
+                                        <li class="menu-item">
                                             <a class="menu-link" href="#">
+                                                <span class="menu-text">Add Packages</span>
+                                            </a>
+                                        </li>
+
+                                    </ul>
+                                </div>
+                            </li>
+                            <li class="menu-item">
+                                <a href="#menuExpages" data-bs-toggle="collapse" class="menu-link waves-effect"
+                                    aria-expanded="true">
+                                    <span class="menu-icon"><i class="bx bx-box"></i></span>
+                                    <span class="menu-text"> Orders </span>
+                                    <span class="menu-arrow"></span>
+                                </a>
+                                <div class="collapse show" id="menuExpages" style="">
+                                    <ul class="sub-menu">
+                                        <li class="menu-item">
+                                            <a class="menu-link" href="#">
+                                                <span class="menu-text">All Orders</span>
+                                            </a>
+                                        </li>
+
+                                        <li class="menu-item">
+                                            <a class="menu-link" href="#">
+                                                <span class="menu-text">Pending Orders</span>
+                                            </a>
+                                        </li>
+                                        <li class="menu-item">
+                                            <a class="menu-link" href="#">
+                                                <span class="menu-text">Completed Order</span>
+                                            </a>
+                                        </li>
+
+                                    </ul>
+                                </div>
+                            </li>
+                            <li class="menu-item">
+                                <a href="{{ route('user.profile', Auth::user()->slug) }}" data-bs-toggle="collapse"
+                                    class="menu-link waves-effect" aria-expanded="true">
+                                    <span class="menu-icon"><i class="bx bx-user"></i></span>
+                                    <span class="menu-text"> My Profile </span>
+                                </a>
+                            </li>
+                            <li class="menu-item">
+                                <a href="{{ route('portal') }}" data-bs-toggle="collapse"
+                                    class="menu-link waves-effect" aria-expanded="true">
+                                    <span class="menu-icon"><i class="bx bx-support"></i></span>
+                                    <span class="menu-text"> Seller Support </span>
+                                </a>
+                            </li>
+                            @if (Auth::user()->verification == 'Unverified' || Auth::user()->verification == 'Pending')
+                                <li class="menu-item">
+                                    <a href="{{ route('verification') }}" data-bs-toggle="collapse"
+                                        class="menu-link waves-effect" aria-expanded="true">
+                                        <span class="menu-icon"><i class="bx bx-check"></i></span>
+                                        <span class="menu-text"> Verfication </span>
+                                    </a>
+                                </li>
+                            @endif
+
+                        </ul>
+                    @endif
+
+
+                    <!---- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+                        -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+                                                            Admin Navigation
+                        -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+                    -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -->
+                    @if (Auth::user()->type == 'admin')
+                        <ul class="metismenu list-unstyled" id="side-menu">
+                            <li class="menu-title">Menu</li>
+                            <li class="menu-item">
+                                <a href="{{ route('portal') }}" data-bs-toggle="collapse"
+                                    class="menu-link waves-effect" aria-expanded="true">
+                                    <span class="menu-icon"><i class="bx bx-file"></i></span>
+                                    <span class="menu-text"> Dashboard </span>
+                                </a>
+                            </li>
+                            <li class="menu-item">
+                                <a href="#menuExpages" data-bs-toggle="collapse" class="menu-link waves-effect"
+                                    aria-expanded="true">
+                                    <span class="menu-icon"><i class="bx bx-file"></i></span>
+                                    <span class="menu-text"> Products </span>
+                                    <span class="menu-arrow"></span>
+                                </a>
+                                <div class="collapse show" id="menuExpages" style="">
+                                    <ul class="sub-menu">
+                                        <li class="menu-item">
+                                            <a class="menu-link" href="{{ route('admin.show.all.products') }}">
                                                 <span class="menu-text">All Products</span>
                                             </a>
                                         </li>
                                         <li class="menu-item">
-                                            <a class="menu-link" href="{{ route('product.index') }}">
-                                                <span class="menu-text">Add Product</span>
+                                            <a class="menu-link" href="{{ route('admin.show.pending.products') }}">
+                                                <span class="menu-text">Pending Products</span>
+                                            </a>
+                                        </li>
+                                        <li class="menu-item">
+                                            <a class="menu-link" href="{{ route('admin.show.approved.products') }}">
+                                                <span class="menu-text">Approved Products</span>
+                                            </a>
+                                        </li>
+                                        <li class="menu-item">
+                                            <a class="menu-link" href="{{ route('admin.show.rejected.products') }}">
+                                                <span class="menu-text">Rejected Products</span>
                                             </a>
                                         </li>
                                     </ul>
                                 </div>
                             </li>
-                        @endif
-                        <li class="menu-item">
-                            <a href="{{ route('verification') }}" data-bs-toggle="collapse"
-                                class="menu-link waves-effect" aria-expanded="true">
-                                <span class="menu-icon"><i class="bx bx-check"></i></span>
-                                <span class="menu-text"> Verfication </span>
-                            </a>
-                        </li>
+                            <li class="menu-item">
+                                <a href="#menuExpages" data-bs-toggle="collapse" class="menu-link waves-effect"
+                                    aria-expanded="true">
+                                    <span class="menu-icon"><i class="bx bx-file"></i></span>
+                                    <span class="menu-text"> Products Management</span>
+                                    <span class="menu-arrow"></span>
+                                </a>
+                                <div class="collapse show" id="menuExpages" style="">
+                                    <ul class="sub-menu">
+                                        <li class="menu-item">
+                                            <a class="menu-link" href="{{ route('category') }}">
+                                                <span class="menu-text">Categories</span>
+                                            </a>
+                                        </li>
+                                        <li class="menu-item">
+                                            <a class="menu-link" href="{{ route('brand.index') }}">
+                                                <span class="menu-text">Brands</span>
+                                            </a>
+                                        </li>
+                                        <li class="menu-item">
+                                            <a class="menu-link" href="{{ route('attribute.index') }}">
+                                                <span class="menu-text">Attributes</span>
+                                            </a>
+                                        </li>
 
+                                    </ul>
+                                </div>
+                            </li>
+                            <li class="menu-item">
+                                <a href="{{ route('admin.show.sellers') }}" data-bs-toggle="collapse"
+                                    class="menu-link waves-effect" aria-expanded="true">
+                                    <span class="menu-icon"><i class="bx bx-user"></i></span>
+                                    <span class="menu-text"> Sellers </span>
+                                </a>
+                            </li>
+                            <li class="menu-item">
+                                <a href="{{ route('verification') }}" data-bs-toggle="collapse"
+                                    class="menu-link waves-effect" aria-expanded="true">
+                                    <span class="menu-icon"><i class="bx bx-check"></i></span>
+                                    <span class="menu-text"> Verfication </span>
+                                </a>
 
-
-                    </ul>
+                            </li>
+                            <li class="menu-item">
+                                <a href="{{ route('verification') }}" data-bs-toggle="collapse"
+                                    class="menu-link waves-effect" aria-expanded="true">
+                                    <span class="menu-icon"><i class="bx bx-box"></i></span>
+                                    <span class="menu-text"> Orders </span>
+                                </a>
+                            </li>
+                            <li class="menu-item">
+                                <a href="#menuExpages" data-bs-toggle="collapse" class="menu-link waves-effect"
+                                    aria-expanded="true">
+                                    <span class="menu-icon"><i class="bx bx-file"></i></span>
+                                    <span class="menu-text"> CMS - Website Manager </span>
+                                    <span class="menu-arrow"></span>
+                                </a>
+                                <div class="collapse show" id="menuExpages" style="">
+                                    <ul class="sub-menu">
+                                        <li class="menu-item">
+                                            <a class="menu-link" href="#">
+                                                <span class="menu-text">Home Page Sliders</span>
+                                            </a>
+                                        </li>
+                                        <li class="menu-item">
+                                            <a class="menu-link" href="#">
+                                                <span class="menu-text">Marketing</span>
+                                            </a>
+                                        </li>
+                                        <li class="menu-item">
+                                            <a class="menu-link" href="#">
+                                                <span class="menu-text">Site Setting</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                            <li class="menu-item">
+                                <a href="#menuExpages" data-bs-toggle="collapse" class="menu-link waves-effect"
+                                    aria-expanded="true">
+                                    <span class="menu-icon"><i class="bx bx-file"></i></span>
+                                    <span class="menu-text"> Requests </span>
+                                    <span class="menu-arrow"></span>
+                                </a>
+                                <div class="collapse show" id="menuExpages" style="">
+                                    <ul class="sub-menu">
+                                        <li class="menu-item">
+                                            <a class="menu-link" href="#">
+                                                <span class="menu-text">User Requests</span>
+                                            </a>
+                                        </li>
+                                        <li class="menu-item">
+                                            <a class="menu-link" href="#">
+                                                <span class="menu-text">Seller Requests</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </ul>
+                    @endif
                 </div>
                 <!-- Sidebar -->
             </div>

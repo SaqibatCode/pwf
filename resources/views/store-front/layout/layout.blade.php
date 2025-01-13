@@ -10,6 +10,7 @@
         integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     @yield('additional_head')
 </head>
 
@@ -40,7 +41,8 @@
                 </div>
                 <div class="hidden lg:flex gap-10 tracking-widest text-sm relative">
                     <div class="relative group">
-                        <a href="{{ route('show.shop') }}" class="hover:text-skin-secondary font-semibold">All Products</a>
+                        <a href="{{ route('show.shop') }}" class="hover:text-skin-secondary font-semibold">All
+                            Products</a>
                         <div
                             class="submenu absolute left-0 hidden group-hover:block bg-white shadow-lg rounded-lg py-2 z-50 min-w-56">
                             <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Product 1</a>

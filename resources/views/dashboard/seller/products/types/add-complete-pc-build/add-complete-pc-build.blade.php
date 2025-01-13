@@ -112,9 +112,9 @@
                                                     </div>
                                                     <div class="col-md-3">
                                                         <div class="form-group">
-                                                            <label for="process_gen" class="form-label">Processor
+                                                            <label for="process_condition" class="form-label">Processor
                                                                 Condition</label>
-                                                            <select name="process_gen" id="process_gen"
+                                                            <select name="process_condition" id="process_condition"
                                                                 class="form-control">
                                                                 <option value="">Select Condition</option>
                                                                 <option value="New">New</option>

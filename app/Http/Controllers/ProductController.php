@@ -14,12 +14,23 @@ class ProductController extends Controller
 {
     public function index()
     {
-        $product = Product::with(['category', 'pictures'])->latest()->paginate(10);
+        $product = Product::with(['category', 'pictures'])->where('user_id',Auth::user()->id)->latest()->paginate(10);
         // return response()->json($product[0]);
         return view('dashboard.seller.products.index', compact('product'));
     }
 
-
+    public function approved_products(){
+        $product = Product::with('category', 'pictures')->where('status','approved')->where('user_id',Auth::user()->id)->latest()->paginate(10);
+        return view('dashboard.seller.products.products', compact('product'));
+    }
+    public function pending_products(){
+        $product = Product::with('category', 'pictures')->where('status','pending')->where('user_id',Auth::user()->id)->latest()->paginate(10);
+        return view('dashboard.seller.products.products', compact('product'));
+    }
+    public function reject_products(){
+        $product = Product::with('category', 'pictures')->where('status','rejected')->where('user_id',Auth::user()->id)->latest()->paginate(10);
+        return view('dashboard.seller.products.products', compact('product'));
+    }
     /*****************************************************
      *
      *
@@ -108,7 +119,10 @@ class ProductController extends Controller
 
             $sellerName = Auth::user()->first_name;
             $slug = Product::generateSlug($validatedData['product_name'], $sellerName);
-
+            $status = 'pending';
+            if (Auth::user()->verification !== 'unverified' || Auth::user()->verification !== 'pending') {
+                $status = 'Approved';
+            }
             // Store product data
             $product = Product::create([
                 'product_name' => $validatedData['product_name'],
@@ -126,7 +140,8 @@ class ProductController extends Controller
                 'description' => $validatedData['description'],
                 'user_id' => Auth::user()->id,
                 'product_type' => 'new',
-                'repaired' => null
+                'repaired' => null,
+                'status' => $status
             ]);
 
             // Attach attributes
@@ -187,6 +202,7 @@ class ProductController extends Controller
         $product = Product::with(['category', 'brand', 'attributes', 'pictures'])
             ->findOrFail($id);
 
+
         // Get all categories for the dropdown
         $categories = Category::all();
 
@@ -221,7 +237,6 @@ class ProductController extends Controller
 
             // Find existing product
             $product = Product::findOrFail($id);
-
             // Update product fields
             $product->update([
                 'product_name'   => $validatedData['product_name'],
@@ -362,7 +377,10 @@ class ProductController extends Controller
 
             $sellerName = Auth::user()->first_name;
             $slug = Product::generateSlug($validatedData['product_name'], $sellerName);
-
+            $status = 'pending';
+            if (Auth::user()->verification !== 'unverified' || Auth::user()->verification !== 'pending') {
+                $status = 'Approved';
+            }
             // Store product data
             $product = Product::create([
                 'product_name' => $validatedData['product_name'],
@@ -381,6 +399,7 @@ class ProductController extends Controller
                 'stock_quanity' => $validatedData['stock'],
                 'description' => $validatedData['description'],
                 'user_id' => Auth::user()->id,
+                'status' => $status
             ]);
 
             // Attach attributes
@@ -628,7 +647,10 @@ class ProductController extends Controller
 
             $sellerName = Auth::user()->first_name;
             $slug = Product::generateSlug($validatedData['product_name'], $sellerName);
-
+            $status = 'pending';
+            if (Auth::user()->verification !== 'unverified' || Auth::user()->verification !== 'pending') {
+                $status = 'Approved';
+            }
             // Store product data
             $product = Product::create([
                 'product_name' => $validatedData['product_name'],
@@ -642,6 +664,7 @@ class ProductController extends Controller
                 'description' => $validatedData['description'],
                 'product_type' => 'complete_pc',
                 'user_id' => Auth::user()->id,
+                'status' => $status
             ]);
             $pcPartsData = [
                 ['key' => 'process_name', 'value' => $validatedData['process_name']],
@@ -775,7 +798,8 @@ class ProductController extends Controller
     }
 
 
-    public function edit_complete_pc($id){
+    public function edit_complete_pc($id)
+    {
         $completePc = Product::with(['parts', 'pictures'])->findOrFail($id);
         return view('dashboard.seller.products.types.add-complete-pc-build.edit-complete-pc-build', compact('completePc'));
         // return response()->json();
