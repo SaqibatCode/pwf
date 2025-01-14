@@ -25,6 +25,14 @@ Route::controller(StoreFrontController::class)->group(function () {
     Route::post('/login', 'login')->name('buyer.login.post');
     Route::get('/register', 'show_register')->name('buyer.register');
     Route::post('/register', 'register')->name('buyer.register.post');
+
+    Route::get('/account', 'edit_user')->name('buyer.account.edit');
+    Route::put('/account', 'update_user')->name('buyer.account.update');
+
+    Route::get('/orders', 'indexOrders')->name('buyer.orders.index');
+    Route::get('/orders/{order}', 'showOrder')->name('buyer.orders.show');
+
+    Route::post('mark-delivered', 'mark_complete')->name('buyer.mark.delivered');
 });
 
 Route::get('profile/{slug}', [UserProfileController::class, 'index'])->name('user.profile');

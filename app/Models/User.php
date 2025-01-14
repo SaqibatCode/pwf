@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Support\Str;
+
 class User extends Model implements AuthenticatableContract
 {
     use Authenticatable;
@@ -80,5 +81,14 @@ class User extends Model implements AuthenticatableContract
     public function userProfile()
     {
         return $this->hasOne(UserProfile::class);
+    }
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    public function sellerChildOrders()
+    {
+        return $this->hasMany(ChildOrder::class, 'seller_id');
     }
 }

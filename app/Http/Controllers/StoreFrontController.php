@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\ChildOrder;
 use App\Models\Product;
 use App\Models\User;
 use Dotenv\Exception\ValidationException;
@@ -50,7 +51,7 @@ class StoreFrontController extends Controller
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
 
-            return redirect()->intended(route('/'));
+            return redirect()->intended(route('home'));
         }
 
         return back()->withErrors([
@@ -100,5 +101,71 @@ class StoreFrontController extends Controller
     public function show_account()
     {
         return view('store-front.account');
+    }
+
+
+    public function edit_user()
+    {
+        $user = auth()->user(); // Get the currently authenticated user
+        return view('store-front.account', compact('user')); // Make sure the view path is correct
+    }
+
+    public function update_user(Request $request)
+    {
+        $user = auth()->user(); // Get the currently authenticated user
+
+        // Validate the form data
+        $request->validate([
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'father_name' => 'required|string|max:255',
+            'dob' => 'required|date',
+            'city' => 'required|string|max:255',
+            'phone' => 'required|string|max:20',
+            'address' => 'required|string|max:255',
+            'password' => 'nullable|string|min:8', // Only validate password if changed
+        ]);
+
+        // Update user model fields
+        $user->first_name = $request->first_name;
+        $user->last_name = $request->last_name;
+        $user->father_name = $request->father_name;
+        $user->dob = $request->dob;
+        $user->city = $request->city;
+        $user->phone = $request->phone;
+        $user->address = $request->address;
+
+        // Hash and update password if changed.
+        if ($request->filled('password')) {
+            $user->password = Hash::make($request->password);
+        }
+
+        $user->save();
+
+        // Redirect to the profile page with a success message.
+        return redirect()->back()->with('success', 'Account updated successfully!');
+    }
+
+    public function indexOrders()
+    {
+        $user = auth()->user();
+        $orders = $user->orders()->with('childOrders.product', 'childOrders.seller')->latest()->get();
+        return view('store-front.order.orders', compact('orders'));
+    }
+
+    public function showOrder($id)
+    {
+        $user = auth()->user();
+        $order = $user->orders()->with('childOrders.product', 'childOrders.seller')->findOrFail($id);
+        return view('store-front.order.order-details', compact('order'));
+    }
+
+    public function mark_complete(Request $req)
+    {
+        $order = ChildOrder::findOrFail($req->id);
+        $order->status = 'Delivered & Completed';
+        $order->save();
+
+        return redirect()->back()->with('success', 'Order Completed Successfully');
     }
 }

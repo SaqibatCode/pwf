@@ -12,7 +12,7 @@
                         <label for="first_name" class="block text-gray-700 text-sm font-semibold mb-2">First Name</label>
                         <input type="text" name="first_name" id="first_name"
                             class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            placeholder="Your first name" required>
+                            placeholder="Your first name" value="{{ old('first_name') }}" required>
                         @error('first_name')
                             <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
@@ -22,7 +22,7 @@
                         <label for="last_name" class="block text-gray-700 text-sm font-semibold mb-2">Last Name</label>
                         <input type="text" name="last_name" id="last_name"
                             class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            placeholder="Your last name" required>
+                            placeholder="Your last name" value="{{ old('last_name') }}" required>
                         @error('last_name')
                             <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
@@ -32,7 +32,7 @@
                     <label for="father_name" class="block text-gray-700 text-sm font-semibold mb-2">Father's Name</label>
                     <input type="text" name="father_name" id="father_name"
                         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        placeholder="Your father's name" required>
+                        placeholder="Your father's name" value="{{ old('father_name') }}" required>
                     @error('father_name')
                         <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                     @enderror
@@ -42,7 +42,7 @@
                     <label for="email" class="block text-gray-700 text-sm font-semibold mb-2">Email</label>
                     <input type="email" name="email" id="email"
                         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        placeholder="Your email address" required>
+                        placeholder="Your email address" value="{{ old('email') }}" required>
                     @error('email')
                         <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                     @enderror
@@ -52,7 +52,7 @@
                     <label for="dob" class="block text-gray-700 text-sm font-semibold mb-2">Date of Birth</label>
                     <input type="date" name="dob" id="dob"
                         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        required>
+                         value="{{ old('dob') }}" required>
                     @error('dob')
                         <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                     @enderror
@@ -62,7 +62,7 @@
                     <label for="city" class="block text-gray-700 text-sm font-semibold mb-2">City</label>
                     <input type="text" name="city" id="city"
                         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        placeholder="Your city" required>
+                        placeholder="Your city" value="{{ old('city') }}" required>
                     @error('city')
                         <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                     @enderror
@@ -72,7 +72,7 @@
                     <label for="phone" class="block text-gray-700 text-sm font-semibold mb-2">Phone Number</label>
                     <input type="tel" name="phone" id="phone"
                         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        placeholder="Your phone number" required>
+                        placeholder="Your phone number" value="{{ old('phone') }}" required>
                     @error('phone')
                         <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                     @enderror
@@ -81,7 +81,7 @@
                     <label for="address" class="block text-gray-700 text-sm font-semibold mb-2">Address</label>
                     <input type="text" name="address" id="address"
                         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        placeholder="Your Address" required>
+                        placeholder="Your Address" value="{{ old('address') }}" required>
                     @error('address')
                         <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                     @enderror
@@ -98,7 +98,7 @@
 
                 <div class="mb-4">
                     <div class="flex items-center">
-                        <input type="checkbox" id="terms" name="terms" class="mr-2" required>
+                        <input type="checkbox" id="terms" name="terms" class="mr-2" value="1" {{ old('terms') ? 'checked' : '' }} required>
                         <label for="terms" class="text-gray-700 text-sm font-semibold">I agree to the <a href="/terms"
                                 class="text-blue-500 hover:underline font-semibold">Terms and Conditions</a></label>
 
