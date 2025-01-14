@@ -33,6 +33,11 @@ Route::controller(StoreFrontController::class)->group(function () {
     Route::get('/orders/{order}', 'showOrder')->name('buyer.orders.show');
 
     Route::post('mark-delivered', 'mark_complete')->name('buyer.mark.delivered');
+
+    Route::get('/all-categories', 'show_all_categories')->name('show.all.categories');
+    Route::get('/category-single/{slug}', 'show_single_category')->name('show.single.categories');
+
+    Route::get('/seller-porfolio/{slug}', 'show_seller_portfolio')->name('show.seller.portfolio');
 });
 
 Route::get('profile/{slug}', [UserProfileController::class, 'index'])->name('user.profile');

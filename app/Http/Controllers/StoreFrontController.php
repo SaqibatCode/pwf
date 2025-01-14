@@ -168,4 +168,28 @@ class StoreFrontController extends Controller
 
         return redirect()->back()->with('success', 'Order Completed Successfully');
     }
+
+
+    public function show_all_categories()
+    {
+        $categories = Category::withCount('products')->get();
+        return view('store-front.category.all-categories', ['categories' => $categories]);
+    }
+    public function show_single_category($slug)
+    {
+        $category = Category::with('products')->where('slug', $slug)->get();
+
+        return view('store-front.category.category-single', compact('category'));
+    }
+
+    public function show_seller_portfolio($slug)
+    {
+        $seller = User::with('products','userProfile')
+            ->where('slug', $slug)
+            ->firstOrFail();
+
+        $products = $seller->products;
+
+        return view('store-front.seller-portfolio', compact('seller', 'products'));
+    }
 }

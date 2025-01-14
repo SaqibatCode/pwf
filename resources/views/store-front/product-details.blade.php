@@ -210,7 +210,7 @@
                     <div class="">
                         <h5 class="font-unbounded text-lg">{{ $product->user->first_name }}</h5>
                         <p class="text-gray-500 mb-2">{{ $product->user->verification }}Seller</p>
-                        <a href="#" class="border rounded-md p-2 text-xs hover:text-skin-secondary">View Seller
+                        <a href="{{ route('show.seller.portfolio', $product->user->slug) }}" class="border rounded-md p-2 text-xs hover:text-skin-secondary">View Seller
                             Profile</a>
                     </div>
                     <div class="border rounded-md p-2">

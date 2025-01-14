@@ -31,7 +31,7 @@
 
                     @if (Auth::check())
                         <p>Good Day, {{ Auth::user()->first_name }}</p>
-                        <a href=""><i class="fa-solid fa-user"></i></a>
+                        <a href="{{ route('buyer.account.edit') }}"><i class="fa-solid fa-user"></i></a>
 
                         <form action="{{ route('logout') }}" method="POST" class="d-inline">
                             @csrf
@@ -49,7 +49,7 @@
         <div class="container mx-auto py-2 font-semibold px-4">
             <div class="flex items-center justify-between">
                 <div>
-                    <a href="#" class="text-skin-secondary text-sm">All Categories</a>
+                    <a href="{{ route('show.all.categories') }}" class="text-skin-secondary text-sm">All Categories</a>
                 </div>
                 <div class="hidden lg:flex gap-10 tracking-widest text-sm relative">
                     <div class="relative group">

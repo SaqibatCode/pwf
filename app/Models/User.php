@@ -91,4 +91,8 @@ class User extends Model implements AuthenticatableContract
     {
         return $this->hasMany(ChildOrder::class, 'seller_id');
     }
+
+    public function products(){
+        return $this->hasMany(Product::class);
+    }
 }
