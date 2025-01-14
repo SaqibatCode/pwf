@@ -168,18 +168,23 @@
                                 <div class="collapse show" id="menuExpages" style="">
                                     <ul class="sub-menu">
                                         <li class="menu-item">
-                                            <a class="menu-link" href="#">
+                                            <a class="menu-link" href="{{ route('seller.all.orders') }}">
                                                 <span class="menu-text">All Orders</span>
                                             </a>
                                         </li>
 
                                         <li class="menu-item">
-                                            <a class="menu-link" href="#">
+                                            <a class="menu-link" href="{{ route('seller.pending.orders') }}">
                                                 <span class="menu-text">Pending Orders</span>
                                             </a>
                                         </li>
                                         <li class="menu-item">
-                                            <a class="menu-link" href="#">
+                                            <a class="menu-link" href="{{ route('seller.dispatched.orders') }}">
+                                                <span class="menu-text">Dispatched Orders</span>
+                                            </a>
+                                        </li>
+                                        <li class="menu-item">
+                                            <a class="menu-link" href="{{ route('seller.completed.orders') }}">
                                                 <span class="menu-text">Completed Order</span>
                                             </a>
                                         </li>
@@ -306,7 +311,7 @@
 
                             </li>
                             <li class="menu-item">
-                                <a href="{{ route('verification') }}" data-bs-toggle="collapse"
+                                <a href="{{ route('admin.all.orders') }}" data-bs-toggle="collapse"
                                     class="menu-link waves-effect" aria-expanded="true">
                                     <span class="menu-icon"><i class="bx bx-box"></i></span>
                                     <span class="menu-text"> Orders </span>

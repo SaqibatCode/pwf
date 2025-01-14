@@ -28,9 +28,8 @@
                     </div>
                 </div>
                 <div class="flex gap-4">
-                    <i class="fa-solid fa-user"></i>
-                    <i class="fa-solid fa-heart"></i>
-                    <i class="fa-solid fa-bag-shopping"></i>
+                    <a href=""><i class="fa-solid fa-user"></i></a>
+                    <a href="{{ route('cart.show') }}"><i class="fa-solid fa-bag-shopping"></i></a>
                 </div>
             </div>
         </div>

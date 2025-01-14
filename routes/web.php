@@ -16,9 +16,15 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::controller(StoreFrontController::class)->group(function () {
-    Route::get('/', 'index');
+    Route::get('/', 'index')->name('home');
     Route::get('product/{slug}', 'show_product')->name('show.product');
     Route::get('/shop', 'show_shop')->name('show.shop');
+
+
+    Route::get('/login', 'show_login')->name('buyer.login');
+    Route::post('/login', 'login')->name('buyer.login.post');
+    Route::get('/register', 'show_register')->name('buyer.register');
+    Route::post('/register', 'register')->name('buyer.register.post');
 });
 
 Route::get('profile/{slug}', [UserProfileController::class, 'index'])->name('user.profile');
@@ -38,6 +44,17 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('cart/empty', [OrderController::class, 'emptyCart'])->name('cart.empty');
     Route::post('order', [OrderController::class, 'store'])->name('order.store');
     Route::get('/order/success', [OrderController::class, 'success'])->name('order.success');
+
+
+    Route::get('/seller/all-orders', [OrderController::class, 'get_seller_order'])->name('seller.all.orders');
+    Route::get('/seller/pending-orders', [OrderController::class, 'get_seller_pending_order'])->name('seller.pending.orders');
+    Route::get('/seller/completed-orders', [OrderController::class, 'get_seller_completed_order'])->name('seller.completed.orders');
+    Route::get('/seller/dispatched-orders', [OrderController::class, 'get_seller_dispatched_order'])->name('seller.dispatched.orders');
+    Route::post('/orders/{order}/payment-received', [OrderController::class, 'markPaymentReceived'])->name('orders.payment.received');
+    Route::post('/orders/{order}/dispatch', [OrderController::class, 'dispatchOrder'])->name('orders.dispatch');
+
+    Route::get('/admin/all-orders', [OrderController::class, 'get_admin_order'])->name('admin.all.orders');
+    Route::post('/orders/{id}/update-status', [OrderController::class, 'updateStatus'])->name('orders.status.update');
 });
 
 Route::controller(AdminController::class)->group(function () {
@@ -52,8 +69,8 @@ Route::controller(AdminController::class)->group(function () {
 
 Route::controller(UserController::class)->group(function () {
     Route::get('portal', 'index')->name('portal');
-    Route::get('register', 'get_register_page')->name('register.seller');
-    Route::post('register', 'register_seller')->name('store.seller');
+    Route::get('seller/register', 'get_register_page')->name('register.seller');
+    Route::post('seller/register', 'register_seller')->name('store.seller');
     Route::post('portal', 'login')->name('login');
     Route::post('/logout', 'logout')->name('logout');
 });

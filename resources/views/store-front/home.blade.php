@@ -167,7 +167,7 @@
             <div class="swiper productSwiper !pb-20">
                 <div class="swiper-wrapper">
                     @foreach ($products as $product)
-                        @if ($product->category->name == 'Graphic Cards')
+                        @if ($product->category?->name == 'Graphic Cards')
                             <div class="swiper-slide product-card-main">
                                 <div class="mb-1">
                                     @if ($product->condition == 'Used')
@@ -234,7 +234,7 @@
             <div class="swiper productSwiper !pb-20">
                 <div class="swiper-wrapper">
                     @foreach ($products as $product)
-                        @if ($product->category->name == 'Processors')
+                        @if ($product->category?->name == 'Processors')
                             <div class="swiper-slide product-card-main">
                                 <div class="mb-1">
                                     @if ($product->condition == 'Used')
@@ -301,7 +301,7 @@
             <div class="swiper productSwiper !pb-20">
                 <div class="swiper-wrapper">
                     @foreach ($products as $product)
-                        @if ($product->category->name == 'Storage')
+                        @if ($product->category?->name == 'Storage')
                             <div class="swiper-slide product-card-main">
                                 <div class="mb-1">
                                     @if ($product->condition == 'Used')
@@ -369,7 +369,7 @@
             <div class="swiper productSwiper !pb-20">
                 <div class="swiper-wrapper">
                     @foreach ($products as $product)
-                        @if ($product->category->name == 'Motherboards')
+                        @if ($product->category?->name == 'Motherboards')
                             <div class="swiper-slide product-card-main">
                                 <div class="mb-1">
                                     @if ($product->condition == 'Used')

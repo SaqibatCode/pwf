@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class ChildOrder extends Model
 {
     use HasFactory;
-    protected $fillable = ['order_id', 'product_id', 'seller_id', 'quantity', 'payment_screenshot'];
+    protected $fillable = ['order_id', 'product_id', 'seller_id', 'quantity', 'payment_screenshot', 'status', 'payment_type', 'tracking_id'];
 
     public function order()
     {
