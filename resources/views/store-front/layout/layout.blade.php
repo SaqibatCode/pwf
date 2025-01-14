@@ -28,8 +28,18 @@
                     </div>
                 </div>
                 <div class="flex gap-4">
-                    <a href=""><i class="fa-solid fa-user"></i></a>
                     <a href="{{ route('cart.show') }}"><i class="fa-solid fa-bag-shopping"></i></a>
+                    @if (Auth::check())
+                        <a href=""><i class="fa-solid fa-user"></i></a>
+                        <p>Good, Day {{ Auth::user()->first_name }}</p>
+                        <form action="{{ route('logout') }}" method="POST" class="d-inline">
+                            @csrf
+                            <button type="submit"><i class="fa-solid fa-power-off"></i></button>
+                        </form>
+                    @else
+
+                    @endif
+
                 </div>
             </div>
         </div>
