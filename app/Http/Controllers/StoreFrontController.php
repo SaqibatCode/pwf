@@ -72,6 +72,7 @@ class StoreFrontController extends Controller
             'dob' => 'required|date',
             'city' => 'required|string|max:255',
             'phone' => 'required|string|max:20',
+            'address' => 'required',
             'password'    => 'required|string|min:8',
             'terms' => 'required|accepted',
         ]);
@@ -84,6 +85,7 @@ class StoreFrontController extends Controller
             'cnic' => 'N/A',
             'verification' => 'Verified',
             'type' => 'buyer',
+            'address' => $request->address,
             'dob' => $request->dob,
             'city' => $request->city,
             'phone' => $request->phone,

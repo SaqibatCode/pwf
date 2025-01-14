@@ -5,7 +5,7 @@
         <div class="bg-white p-8 rounded shadow-md w-full max-w-lg">
             <h2 class="text-4xl font-extralight mb-6 text-center text-gray-800">Register</h2>
 
-            <form action="/register" method="POST">
+            <form action="{{ route('buyer.register.post') }}" method="POST">
                 @csrf
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div class="mb-4">
@@ -78,7 +78,7 @@
                     @enderror
                 </div>
                 <div class="mb-4">
-                    <label for="address" class="block text-gray-700 text-sm font-semibold mb-2">Phone Number</label>
+                    <label for="address" class="block text-gray-700 text-sm font-semibold mb-2">Address</label>
                     <input type="text" name="address" id="address"
                         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         placeholder="Your Address" required>
