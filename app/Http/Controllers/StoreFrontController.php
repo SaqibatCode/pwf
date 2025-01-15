@@ -24,16 +24,45 @@ class StoreFrontController extends Controller
 
     public function show_product($slug)
     {
-        $product = Product::where('slug', $slug)->with('brand', 'category', 'pictures', 'user')->first();
-        $relatedProducts = Product::where('category_id', $product->category_id)->where('stock_quanity', '>=', 1)->with('user')->latest()->take(5)->get();
+        $product = Product::with([
+            'attributes' => function ($query) {
+                $query->with('values');
+            },
+            'attributes.values'
+        ])->where('slug', $slug)->firstOrFail();
 
-        // dd($relatedProducts);
-        return view('store-front.product-details', compact('product', 'relatedProducts'));
+
+        $productAttributes = $product->attributes->map(function ($attribute) {
+            // Map the attributes with their values and names
+            $attributeValueId = $attribute->pivot->attribute_value_id; // Get the pivot table's attribute_value_id
+
+            $attributeValue = $attribute->values->first(function ($value) use ($attributeValueId) {
+                return $value->id === $attributeValueId; // Find the corresponding attribute value.
+            });
+
+            return [
+                'attribute_name' => $attribute->name,
+                'attribute_value' => $attributeValue ? $attributeValue->value : null,
+            ];
+        });
+
+
+        if (request()->wantsJson()) {
+            return new JsonResponse($productAttributes, 200);
+        }
+
+        $relatedProducts = Product::where('category_id', $product->category_id)
+            ->where('stock_quanity', '>=', 1)
+            ->with('user')
+            ->latest()
+            ->take(5)
+            ->get();
+
+        return view('store-front.product-details', compact('product', 'relatedProducts', 'productAttributes'));
     }
-
     public function show_shop()
     {
-        $products = Product::with('pictures', 'user')->where('status', 'approved')->where('stock_quanity', '>=', 1)->paginate('10');
+        $products = Product::with('pictures', 'user')->where('status', 'approved')->where('stock_quanity', '>=', 1)->latest()->paginate('10');
         return view('store-front.products', compact('products'));
     }
 
@@ -184,12 +213,16 @@ class StoreFrontController extends Controller
 
     public function show_seller_portfolio($slug)
     {
-        $seller = User::with('products','userProfile')
+        $seller = User::with('products', 'userProfile')
             ->where('slug', $slug)
             ->firstOrFail();
 
         $products = $seller->products;
 
         return view('store-front.seller-portfolio', compact('seller', 'products'));
+    }
+
+    public function become_seller(){
+        return view('store-front.become-vendor');
     }
 }

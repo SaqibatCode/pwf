@@ -82,7 +82,8 @@
                                 <td>{{ $seller->email }}</td>
                                 <td>{{ $seller->created_at }}</td>
                                 <td>
-                                    <a href="#" class="btn btn-primary">View Seller Profile</a>
+                                    <a href="{{ route('show.seller.portfolio', $seller->slug) }}" class="btn btn-primary">View Seller Profile</a>
+                                    <a href="{{ route('user.profile', $seller->slug) }}" class="btn btn-primary">Edit Seller Profile</a>
                                     @if ($seller->verification !== 'Unverified')
                                         <form method="POST" action="{{ route('verification.reject') }}">
                                             @csrf

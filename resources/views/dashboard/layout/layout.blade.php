@@ -327,18 +327,28 @@
                                 <div class="collapse show" id="menuExpages" style="">
                                     <ul class="sub-menu">
                                         <li class="menu-item">
-                                            <a class="menu-link" href="#">
+                                            <a class="menu-link" href="{{ route('slider.index') }}">
                                                 <span class="menu-text">Home Page Sliders</span>
                                             </a>
                                         </li>
                                         <li class="menu-item">
-                                            <a class="menu-link" href="#">
-                                                <span class="menu-text">Marketing</span>
+                                            <a class="menu-link" href="{{ route('admin.terms.edit') }}">
+                                                <span class="menu-text">Edit Terms & Condition</span>
                                             </a>
                                         </li>
                                         <li class="menu-item">
-                                            <a class="menu-link" href="#">
-                                                <span class="menu-text">Site Setting</span>
+                                            <a class="menu-link" href="{{ route('admin.about.edit') }}">
+                                                <span class="menu-text">Edit About Us</span>
+                                            </a>
+                                        </li>
+                                        <li class="menu-item">
+                                            <a class="menu-link" href="{{ route('admin.contact.edit') }}">
+                                                <span class="menu-text">Edit Contact Us</span>
+                                            </a>
+                                        </li>
+                                        <li class="menu-item">
+                                            <a class="menu-link" href="{{ route('admin.faqs.index') }}">
+                                                <span class="menu-text">Manage FAQS</span>
                                             </a>
                                         </li>
                                     </ul>

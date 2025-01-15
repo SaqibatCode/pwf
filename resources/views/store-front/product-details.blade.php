@@ -210,7 +210,8 @@
                     <div class="">
                         <h5 class="font-unbounded text-lg">{{ $product->user->first_name }}</h5>
                         <p class="text-gray-500 mb-2">{{ $product->user->verification }}Seller</p>
-                        <a href="{{ route('show.seller.portfolio', $product->user->slug) }}" class="border rounded-md p-2 text-xs hover:text-skin-secondary">View Seller
+                        <a href="{{ route('show.seller.portfolio', $product->user->slug) }}"
+                            class="border rounded-md p-2 text-xs hover:text-skin-secondary">View Seller
                             Profile</a>
                     </div>
                     <div class="border rounded-md p-2">
@@ -238,57 +239,96 @@
 
     <section class="px-4 font-unbounded">
         <div class="container mx-auto pb-12">
-
-
-
             <div class="mb-4 border-b border-gray-200">
                 <ul id="myTabs" class="flex justify-center flex-wrap -mb-px text-sm font-medium text-center"
-                    id="default-styled-tab" data-tabs-toggle="#default-styled-tab-content" role="tablist">
+                    role="tablist">
                     <li class="me-2" role="presentation">
-                        <button onclick="activeTab('description')" id="description"
+                        <button id="description-tab"
                             class="inline-block p-4 border-b-2 rounded-t-lg !text-skin-secondary !border-blue-700 transition-all duration-300"
-                            data-tabs-target="#styled-profile" type="button" role="tab" aria-controls="profile"
-                            aria-selected="false">Description</button>
+                            data-tab-target="#description-content" type="button" role="tab"
+                            aria-controls="description-content" aria-selected="true">
+                            Description
+                        </button>
                     </li>
                     <li class="me-2" role="presentation">
-                        <button onclick="activeTab('specification')" id="specification"
+                        <button id="specification-tab"
                             class="inline-block p-4 border-b-2 rounded-t-lg text-skin-primary border-gray-700 transition-all duration-300 hover:text-skin-secondary hover:border-blue-700"
-                            data-tabs-target="#styled-dashboard" type="button" role="tab" aria-controls="dashboard"
-                            aria-selected="false">Specification</button>
+                            data-tab-target="#specification-content" type="button" role="tab"
+                            aria-controls="specification-content" aria-selected="false">
+                            Specification
+                        </button>
                     </li>
                     <li class="me-2" role="presentation">
-                        <button onclick="activeTab('reviews')" id="reviews"
+                        <button id="reviews-tab"
                             class="inline-block p-4 border-b-2 rounded-t-lg text-skin-primary border-gray-700 transition-all duration-300 hover:text-skin-secondary hover:border-blue-700"
-                            data-tabs-target="#styled-settings" type="button" role="tab" aria-controls="settings"
-                            aria-selected="false">Reviews</button>
+                            data-tab-target="#reviews-content" type="button" role="tab"
+                            aria-controls="reviews-content" aria-selected="false">
+                            Reviews
+                        </button>
                     </li>
                 </ul>
             </div>
-            <div id="default-styled-tab-content">
-                <div class="hidden p-4 max-h-[500px] overflow-auto" id="styled-profile" role="tabpanel"
-                    aria-labelledby="profile-tab">
-                    <p class="text-sm">This is some placeholder content the <strong
-                            class="font-medium text-skin-secondary">Profile tab's associated
-                            content</strong>. Clicking another tab will toggle the visibility of this one for the
-                        next. The tab JavaScript swaps classes to control the content visibility and styling.
+            <div id="tab-contents">
+                <div class="p-4 max-h-[500px] overflow-auto" id="description-content" role="tabpanel"
+                    aria-labelledby="description-tab">
+                    <p class="text-sm">
+                        {{ $product->description }}
                     </p>
                 </div>
-                <div class="hidden p-4 max-h-[500px] overflow-auto" id="styled-dashboard" role="tabpanel"
-                    aria-labelledby="dashboard-tab">
-                    <p class="text-sm">This is some placeholder content the <strong
-                            class="font-medium text-skin-secondary">Dashboard tab's associated
-                            content</strong>. Clicking another tab will toggle the visibility of this one for the
-                        next. The tab JavaScript swaps classes to control the content visibility and styling.</p>
+                <div class="hidden p-4 overflow-auto" id="specification-content" role="tabpanel"
+                    aria-labelledby="specification-tab">
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 shadow-md rounded-md">
+                            <thead class="bg-gray-50 dark:bg-gray-800">
+                                <tr>
+                                    <th scope="col"
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
+                                        Attribute
+                                    </th>
+                                    <th scope="col"
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
+                                        Value
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody id="keyValueTableBody"
+                                class="bg-white divide-y divide-gray-200 dark:bg-gray-900 dark:divide-gray-700">
+                                @if ($product->parts)
+                                    @foreach ($product->parts as $parts)
+                                        <tr class="hover:bg-gray-100 dark:hover:bg-gray-800">
+                                            <td
+                                                class="px-6 py-4 whitespace-nowrap uppercase text-sm font-medium text-gray-900 dark:text-gray-200">
+                                                {{ STR_REPLACE('_', ' ', $parts->key) }}</td>
+                                            <td
+                                                class="px-6 py-4 whitespace-nowrap uppercase text-sm text-gray-500 dark:text-gray-400">
+                                                {{ $parts->value }}</td>
+                                        </tr>
+                                    @endforeach
+                                @endif
+                                @if ($productAttributes)
+                                    @foreach ($productAttributes as $attribute)
+                                        <tr class="hover:bg-gray-100 dark:hover:bg-gray-800">
+                                            <td
+                                                class="px-6 py-4 whitespace-nowrap uppercase text-sm font-medium text-gray-900 dark:text-gray-200">
+                                                {{ $attribute['attribute_name'] }}</td>
+                                            <td
+                                                class="px-6 py-4 whitespace-nowrap uppercase text-sm text-gray-500 dark:text-gray-400">
+                                                {{ $attribute['attribute_value'] }}</td>
+                                        </tr>
+                                    @endforeach
+                                @endif
+                            </tbody>
+                        </table>
+
+                    </div>
                 </div>
-                <div class="hidden p-4 max-h-[500px] overflow-auto" id="styled-settings" role="tabpanel"
-                    aria-labelledby="settings-tab">
-                    <p class="text-sm">This is some placeholder content the <strong
-                            class="font-medium text-skin-secondary">Settings tab's associated
-                            content</strong>. Clicking another tab will toggle the visibility of this one for the
-                        next. The tab JavaScript swaps classes to control the content visibility and styling.</p>
+                <div class="hidden p-4 max-h-[500px] overflow-auto" id="reviews-content" role="tabpanel"
+                    aria-labelledby="reviews-tab">
+                    <p class="text-sm">
+                        This is the reviews tab's content <strong class="font-medium text-skin-secondary">Reviews</strong>.
+                    </p>
                 </div>
             </div>
-
         </div>
     </section>
 
@@ -344,4 +384,44 @@
 
         </div>
     </section>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabs = document.querySelectorAll('#myTabs button');
+            const tabContents = document.querySelectorAll('#tab-contents > div');
+
+            function activateTab(tabId) {
+
+                tabs.forEach(tab => {
+                    tab.classList.remove('!text-skin-secondary', '!border-blue-700');
+                    tab.classList.add('text-skin-primary', 'border-gray-700', 'hover:text-skin-secondary',
+                        'hover:border-blue-700');
+                    tab.setAttribute('aria-selected', false)
+                });
+
+                tabContents.forEach(content => {
+                    content.classList.add('hidden')
+                })
+
+                const selectedTab = document.querySelector(`#${tabId}-tab`);
+                selectedTab.classList.remove('text-skin-primary', 'border-gray-700', 'hover:text-skin-secondary',
+                    'hover:border-blue-700')
+                selectedTab.classList.add('!text-skin-secondary', '!border-blue-700')
+                selectedTab.setAttribute('aria-selected', true);
+
+                const selectedContent = document.querySelector(selectedTab.getAttribute('data-tab-target'))
+                selectedContent.classList.remove('hidden');
+            }
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function(e) {
+                    const targetId = this.getAttribute('id').replace('-tab', '')
+                    activateTab(targetId)
+                });
+            });
+            //set default selected tab
+            activateTab('description');
+        });
+    </script>
 @endsection

@@ -8,12 +8,12 @@
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-flex align-items-center justify-content-between">
-                        <h4 class="mb-0 font-size-18">All Products</h4>
+                        <h4 class="mb-0 font-size-18">Seller Profile</h4>
 
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
                                 <li class="breadcrumb-item"><a href="javascript: void(0);">Playware</a></li>
-                                <li class="breadcrumb-item active">Products</li>
+                                <li class="breadcrumb-item active">Seller Profile</li>
                             </ol>
                         </div>
 
@@ -164,7 +164,9 @@
                             </tbody>
                         </table>
 
-                        <button class="btn btn-primary" id="add_new_method">Add New Method</button>
+                        @if (Auth::user()->type == 'seller')
+                            <button class="btn btn-primary" id="add_new_method">Add New Method</button>
+                        @endif
 
                         <form action="{{ route('payment_methods.store') }}" method="POST" id="pMtd" class="form"
                             style="display:none;">
@@ -211,4 +213,3 @@
         </div>
     </div>
 @endsection
-

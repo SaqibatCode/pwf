@@ -24,12 +24,14 @@ class VerificationController extends Controller
                 return view('dashboard.seller.verification.verification');
             case 'admin':
                 $verification = User::with('user_verification')
-                ->where('type', 'seller')
-                ->where('verification', 'pending')
-                ->paginate(10);
+                    ->where('type', 'seller')
+                    ->where('verification', 'pending')
+                    ->paginate(10);
                 // dd($verification);
                 // return response()->json($verification);
                 return view('dashboard.admin.verification.verification', compact('verification'));
+            case 'buyer':
+                return redirect(route('home'));
         }
     }
 
@@ -140,13 +142,15 @@ class VerificationController extends Controller
             ->with('error', 'There was an error in processing your verification request.');
     }
 
-    public function approve_user(Request $request){
+    public function approve_user(Request $request)
+    {
         $user = User::findorfail($request->id);
         $user->verification = 'Verified';
         $user->save();
         return redirect()->back()->with('success', 'User Verified Successfully');
     }
-    public function reject_user(Request $request){
+    public function reject_user(Request $request)
+    {
         $user = User::findorfail($request->id);
         $user->verification = 'Unverified';
         $user->save();

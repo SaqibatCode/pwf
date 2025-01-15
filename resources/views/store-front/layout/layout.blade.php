@@ -78,9 +78,9 @@
                             <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Package 2</a>
                         </div>
                     </div>
-                    <a href="#" class="text-skin-secondary flex gap-2 items-center">
+                    <a href="{{ route('become.seller') }}" class="text-skin-secondary flex gap-2 items-center">
                         <img src="{{ asset('store-front/images/icons/dot-hot.png') }}" alt="" class="h-5 w-5">
-                        Become a Vendor
+                        Become a Seller
                     </a>
                 </div>
                 <div>
@@ -130,9 +130,9 @@
                     <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Package 2</a>
                 </div>
             </div>
-            <a href="#" class="text-skin-secondary flex gap-2 items-center">
-                <img src="{{ asset('store-front/images/icons/dot-hot.png') }}" alt="" class="h-5 w-5"> Become
-                a Vendor
+            <a href="{{ route('become.seller') }}" class="text-skin-secondary flex gap-2 items-center">
+                <img src="{{ asset('store-front/images/icons/dot-hot.png') }}" alt="" class="h-5 w-5">
+                Become a Seller
             </a>
         </div>
 
@@ -238,22 +238,18 @@
 
                     <ul class="mb-0 list-none">
                         <li>
-                            <a href="#!"
+                            <a href="{{ route('show.shop') }}"
                                 class="text-skin-gray hover:text-skin-secondary duration-300 transition-all font-semibold">Shop</a>
                         </li>
                         <li>
-                            <a href="#!"
+                            <a href="{{ route('about') }}"
                                 class="text-skin-gray hover:text-skin-secondary duration-300 transition-all font-semibold">About
                                 us</a>
                         </li>
                         <li>
-                            <a href="#!"
+                            <a href="{{ route('contact') }}"
                                 class="text-skin-gray hover:text-skin-secondary duration-300 transition-all font-semibold">Contact
                                 Us</a>
-                        </li>
-                        <li>
-                            <a href="#!"
-                                class="text-skin-gray hover:text-skin-secondary duration-300 transition-all font-semibold">Support</a>
                         </li>
                     </ul>
                 </div>
@@ -263,21 +259,21 @@
 
                     <ul class="mb-0 list-none">
                         <li>
-                            <a href="#!"
+                            <a href="{{ route('terms') }}"
                                 class="text-skin-gray hover:text-skin-secondary duration-300 transition-all font-semibold">Terms
                                 & Conditions</a>
                         </li>
                         <li>
-                            <a href="#!"
+                            <a href="{{ route('faqs') }}"
                                 class="text-skin-gray hover:text-skin-secondary duration-300 transition-all font-semibold">FAQ's</a>
                         </li>
                         <li>
-                            <a href="#!"
+                            <a href="{{ route('about') }}"
                                 class="text-skin-gray hover:text-skin-secondary duration-300 transition-all font-semibold">About
                                 Us</a>
                         </li>
                         <li>
-                            <a href="#!"
+                            <a href="{{ route('contact') }}"
                                 class="text-skin-gray hover:text-skin-secondary duration-300 transition-all font-semibold">Contact
                                 Us</a>
                         </li>
@@ -289,20 +285,20 @@
 
                     <ul class="mb-0 list-none">
                         <li>
-                            <a href="#!"
+                            <a href="{{ route('show.single.categories', 'monitors') }}"
                                 class="text-skin-gray hover:text-skin-secondary duration-300 transition-all font-semibold">Monitor</a>
                         </li>
                         <li>
-                            <a href="#!"
+                            <a href="{{ route('show.single.categories', 'headphones') }}"
                                 class="text-skin-gray hover:text-skin-secondary duration-300 transition-all font-semibold">Headphone</a>
                         </li>
                         <li>
-                            <a href="#!"
+                            <a href="{{ route('show.single.categories', 'graphic-cards') }}"
                                 class="text-skin-gray hover:text-skin-secondary duration-300 transition-all font-semibold">Graphic
                                 Card</a>
                         </li>
                         <li>
-                            <a href="#!"
+                            <a href="{{ route('show.single.categories', 'mouse') }}"
                                 class="text-skin-gray hover:text-skin-secondary duration-300 transition-all font-semibold">Mouse</a>
                         </li>
                     </ul>

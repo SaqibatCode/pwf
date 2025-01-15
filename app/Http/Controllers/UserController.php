@@ -31,7 +31,7 @@ class UserController extends Controller
             case 'admin':
                 return view('dashboard.admin.dashboard');
             case 'buyer':
-                return ('Home');
+                return redirect(route('home'));
         }
     }
 
