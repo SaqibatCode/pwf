@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ChildOrder;
+use App\Models\Order;
+use App\Models\Product;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -29,7 +32,14 @@ class UserController extends Controller
             case 'seller':
                 return view('dashboard.seller.dashboard');
             case 'admin':
-                return view('dashboard.admin.dashboard');
+                $totalRevenue = '200000';
+                $totalOrders = Order::count();
+                $totalProducts = Product::count();
+                $totalSellers = User::where('type', 'seller')->count();
+                $totalBuyers = User::where('type', 'buyer')->count();
+
+                $recentOrders = ChildOrder::latest()->take(5)->get();
+                return view('dashboard.admin.dashboard', compact('totalRevenue', 'totalOrders', 'totalProducts', 'totalSellers', 'totalBuyers', 'recentOrders'));
             case 'buyer':
                 return redirect(route('home'));
         }

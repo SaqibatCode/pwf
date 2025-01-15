@@ -97,14 +97,14 @@ Route::middleware('auth', 'admin')->group(function () {
     // =========================================================================
     // These routes are for editing and managing static pages by admin users.
 
-    Route::resource('sliders', HomePageSliderController::class)->names([
-        'index' => 'slider.index',
-        'create' => 'slider.create',
-        'store' => 'slider.store',
-        'edit' => 'slider.edit',
-        'update' => 'slider.update',
-        'destroy' => 'slider.destroy',
-    ]);
+    Route::get('sliders', [HomePageSliderController::class, 'index'])->name('slider.index');
+    Route::get('sliders/create', [HomePageSliderController::class, 'create'])->name('slider.create');
+    Route::post('sliders', [HomePageSliderController::class, 'store'])->name('slider.store');
+    Route::get('sliders/{id}/edit', [HomePageSliderController::class, 'edit'])->name('slider.edit');
+    Route::put('sliders/{id}', [HomePageSliderController::class, 'update'])->name('slider.update');
+    Route::delete('sliders/{id}', [HomePageSliderController::class, 'destroy'])->name('slider.destroy');
+
+
     Route::prefix('/admin/pages')->name('admin.')->group(function () {
 
         // Admin Controller Routes
