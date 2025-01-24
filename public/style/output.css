@@ -1079,6 +1079,10 @@ video {
   display: none;
 }
 
+.h-10{
+  height: 2.5rem;
+}
+
 .h-16{
   height: 4rem;
 }
@@ -1132,10 +1136,6 @@ video {
   height: max-content;
 }
 
-.h-10{
-  height: 2.5rem;
-}
-
 .max-h-20{
   max-height: 5rem;
 }
@@ -1162,6 +1162,10 @@ video {
 
 .min-h-screen{
   min-height: 100vh;
+}
+
+.w-10{
+  width: 2.5rem;
 }
 
 .w-16{
@@ -1211,10 +1215,6 @@ video {
 .w-max{
   width: -moz-max-content;
   width: max-content;
-}
-
-.w-10{
-  width: 2.5rem;
 }
 
 .min-w-12{
@@ -1267,10 +1267,6 @@ video {
 
 .table-auto{
   table-layout: auto;
-}
-
-.border-collapse{
-  border-collapse: collapse;
 }
 
 .translate-y-full{
@@ -1418,16 +1414,16 @@ video {
   margin-bottom: calc(0.25rem * var(--tw-space-y-reverse));
 }
 
-.space-y-6 > :not([hidden]) ~ :not([hidden]){
-  --tw-space-y-reverse: 0;
-  margin-top: calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));
-  margin-bottom: calc(1.5rem * var(--tw-space-y-reverse));
-}
-
 .space-y-4 > :not([hidden]) ~ :not([hidden]){
   --tw-space-y-reverse: 0;
   margin-top: calc(1rem * calc(1 - var(--tw-space-y-reverse)));
   margin-bottom: calc(1rem * var(--tw-space-y-reverse));
+}
+
+.space-y-6 > :not([hidden]) ~ :not([hidden]){
+  --tw-space-y-reverse: 0;
+  margin-top: calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));
+  margin-bottom: calc(1.5rem * var(--tw-space-y-reverse));
 }
 
 .divide-y > :not([hidden]) ~ :not([hidden]){
@@ -3178,14 +3174,14 @@ nav .menu .menu_icon:hover .icon:after {
   background-color: rgb(185 28 28 / var(--tw-bg-opacity, 1));
 }
 
-.hover\:bg-skin-secondary:hover{
-  --tw-bg-opacity: 1;
-  background-color: rgba(var(--bg-secondary), var(--tw-bg-opacity, 1));
-}
-
 .hover\:bg-skin-primary:hover{
   --tw-bg-opacity: 1;
   background-color: rgba(var(--bg-primary), var(--tw-bg-opacity, 1));
+}
+
+.hover\:bg-skin-secondary:hover{
+  --tw-bg-opacity: 1;
+  background-color: rgba(var(--bg-secondary), var(--tw-bg-opacity, 1));
 }
 
 .hover\:bg-opacity-5:hover{
@@ -3696,6 +3692,16 @@ nav .menu .menu_icon:hover .icon:after {
     background-color: rgb(17 24 39 / var(--tw-bg-opacity, 1));
   }
 
+  .dark\:text-gray-100{
+    --tw-text-opacity: 1;
+    color: rgb(243 244 246 / var(--tw-text-opacity, 1));
+  }
+
+  .dark\:text-gray-200{
+    --tw-text-opacity: 1;
+    color: rgb(229 231 235 / var(--tw-text-opacity, 1));
+  }
+
   .dark\:text-gray-300{
     --tw-text-opacity: 1;
     color: rgb(209 213 219 / var(--tw-text-opacity, 1));
@@ -3709,16 +3715,6 @@ nav .menu .menu_icon:hover .icon:after {
   .dark\:text-gray-600{
     --tw-text-opacity: 1;
     color: rgb(75 85 99 / var(--tw-text-opacity, 1));
-  }
-
-  .dark\:text-gray-200{
-    --tw-text-opacity: 1;
-    color: rgb(229 231 235 / var(--tw-text-opacity, 1));
-  }
-
-  .dark\:text-gray-100{
-    --tw-text-opacity: 1;
-    color: rgb(243 244 246 / var(--tw-text-opacity, 1));
   }
 
   .dark\:hover\:bg-blue-700:hover{

@@ -104,6 +104,9 @@
                                                             <li><strong>Cnic Back:</strong> <img
                                                                     src="{{ asset($ver->user_verification->cnic_back_picture) }}"
                                                                     alt="cnic_back_picture Card" class="img-fluid"></li>
+                                                            <li><strong>Cnic Holding Selfie:</strong> <img
+                                                                    src="{{ $ver->user_verification->cnic_holding_selfie }}"
+                                                                    alt="cnic_back_picture Card" class="img-fluid"></li>
                                                         </ul>
                                                     @else
                                                         <ul>
@@ -112,6 +115,9 @@
                                                                     alt="cnic_front_picture Picture" class="img-fluid"></li>
                                                             <li><strong>Cnic Back:</strong> <img
                                                                     src="{{ $ver->user_verification->cnic_back_picture }}"
+                                                                    alt="cnic_back_picture Card" class="img-fluid"></li>
+                                                            <li><strong>Cnic Holding Selfie:</strong> <img
+                                                                    src="{{ $ver->user_verification->cnic_holding_selfie }}"
                                                                     alt="cnic_back_picture Card" class="img-fluid"></li>
                                                         </ul>
                                                     @endif

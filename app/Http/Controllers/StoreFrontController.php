@@ -53,7 +53,7 @@ class StoreFrontController extends Controller
 
         $relatedProducts = Product::where('category_id', $product->category_id)
             ->where('stock_quanity', '>=', 1)
-            ->with('user')
+            ->with('user', 'pictures')
             ->latest()
             ->take(5)
             ->get();
@@ -201,12 +201,19 @@ class StoreFrontController extends Controller
 
     public function show_all_categories()
     {
-        $categories = Category::withCount('products')->get();
+        $categories = Category::withCount(['products' => function ($query) {
+            $query->where('status', 'approved');
+        }])->get();
         return view('store-front.category.all-categories', ['categories' => $categories]);
     }
     public function show_single_category($slug)
     {
-        $category = Category::with('products')->where('slug', $slug)->get();
+        $category = Category::where('slug', $slug)
+            ->whereHas('products', function ($query) {
+                $query->where('status', 'approved');
+            })
+            ->with('products')
+            ->get();
 
         return view('store-front.category.category-single', compact('category'));
     }
@@ -222,7 +229,8 @@ class StoreFrontController extends Controller
         return view('store-front.seller-portfolio', compact('seller', 'products'));
     }
 
-    public function become_seller(){
+    public function become_seller()
+    {
         return view('store-front.become-vendor');
     }
 }
