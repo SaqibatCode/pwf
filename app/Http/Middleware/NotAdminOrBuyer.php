@@ -17,7 +17,7 @@ class NotAdminOrBuyer
      */
     public function handle(Request $request, Closure $next)
     {
-        if (Auth::check() && in_array(Auth::user()->type, ['admin', 'buyer'])) {
+        if (Auth::check() && in_array(Auth::user()->type, ['admin', 'seller'])) {
             return redirect()->back()->with('error', 'You are not allowed to add to cart.'); // redirect to previous with error
         }
 

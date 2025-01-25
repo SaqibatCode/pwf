@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Brand;
 use App\Models\Category;
 use App\Models\ChildOrder;
 use App\Models\Product;
@@ -13,6 +14,10 @@ use Illuminate\Support\Facades\Hash;
 
 class StoreFrontController extends Controller
 {
+    // ============================
+    // Home & Product Views Section
+    // ============================
+
     public function index()
     {
         $products = Product::with('category', 'brand', 'user')->get();
@@ -31,13 +36,11 @@ class StoreFrontController extends Controller
             'attributes.values'
         ])->where('slug', $slug)->firstOrFail();
 
-
+        // Map the attributes with their values and names
         $productAttributes = $product->attributes->map(function ($attribute) {
-            // Map the attributes with their values and names
-            $attributeValueId = $attribute->pivot->attribute_value_id; // Get the pivot table's attribute_value_id
-
+            $attributeValueId = $attribute->pivot->attribute_value_id;
             $attributeValue = $attribute->values->first(function ($value) use ($attributeValueId) {
-                return $value->id === $attributeValueId; // Find the corresponding attribute value.
+                return $value->id === $attributeValueId;
             });
 
             return [
@@ -46,11 +49,12 @@ class StoreFrontController extends Controller
             ];
         });
 
-
+        // Return as JSON if the request demands it
         if (request()->wantsJson()) {
             return new JsonResponse($productAttributes, 200);
         }
 
+        // Related products section
         $relatedProducts = Product::where('category_id', $product->category_id)
             ->where('stock_quanity', '>=', 1)
             ->with('user', 'pictures')
@@ -60,16 +64,63 @@ class StoreFrontController extends Controller
 
         return view('store-front.product-details', compact('product', 'relatedProducts', 'productAttributes'));
     }
-    public function show_shop()
+
+    public function show_shop(Request $request)
     {
-        $products = Product::with('pictures', 'user')->where('status', 'approved')->where('stock_quanity', '>=', 1)->latest()->paginate('10');
-        return view('store-front.products', compact('products'));
+        // Fetch categories that have products with stock available and are approved
+        $categories = Category::whereHas('products', function ($query) {
+            $query->where('status', 'approved')
+                ->where('stock_quanity', '>=', 1);
+        })->get();
+
+        // Fetch brands that have products with stock available and are approved
+        $brands = Brand::whereHas('products', function ($query) {
+            $query->where('status', 'approved')
+                ->where('stock_quanity', '>=', 1);
+        })->get();
+
+        // Start with the base query for fetching products
+        $query = Product::with('pictures', 'user')
+            ->where('status', 'approved')
+            ->where('stock_quanity', '>=', 1);
+
+        // Apply price filter if provided
+        if ($request->has('min_price') && $request->has('max_price')) {
+            $query->whereBetween('price', [$request->min_price, $request->max_price]);
+        }
+
+        // Apply category filter if provided
+        if ($request->has('category')) {
+            $query->whereHas('category', function ($query) use ($request) {
+                $query->whereIn('slug', $request->category);
+            });
+        }
+
+        // Apply brand filter if provided
+        if ($request->has('brand')) {
+            $query->whereHas('brand', function ($query) use ($request) {
+                $query->whereIn('slug', $request->brand);
+            });
+        }
+
+        // Get the filtered products with pagination
+        $products = $query->latest()->paginate(10);
+
+        // Pass the filtered products, categories, and brands to the view
+        return view('store-front.products', compact('products', 'categories', 'brands'));
     }
+
+
+
+    // ============================
+    // Authentication Section
+    // ============================
 
     public function show_login()
     {
         return view('store-front.login');
     }
+
     public function login(Request $request)
     {
         $credentials = $request->validate([
@@ -79,7 +130,6 @@ class StoreFrontController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-
             return redirect()->intended(route('home'));
         }
 
@@ -92,8 +142,10 @@ class StoreFrontController extends Controller
     {
         return view('store-front.register');
     }
+
     public function register(Request $request)
     {
+        // Validate the registration form
         $request->validate([
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
@@ -107,6 +159,7 @@ class StoreFrontController extends Controller
             'terms' => 'required|accepted',
         ]);
 
+        // Create the user and log them in
         $user = User::create([
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
@@ -127,11 +180,15 @@ class StoreFrontController extends Controller
 
         return redirect()->intended('/'); // Redirect after registration
     }
+
+    // ============================
+    // User Account Management Section
+    // ============================
+
     public function show_account()
     {
         return view('store-front.account');
     }
-
 
     public function edit_user()
     {
@@ -164,16 +221,19 @@ class StoreFrontController extends Controller
         $user->phone = $request->phone;
         $user->address = $request->address;
 
-        // Hash and update password if changed.
+        // Hash and update password if changed
         if ($request->filled('password')) {
             $user->password = Hash::make($request->password);
         }
 
         $user->save();
 
-        // Redirect to the profile page with a success message.
         return redirect()->back()->with('success', 'Account updated successfully!');
     }
+
+    // ============================
+    // Orders Section
+    // ============================
 
     public function indexOrders()
     {
@@ -198,6 +258,9 @@ class StoreFrontController extends Controller
         return redirect()->back()->with('success', 'Order Completed Successfully');
     }
 
+    // ============================
+    // Category & Seller Views Section
+    // ============================
 
     public function show_all_categories()
     {
@@ -206,6 +269,7 @@ class StoreFrontController extends Controller
         }])->get();
         return view('store-front.category.all-categories', ['categories' => $categories]);
     }
+
     public function show_single_category($slug)
     {
         $category = Category::where('slug', $slug)

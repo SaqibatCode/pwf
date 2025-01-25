@@ -7,86 +7,106 @@
 
             <div class="grid grid-cols-6 sm:border rounded-xl">
 
-                <div class="relative min-h-screen">
-                    <div class="p-6 bg-skin-fill h-max lg:flex flex-col gap-8 max-lg:hidden sticky top-12 left-0">
+                <form method="GET" action="{{ route('show.shop') }}">
+                    <!-- Price Range Filter -->
+                    <div class="relative min-h-screen">
+                        <div class="p-6 bg-skin-fill h-max lg:flex flex-col gap-8 max-lg:hidden sticky top-12 left-0">
+                            <div class="flex flex-col gap-3">
+                                <h3 class="filter-heading">Price</h3>
+                                <input class="product-form-inp" placeholder="Lowest" type="number" name="min_price"
+                                    value="{{ request('min_price') }}">
+                                <input class="product-form-inp" placeholder="Highest" type="number" name="max_price"
+                                    value="{{ request('max_price') }}">
 
-                        <div class="flex flex-col gap-3">
-                            <h3 class="filter-heading">Price</h3>
+                                <button type="submit"
+                                    class="mt-3 rounded-md w-full py-1 text-sm border border-blue-700 font-semibold bg-white text-skin-primary hover:border-blue-700 hover:bg-skin-secondary hover:text-skin-inverted transition-all duration-300 font-unbounded">
+                                    Filter
+                                </button>
+                            </div>
 
-                            <!-- <div class="relative mb-6">
-                                    <input id="labels-range-input" type="range" value="0" min="100" max="1500"
-                                        class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
-                                    <span class="text-sm text-skin-primary absolute start-0 -bottom-6">Rs100</span>
-                                    <span class="text-sm text-skin-primary absolute end-0 -bottom-6">Rs1500</span>
-                                </div> -->
+                            <!-- Category Filter (Dynamic categories based on available products) -->
+                            <div class="flex flex-col gap-3">
+                                <h3 class="filter-heading">Category</h3>
+                                <ul class="flex flex-col gap-2">
+                                    @foreach ($categories as $category)
+                                        <li>
+                                            <label class="flex items-center color-li group"
+                                                for="category-{{ $category->slug }}">
+                                                <input class="filter-checkbox" type="checkbox" name="category[]"
+                                                    value="{{ $category->slug }}" id="category-{{ $category->slug }}"
+                                                    {{ in_array($category->slug, request('category', [])) ? 'checked' : '' }}>
+                                                <span class="color-text">{{ $category->name }}</span>
+                                            </label>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </div>
 
+                            <!-- Brand Filter (Dynamic brands based on available products) -->
+                            <div class="flex flex-col gap-3">
+                                <h3 class="filter-heading">Brand</h3>
+                                <ul class="flex flex-col gap-2">
+                                    @foreach ($brands as $brand)
+                                        <li>
+                                            <label class="flex items-center color-li group" for="brand-{{ $brand->slug }}">
+                                                <input class="filter-checkbox" type="checkbox" name="brand[]"
+                                                    value="{{ $brand->slug }}" id="brand-{{ $brand->slug }}"
+                                                    {{ in_array($brand->slug, request('brand', [])) ? 'checked' : '' }}>
+                                                <span class="color-text">{{ $brand->name }}</span>
+                                            </label>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </div>
 
-                            <input class="product-form-inp" placeholder="Lowest" type="number" name=""
-                                id="" value="0">
-                            <input class="product-form-inp" placeholder="Highest" type="number" name=""
-                                id="" value="500">
+                            <!-- Optional Filters for Color, Size, Tags (If applicable to your products) -->
+                            <div class="flex flex-col gap-3">
+                                <h3 class="filter-heading">Color</h3>
+                                <ul class="flex flex-col gap-2">
+                                    <li><label class="flex items-center color-li group"><input class="filter-checkbox"
+                                                type="checkbox" name="color[]" value="white"><span
+                                                class="color-text">White</span></label></li>
+                                    <li><label class="flex items-center color-li group"><input class="filter-checkbox"
+                                                type="checkbox" name="color[]" value="black"><span
+                                                class="color-text">Black</span></label></li>
+                                    <!-- Add more colors as needed -->
+                                </ul>
+                            </div>
 
-                            <button
-                                class="mt-3 rounded-md w-full py-1 text-sm border border-blue-700 font-semibold bg-white text-skin-primary hover:border-blue-700 hover:bg-skin-secondary hover:text-skin-inverted transition-all duration-300 font-unbounded">
-                                Filter</button>
+                            <!-- Size Filter -->
+                            <div class="flex flex-col gap-3">
+                                <h3 class="filter-heading">Size</h3>
+                                <ul class="flex flex-col gap-2">
+                                    <li><label class="flex items-center color-li group"><input class="filter-checkbox"
+                                                type="checkbox" name="size[]" value="big"><span
+                                                class="color-text">Big</span></label></li>
+                                    <li><label class="flex items-center color-li group"><input class="filter-checkbox"
+                                                type="checkbox" name="size[]" value="medium"><span
+                                                class="color-text">Medium</span></label></li>
+                                    <li><label class="flex items-center color-li group"><input class="filter-checkbox"
+                                                type="checkbox" name="size[]" value="small"><span
+                                                class="color-text">Small</span></label></li>
+                                </ul>
+                            </div>
+
+                            <!-- Tags Filter -->
+                            <div class="flex flex-col gap-3">
+                                <h3 class="filter-heading">Tags</h3>
+                                <ul class="flex flex-wrap gap-2 w-full">
+                                    <li><label class="tags-check-label group"><input class="tags-checkbox" type="checkbox"
+                                                name="tags[]" value="smartphone"><span
+                                                class="tags-text">Smartphone</span></label></li>
+                                    <li><label class="tags-check-label group"><input class="tags-checkbox" type="checkbox"
+                                                name="tags[]" value="laptop"><span class="tags-text">Laptop</span></label>
+                                    </li>
+                                    <li><label class="tags-check-label group"><input class="tags-checkbox" type="checkbox"
+                                                name="tags[]" value="tv"><span class="tags-text">TV</span></label></li>
+                                </ul>
+                            </div>
                         </div>
-
-                        <div class="flex flex-col gap-3">
-                            <h3 class="filter-heading">Color</h3>
-
-                            <ul class="flex flex-col gap-2">
-                                <li class="color-li group"><span class="color-circle bg-white"></span><span
-                                        class="color-text">White</span></li>
-                                <li class="color-li group"><span class="color-circle bg-black"></span><span
-                                        class="color-text">Black</span></li>
-                                <li class="color-li group"><span class="color-circle bg-green-600"></span><span
-                                        class="color-text">Green</span></li>
-                                <li class="color-li group"><span class="color-circle bg-red-600"></span><span
-                                        class="color-text">Red</span></li>
-                                <li class="color-li group"><span class="color-circle bg-yellow-400"></span><span
-                                        class="color-text">Yellow</span></li>
-                            </ul>
-
-                        </div>
-
-
-                        <div class="flex flex-col gap-3">
-                            <h3 class="filter-heading">Size</h3>
-
-                            <ul class="flex flex-col gap-2">
-                                <li class=""><label class="flex items-center color-li group" for="big"><input
-                                            class="filter-checkbox" type="checkbox" name="big" id="big"><span
-                                            class="color-text">Big</span></label></li>
-                                <li class=""><label class="flex items-center color-li group" for="medium"><input
-                                            class="filter-checkbox" type="checkbox" name="medium" id="medium"><span
-                                            class="color-text">Medium</span></label></li>
-                                <li class=""><label class="flex items-center color-li group" for="small"><input
-                                            class="filter-checkbox" type="checkbox" name="small" id="small"><span
-                                            class="color-text">Small</span></label></li>
-                            </ul>
-
-                        </div>
-
-
-                        <div class="flex flex-col gap-3">
-                            <h3 class="filter-heading">Tags</h3>
-
-                            <ul class="flex flex-wrap gap-2 w-full">
-                                <li class=""><label class="tags-check-label group" for="smartphone"><input
-                                            class="tags-checkbox" type="checkbox" name="smartphone" id="smartphone"><span
-                                            class="tags-text">Smartphone</span></label></li>
-                                <li class=""><label class="tags-check-label group" for="laptop"><input
-                                            class="tags-checkbox" type="checkbox" name="laptop" id="laptop"><span
-                                            class="tags-text">Laptop</span></label></li>
-                                <li class=""><label class="tags-check-label group" for="tv"><input
-                                            class="tags-checkbox" type="checkbox" name="tv" id="tv"><span
-                                            class="tags-text">TV</span></label>
-                                </li>
-                            </ul>
-                        </div>
-
                     </div>
-                </div>
+                </form>
+
 
 
                 <div class="lg:col-span-5 max-lg:col-span-6 bg-skin-fill">
@@ -97,7 +117,8 @@
                         <div class="flex-1 flex flex-col md:flex-row gap-2 sm:gap-0 justify-between md:items-center">
 
                             <p class="text-xs sm:text-sm text-skin-primary font-unbounded">Showing
-                                {{ $products->firstItem() }}–{{ $products->lastItem() }} of {{ $products->total() }} results
+                                {{ $products->firstItem() }}–{{ $products->lastItem() }} of {{ $products->total() }}
+                                results
                             </p>
 
                             <select
