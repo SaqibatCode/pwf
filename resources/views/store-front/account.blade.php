@@ -1,7 +1,9 @@
 @extends('store-front.layout.layout')
 
 @section('main-content')
-  <x-dashboard-component>
+    <x-dashboard-component>
+
+
         <div class="bg-white p-8 rounded shadow-md w-full">
             <h2 class="text-4xl font-extralight mb-6 text-center text-gray-800">Account Settings</h2>
 
@@ -102,10 +104,10 @@
 
 
                 <button type="submit"
-                    class="rounded-full border-2 border-[#FCCDC5] py-2 px-4 uppercase text-xs lg:text-sm font-bold tracking-[1.05px]">
+                    class="flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-200">
                     Update Profile
                 </button>
             </form>
         </div>
-  </x-dashboard-component>
+    </x-dashboard-component>
 @endsection

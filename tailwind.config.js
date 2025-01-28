@@ -43,6 +43,7 @@
           },
           fontFamily: {
             unbounded: ['"Unbounded"', 'sans-serif'],
+            poppins: ['"Poppins"', 'sans-serif'],
           },
         },
       },
