@@ -4,7 +4,7 @@
     <x-dashboard-component>
 
 
-        <div class="bg-white p-8 rounded shadow-md w-full">
+        <div class="bg-white p-4 md:p-8 rounded shadow-md w-full">
             <h2 class="text-4xl font-extralight mb-6 text-center text-gray-800">Account Settings</h2>
 
             <form action="{{ route('buyer.account.update') }}" method="POST">

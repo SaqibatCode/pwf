@@ -19,7 +19,10 @@
         <div class="lg:container mx-auto py-2 border-b border-[#EAEAEA]">
             <div class="flex flex-col md:flex-row items-center justify-between h-20 md:h-16">
                 <div class="flex items-center">
-                    <img class="min-h-12 max-h-12" src="{{ asset('store-front/images/logo/circuit.svg') }}" alt="Workflow">
+                    <a href="{{ route('home') }}">
+                        <img class="min-h-12 max-h-12" src="{{ asset('store-front/images/logo/circuit.svg') }}"
+                            alt="Workflow">
+                    </a>
                     <div class="ml-4">
                         <!-- Placeholder for additional branding -->
                     </div>
