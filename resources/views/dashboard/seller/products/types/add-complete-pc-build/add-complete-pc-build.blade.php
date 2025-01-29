@@ -262,10 +262,8 @@
                                                     </div>
                                                     <div class="col-md-3">
                                                         <div class="form-group">
-                                                            <label for="ram_dimm"
-                                                                class="form-label">Ram Dimm Type</label>
-                                                            <select name="ram_dimm" id="ram_dimm"
-                                                                class="form-control">
+                                                            <label for="ram_dimm" class="form-label">Ram Dimm Type</label>
+                                                            <select name="ram_dimm" id="ram_dimm" class="form-control">
                                                                 <option value="">Select Dimm Type</option>
                                                                 <option value="DDR1">DDR1</option>
                                                                 <option value="DDR2">DDR2</option>
@@ -474,14 +472,41 @@
                                                     <option value="Mouse">Mouse</option>
                                                     <option value="Headphones">Headphones</option>
                                                 </select>
-                                                <a class="btn btn-success" id="add-more-component">Add
+                                                <a class="btn btn-success mt-2 text-white" id="add-more-component">Add
                                                     Component</a>
                                             </div>
                                             <!-- Additonal Components -->
                                             <div id="additional_component" class="row">
 
                                             </div>
+                                            <style>
+                                                #additional_component {
+                                                    width: 100%;
+                                                    margin-bottom: 20px;
+                                                }
+                                            </style>
+
+
                                             <!-- Additional Parts -->
+                                            <div class="col-md-12 my-5">
+                                                <h4>Add More Part</h4>
+                                                <select name="add_part" class="form-control" id="add_part">
+                                                    <option value="Fan">Fan</option>
+                                                    <option value="GPU Stand">GPU Stand</option>
+                                                    <option value="Case Parts">Case Parts</option>
+                                                </select>
+                                                <a class="btn btn-success mt-2 text-white" id="add-more-part">Add Part</a>
+                                            </div>
+
+                                            <!-- Additional Parts -->
+                                            <div id="additional_part" class="row"></div>
+
+                                            <style>
+                                                #additional_part {
+                                                    width: 100%;
+                                                    margin-bottom: 20px;
+                                                }
+                                            </style>
 
                                         </div>
                                     </div>
@@ -537,6 +562,7 @@
     </div>
 @endsection
 @section('additionScript')
+    {{-- Script To Render Year --}}
     <script>
         function renderYearSelectBox() {
             // Get the current year
@@ -569,6 +595,8 @@
         // Call the function to render the year select boxes when the page loads
         document.addEventListener('DOMContentLoaded', renderYearSelectBox);
     </script>
+
+    {{-- Script For Getting Categories By Slug --}}
     <script>
         function getCategoriesBySlug(slug, compid) {
             $.ajax({
@@ -615,6 +643,8 @@
         });
     </script>
 
+
+    {{-- Script For Storage --}}
     <script>
         let storageCounter = 1; // Counter to keep track of unique IDs
 
@@ -693,27 +723,36 @@
             }
         });
     </script>
-    <!-- JavaScript to Add and Remove Components -->
-    <script>
-        document.getElementById('add-more-component').addEventListener('click', function() {
-            const selectedComponent = document.getElementById('add_component').value;
-            const additionalComponentDiv = document.getElementById('additional_component');
-            const addComponentSelect = document.getElementById('add_component');
 
-            // Skip if no component is selected
+
+
+    {{-- Script For Additonal Components  --}}
+    <script>
+        // Store original options to restore later
+        // Component-specific variable names
+        const componentSelect = document.getElementById('add_component');
+        const originalComponentOptions = Array.from(componentSelect.options).map(option => ({
+            value: option.value,
+            text: option.text
+        }));
+
+        document.getElementById('add-more-component').addEventListener('click', function() {
+            const selectedComponent = componentSelect.value;
+            const additionalComponentDiv = document.getElementById('additional_component');
+
             if (!selectedComponent) return;
 
-            // Remove the selected option from the dropdown
-            for (let i = 0; i < addComponentSelect.options.length; i++) {
-                if (addComponentSelect.options[i].value === selectedComponent) {
-                    addComponentSelect.options[i].setAttribute('disabled', true);
+            // Remove the selected option from dropdown completely
+            for (let i = 0; i < componentSelect.options.length; i++) {
+                if (componentSelect.options[i].value === selectedComponent) {
+                    componentSelect.remove(i);
                     break;
                 }
             }
 
             let componentForm = '';
 
-            // Form structure based on selected component
+            // Form templates (shortened for brevity - keep your existing templates)
             if (selectedComponent === 'Keyboard') {
                 componentForm = `
                     <div class="col-md-12" id="keyboard-form">
@@ -751,10 +790,8 @@
                                 <button class="btn btn-danger delete-btn" data-component="Keyboard">Delete</button>
                             </div>
                         </div>
-                    </div>
-                `
+                    </div>`;
                 getCategoriesBySlug('Keyboards', `keyboard_brand`);
-                ;
             } else if (selectedComponent === 'Monitor') {
                 componentForm = `
                     <div class="col-md-12" id="monitor-form">
@@ -795,8 +832,7 @@
                         </div>
                     </div>
                 `
-                getCategoriesBySlug('Monitors', `monitor_brand`);
-                ;
+                getCategoriesBySlug('Monitors', `monitor_brand`);;
             } else if (selectedComponent === 'Mouse') {
                 componentForm = `
                     <div class="col-md-12" id="mouse-form">
@@ -835,8 +871,7 @@
                         </div>
                     </div>
                 `
-                getCategoriesBySlug('Mouse', `mouse_brand`);
-                ;
+                getCategoriesBySlug('Mouse', `mouse_brand`);;
             } else if (selectedComponent === 'Headphones') {
                 componentForm = `
                     <div class="col-md-12" id="headphones-form">
@@ -875,39 +910,201 @@
                         </div>
                     </div>
                 `
-                getCategoriesBySlug('Headphones', `headphones_brand`);
-                ;
+                getCategoriesBySlug('Headphones', `headphones_brand`);;
             }
 
-            // Append the selected component form to the additional component section
-            additionalComponentDiv.innerHTML += componentForm;
+            // Use insertAdjacentHTML instead of innerHTML += to preserve existing elements
+            additionalComponentDiv.insertAdjacentHTML('beforeend', componentForm);
+
+            // Reset select to first available option
+            if (componentSelect.options.length > 0) {
+                componentSelect.value = componentSelect.options[0].value;
+            }
         });
 
-        // Event delegation for delete button functionality
+        // Component delete handler
         document.getElementById('additional_component').addEventListener('click', function(event) {
-            if (event.target && event.target.classList.contains('delete-btn')) {
-                // Find the form to delete based on the data-component attribute
-                const componentType = event.target.getAttribute('data-component').toLowerCase();
-                const formToDelete = document.getElementById(`${componentType}-form`);
+            if (event.target.classList.contains('delete-btn')) {
+                const componentType = event.target.dataset.component;
+                const formToDelete = document.getElementById(`${componentType.toLowerCase()}-form`);
 
-                // Remove the form from the DOM
-                formToDelete.remove();
-
-                // Re-enable the corresponding option in the dropdown
-                const addComponentSelect = document.getElementById('add_component');
-                for (let i = 0; i < addComponentSelect.options.length; i++) {
-                    if (addComponentSelect.options[i].value === componentType) {
-                        addComponentSelect.options[i].removeAttribute('disabled');
-                        break;
-                    }
+                // Restore to component options
+                const originalOption = originalComponentOptions.find(opt => opt.value === componentType);
+                if (originalOption) {
+                    componentSelect.add(new Option(originalOption.text, originalOption.value));
                 }
+                formToDelete.remove();
             }
         });
     </script>
+
+    {{-- Script For Additonal Parts  --}}
+
+    <script>
+        // Part-specific variable names
+        const partSelect = document.getElementById('add_part');
+        const originalPartOptions = Array.from(partSelect.options).map(option => ({
+            value: option.value,
+            text: option.text
+        }));
+
+        document.getElementById('add-more-part').addEventListener('click', function() {
+            const selectedPart = partSelect.value;
+            const additionalPartDiv = document.getElementById('additional_part');
+
+            if (!selectedPart) return;
+
+            // Remove the selected option from dropdown completely
+            for (let i = 0; i < partSelect.options.length; i++) {
+                if (partSelect.options[i].value === selectedPart) {
+                    partSelect.remove(i);
+                    break;
+                }
+            }
+
+            let partForm = '';
+
+            // Form templates for adding parts (Fan, GPU Stand, etc.)
+            if (selectedPart === 'Fan') {
+                partForm = `
+                    <div class="col-md-12" id="fan-form">
+                        <h4>Fan</h4>
+                        <div class="row">
+                            <!-- Fan Form Fields -->
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="fan_name" class="form-label">Fan Name</label>
+                                    <input type="text" name="fan_name" id="fan_name" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="fan_condition" class="form-label">Fan Condition</label>
+                                    <select name="fan_condition" id="fan_condition" class="form-control">
+                                        <option value="">Select Condition</option>
+                                        <option value="New">New</option>
+                                        <option value="Used">Used</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="fan_brand" class="form-label">Fan Brand</label>
+                                    <input type="text" name="fan_brand" id="fan_brand" class="form-control">
+                                </div>
+                            </div>
+                             <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="fan_number" class="form-label">Fan Number</label>
+                                    <input type="text" name="fan_number" id="fan_number" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn btn-danger delete-btn" data-part="Fan">Delete</button>
+                            </div>
+                        </div>
+                    </div>`;
+            } else if (selectedPart === 'GPU Stand') {
+                partForm = `
+                    <div class="col-md-12" id="gpu-stand-form">
+                        <h4>GPU Stand</h4>
+                        <div class="row">
+                            <!-- GPU Stand Form Fields -->
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="gpu_stand_name" class="form-label">GPU Stand Name</label>
+                                    <input type="text" name="gpu_stand_name" id="gpu_stand_name" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="gpu_stand_condition" class="form-label">GPU Stand Condition</label>
+                                    <select name="gpu_stand_condition" id="gpu_stand_condition" class="form-control">
+                                        <option value="">Select Condition</option>
+                                        <option value="New">New</option>
+                                        <option value="Used">Used</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="gpu_stand_brand" class="form-label">GPU Stand Brand</label>
+                                    <input type="text" name="gpu_stand_brand" id="gpu_stand_brand" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn btn-danger delete-btn" data-part="GPU Stand">Delete</button>
+                            </div>
+                        </div>
+                    </div>`;
+            } else if (selectedPart === 'Case Parts') {
+                partForm = `
+                    <div class="col-md-12" id="case-parts-form">
+                        <h4>Case Parts</h4>
+                        <div class="row">
+                            <!-- Case Parts Form Fields -->
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="case_parts_name" class="form-label">Case Part Name</label>
+                                    <input type="text" name="case_parts_name" id="case_parts_name" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="case_parts_condition" class="form-label">Case Part Condition</label>
+                                    <select name="case_parts_condition" id="case_parts_condition" class="form-control">
+                                        <option value="">Select Condition</option>
+                                        <option value="New">New</option>
+                                        <option value="Used">Used</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="case_parts_brand" class="form-label">Case Part Brand</label>
+                                    <input type="text" name="case_parts_brand" id="case_parts_brand" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn btn-danger delete-btn" data-part="Case Parts">Delete</button>
+                            </div>
+                        </div>
+                    </div>`;
+            }
+
+            // Use insertAdjacentHTML instead of innerHTML += to preserve existing elements
+            additionalPartDiv.insertAdjacentHTML('beforeend', partForm);
+
+            // Reset select to first available option
+            if (partSelect.options.length > 0) {
+                partSelect.value = partSelect.options[0].value;
+            }
+        });
+
+        // Delete handler
+        // Part delete handler
+        document.getElementById('additional_part').addEventListener('click', function(event) {
+            if (event.target.classList.contains('delete-btn')) {
+                const partType = event.target.dataset.part;
+                const formID = `${partType.toLowerCase().replace(/\s+/g, '-')}-form`;
+                const formToDelete = document.getElementById(formID);
+
+                // Restore to part options
+                const originalOption = originalPartOptions.find(opt => opt.value === partType);
+                if (originalOption) {
+                    partSelect.add(new Option(originalOption.text, originalOption.value));
+                }
+                formToDelete.remove();
+            }
+        });
+    </script>
+
+
+    {{-- FilePond Script --}}
     <script src="https://unpkg.com/filepond/dist/filepond.min.js"></script>
 
 
-
+    {{-- Script To Upload Product --}}
     <script>
         $(document).ready(function() {
             // Initialize FilePond

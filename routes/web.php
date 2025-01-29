@@ -408,5 +408,6 @@ Route::middleware(['auth', 'adminOrSeller'])->group(function () {
         Route::get('add-complete-pc', 'show_add_complete_pc_product_page')->name('product.add.completepc');  // Display add complete pc product page.
         Route::post('add-complete-pc', 'store_complete_pc')->name('product.add.complete.pc'); // Handle adding of complete pc product.
         Route::get('/product/{id}/edit-complete-pc', 'edit_complete_pc')->name('product.complete.pc.edit'); // Display edit page for a complete pc.
+        Route::put('/update-complete-pc/{id}', 'update_complete_pc')->name('products.update-complete-pc');
     });
 });
