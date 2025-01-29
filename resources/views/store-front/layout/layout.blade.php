@@ -15,19 +15,16 @@
 </head>
 
 <body>
-    <header class="px-4 relative">
+    <header class="px-4 relative font-poppins">
         <div class="lg:container mx-auto py-2 border-b border-[#EAEAEA]">
-            <div class="flex items-center justify-between h-16">
-                <!-- <div> -->
-                <!-- Placeholder for left content if needed -->
-                <!-- </div> -->
+            <div class="flex flex-col md:flex-row items-center justify-between h-20 md:h-16">
                 <div class="flex items-center">
-                    <img class="min-h-12" src="{{ asset('store-front/images/logo/circuit.svg') }}" alt="Workflow">
+                    <img class="min-h-12 max-h-12" src="{{ asset('store-front/images/logo/circuit.svg') }}" alt="Workflow">
                     <div class="ml-4">
                         <!-- Placeholder for additional branding -->
                     </div>
                 </div>
-                <div class="flex gap-4">
+                <div class="flex items-center gap-4">
 
                     @if (Auth::check())
                         <p>Good Day, {{ Auth::user()->first_name }}</p>
@@ -35,25 +32,28 @@
 
                         <form action="{{ route('logout') }}" method="POST" class="d-inline">
                             @csrf
-                            <button type="submit"><i class="fa-solid fa-power-off"></i></button>
+                            <button type="submit"><i class="fa-solid fa-sign-out-alt"></i></button>
                         </form>
                     @else
-                        <a href="{{ route('buyer.login') }}">
-                            <p>Login<i class="fa-solid fa-power-off"></i></p>
+                        <a href="{{ route('buyer.login') }}" class="font-unbounded text-sm hidden lg:flex">
+                            Login/Register
+                        </a>
+                        <a href="{{ route('buyer.login') }}" class="font-unbounded text-sm flex lg:hidden">
+                            <i class="fa-solid fa-user"></i>
                         </a>
                     @endif
                     <a href="{{ route('cart.show') }}"><i class="fa-solid fa-bag-shopping"></i></a>
                 </div>
             </div>
         </div>
-        <div class="container mx-auto py-2 font-semibold px-4">
+        <div class="container mx-auto py-2 font-light px-4 font-unbounded">
             <div class="flex items-center justify-between">
                 <div>
                     <a href="{{ route('show.all.categories') }}" class="text-skin-secondary text-sm">All Categories</a>
                 </div>
                 <div class="hidden lg:flex gap-10 tracking-widest text-sm relative">
                     <div class="relative group">
-                        <a href="{{ route('show.shop') }}" class="hover:text-skin-secondary font-semibold">All
+                        <a href="{{ route('show.shop') }}" class="hover:text-skin-secondary">All
                             Products</a>
                         <div
                             class="submenu absolute left-0 hidden group-hover:block bg-white shadow-lg rounded-lg py-2 z-50 min-w-56">
@@ -63,7 +63,7 @@
                         </div>
                     </div>
                     <div class="relative group">
-                        <a href="#" class="hover:text-skin-secondary font-semibold">Complete Build</a>
+                        <a href="#" class="hover:text-skin-secondary">Complete Build</a>
                         <div
                             class="submenu absolute left-0 hidden group-hover:block bg-white shadow-lg rounded-lg py-2 z-50 min-w-56">
                             <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Build Option 1</a>
@@ -71,7 +71,7 @@
                         </div>
                     </div>
                     <div class="relative group">
-                        <a href="#" class="hover:text-skin-secondary font-semibold">Bundled Packages</a>
+                        <a href="#" class="hover:text-skin-secondary">Bundled Packages</a>
                         <div
                             class="submenu absolute left-0 hidden group-hover:block bg-white shadow-lg rounded-lg py-2 z-50 min-w-56">
                             <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Package 1</a>
@@ -97,7 +97,7 @@
         </div>
 
         <div id="mobile-menu"
-            class="lg:hidden flex absolute z-[9999] left-0 top-28 w-full flex-col gap-4 mt-4 bg-white p-4 shadow-lg rounded-lg">
+            class="lg:hidden absolute z-[9999] left-0 top-28 w-full flex-col gap-4 mt-4 bg-white p-4 shadow-lg rounded-lg hidden">
             <a href="#" class="hover:text-skin-secondary">Home</a>
             <div class="mobile-submenu">
                 <a href="#" class="flex justify-between items-center hover:text-skin-secondary">
@@ -143,7 +143,7 @@
 
     <!-- NEWS LETTER -->
 
-    <section class="h-[265px] bg-skin-secondary">
+    <section class="h-[265px] bg-skin-secondary font-poppins">
         <div class="container mx-auto h-full">
             <div class="grid grid-cols-1 md:grid-cols-2 h-full">
                 <div class="flex flex-col justify-center px-4 md:pl-24">
@@ -165,7 +165,7 @@
 
 
     <Footer>
-        <div class="container mx-auto px-6 pt-6">
+        <div class="container mx-auto px-6 pt-6 font-poppins">
             <!-- Social media icons container -->
             <div class="mb-6 flex justify-center">
                 <a href="#!" type="button"
@@ -331,7 +331,7 @@
 
         <!-- Copyright section -->
         <div class="w-full p-4 text-start container mx-auto">
-            <p class="text-skin-gray font-medium">
+            <p class="text-skin-gray font-medium font-poppins">
                 Copyright © <span id="current_year">2024</span> <a class="text-skin-gray"
                     href="#">Playware</a>. All
                 Rights Reserved.

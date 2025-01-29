@@ -1,18 +1,18 @@
 @extends('store-front.layout.layout')
 
 @section('main-content')
-    <div class="container mx-auto px-4 py-8">
-        <div class="text-center mb-12">
-            <h2 class="section-heading">PLAYWARE Seller Signup</h2>
-            <p class="text-gray-600 dark:text-gray-400">Choose the right plan for your business needs. We offer various
+    <div class="container mx-auto px-4 py-8 font-poppins">
+        <div class="text-center my-12">
+            <h2 class="section-heading">Playware Seller Signup</h2>
+            <p class="text-gray-600 ">Choose the right plan for your business needs. We offer various
                 options to suit every type of seller.</p>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 py-12">
             <!-- Individual Seller Plan -->
-            <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6 flex flex-col">
-                <h3 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">Individual Seller</h3>
+            <div class="bg-white border  shadow-md rounded-lg p-6 flex flex-col">
+                <h3 class="text-xl font-semibold text-gray-900  mb-4">Individual Seller</h3>
                 <div class="mb-4">
-                    <ul class="list-disc list-inside text-gray-700 dark:text-gray-300 text-sm">
+                    <ul class="list-disc list-inside text-gray-700  text-sm">
                         <li>Hold Over Payment (If done via Platform/Platform Account).</li>
                         <li>No claiming on F2F deal.</li>
                         <li>2% cut after Payment hold.</li>
@@ -22,7 +22,7 @@
                     </ul>
                 </div>
                 <div class="mt-auto">
-                    <p class="text-2xl font-bold text-center text-gray-900 dark:text-gray-100 mb-2">Free</p>
+                    <p class="text-2xl font-bold text-center text-gray-900  mb-2">Free</p>
                     <button
                         class="block w-full bg-skin-secondary hover:bg-skin-primary text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-skin-secondary focus:ring-opacity-50">
                         Sign Up
@@ -31,10 +31,10 @@
             </div>
 
             <!-- Individual Seller (Verified) Plan -->
-            <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6 flex flex-col">
-                <h3 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">Individual Seller (Verified)</h3>
+            <div class="bg-white border  shadow-md rounded-lg p-6 flex flex-col">
+                <h3 class="text-xl font-semibold text-gray-900  mb-4">Individual Seller (Verified)</h3>
                 <div class="mb-4">
-                    <ul class="list-disc list-inside text-gray-700 dark:text-gray-300 text-sm">
+                    <ul class="list-disc list-inside text-gray-700  text-sm">
                         <li>No Hold on Payment.</li>
                         <li>Direct Payment-to-seller (Easypaisa/Bank account).</li>
                         <li>0% Cut on any sale.</li>
@@ -44,7 +44,7 @@
                     </ul>
                 </div>
                 <div class="mt-auto">
-                    <p class="text-2xl font-bold text-center text-gray-900 dark:text-gray-100 mb-2">PKR 2999/-</p>
+                    <p class="text-2xl font-bold text-center text-gray-900  mb-2">PKR 2999/-</p>
                     <button
                         class="block w-full bg-skin-secondary hover:bg-skin-primary text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-skin-secondary focus:ring-opacity-50">
                         Sign Up
@@ -54,11 +54,11 @@
 
 
             <!-- Shopkeeper Seller (Verified) Plan -->
-            <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6 flex flex-col">
-                <h3 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">Shopkeeper Seller (Verified)
+            <div class="bg-white border  shadow-md rounded-lg p-6 flex flex-col">
+                <h3 class="text-xl font-semibold text-gray-900  mb-4">Shopkeeper Seller (Verified)
                 </h3>
                 <div class="mb-4">
-                    <ul class="list-disc list-inside text-gray-700 dark:text-gray-300 text-sm">
+                    <ul class="list-disc list-inside text-gray-700  text-sm">
                         <li>No Hold over Payments.</li>
                         <li>Direct Payment-to-seller (Easypaisa/Bank account).</li>
                         <li>Credit/Debit Card Option (Coming Soon).</li>
@@ -71,7 +71,7 @@
                     </ul>
                 </div>
                 <div class="mt-auto">
-                    <p class="text-2xl font-bold text-center text-gray-900 dark:text-gray-100 mb-2">PKR 4999/-</p>
+                    <p class="text-2xl font-bold text-center text-gray-900  mb-2">PKR 4999/-</p>
                     <button
                         class="block w-full bg-skin-secondary hover:bg-skin-primary text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-skin-secondary focus:ring-opacity-50">
                         Sign Up
@@ -80,10 +80,10 @@
             </div>
 
             <!-- Enterprise Plan -->
-            <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6 flex flex-col">
-                <h3 class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">Enterprise (Verified)</h3>
+            <div class="bg-white border  shadow-md rounded-lg p-6 flex flex-col">
+                <h3 class="text-xl font-semibold text-gray-900  mb-4">Enterprise (Verified)</h3>
                 <div class="mb-4">
-                    <ul class="list-disc list-inside text-gray-700 dark:text-gray-300 text-sm">
+                    <ul class="list-disc list-inside text-gray-700  text-sm">
                         <li>Custom Profile.</li>
                         <li>No Hold over Payments.</li>
                         <li>Direct Payment-to-seller (Easypaisa/Bank account).</li>
@@ -95,7 +95,7 @@
                     </ul>
                 </div>
                 <div class="mt-auto">
-                    <p class="text-2xl font-bold text-center text-gray-900 dark:text-gray-100 mb-2">Contact Us</p>
+                    <p class="text-2xl font-bold text-center text-gray-900  mb-2">Contact Us</p>
                     <button
                         class="block w-full bg-skin-secondary hover:bg-skin-primary text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-skin-secondary focus:ring-opacity-50">
                         Contact Us
