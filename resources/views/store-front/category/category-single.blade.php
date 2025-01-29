@@ -47,8 +47,8 @@
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
                     @forelse($cat->products as $product)
-                        <div class="product-card-main group/product relative rounded-lg shadow-md overflow-hidden transition-shadow hover:shadow-lg">
-                            <div class="mb-2 p-2 bg-skin-fill/75 rounded-t-lg flex justify-end">
+                        <div class="product-card-main h-full flex flex-col justify-between">
+                            <div class="mb-1">
                                 @if ($product->condition == 'Used')
                                     <span
                                         class="bg-skin-primary py-1 px-2 rounded-md text-xs text-white font-unbounded">Used</span>
@@ -59,13 +59,13 @@
                             </div>
                             <div class="img flex flex-col justify-center items-center mb-4 overflow-hidden">
                                 <img src="{{ asset($product->pictures[0]->image) }}"
-                                    alt="{{ $product->product_name }}" class="max-w-64 transition-transform duration-300 group-hover/product:scale-105">
+                                    alt="{{ $product->product_name }}" class="max-w-64">
                             </div>
-                            <div class="p-4">
+                            <div class="">
                                 <div class="flex justify-between gap-4">
                                     <div class="flex flex-col gap-1">
                                         <a href="{{ route('show.product', $product->slug) }}">
-                                            <h4 class="font-semibold text-xl text-[#111928] group-hover/product:text-skin-primary transition-colors duration-300">
+                                            <h4 class="font-semibold text-xl text-[#111928]">
                                                 {{ $product->product_name }}
                                             </h4>
                                             <h6 class="text-base font-semibold">Rs.

@@ -144,7 +144,7 @@
                     <div id="shopProductssa"
                         class="py-4 sm:p-4 grid place-items-center grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-5 gap-4 sm:border sm:border-b-0 sm:border-r-0">
                         @foreach ($products as $product)
-                            <div class="product-card-main">
+                            <div class="product-card-main h-full flex flex-col justify-between">
                                 <div class="mb-1">
                                     @if ($product->condition == 'Used')
                                         <span

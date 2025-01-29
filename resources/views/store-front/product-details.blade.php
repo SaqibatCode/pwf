@@ -278,41 +278,41 @@
                 <div class="hidden p-4 overflow-auto" id="specification-content" role="tabpanel"
                     aria-labelledby="specification-tab">
                     <div class="overflow-x-auto">
-                        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 shadow-md rounded-md">
-                            <thead class="bg-gray-50 dark:bg-gray-800">
+                        <table class="min-w-full divide-y divide-gray-200 shadow-md rounded-md">
+                            <thead class="bg-gray-50">
                                 <tr>
                                     <th scope="col"
-                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         Attribute
                                     </th>
                                     <th scope="col"
-                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-gray-300">
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         Value
                                     </th>
                                 </tr>
                             </thead>
                             <tbody id="keyValueTableBody"
-                                class="bg-white divide-y divide-gray-200 dark:bg-gray-900 dark:divide-gray-700">
+                                class="bg-white divide-y divide-gray-200">
                                 @if ($product->parts)
                                     @foreach ($product->parts as $parts)
-                                        <tr class="hover:bg-gray-100 dark:hover:bg-gray-800">
+                                        <tr class="hover:bg-gray-100-800">
                                             <td
-                                                class="px-6 py-4 whitespace-nowrap uppercase text-sm font-medium text-gray-900 dark:text-gray-200">
+                                                class="px-6 py-4 whitespace-nowrap uppercase text-sm font-medium text-gray-900">
                                                 {{ STR_REPLACE('_', ' ', $parts->key) }}</td>
                                             <td
-                                                class="px-6 py-4 whitespace-nowrap uppercase text-sm text-gray-500 dark:text-gray-400">
+                                                class="px-6 py-4 whitespace-nowrap uppercase text-sm text-gray-500">
                                                 {{ $parts->value }}</td>
                                         </tr>
                                     @endforeach
                                 @endif
                                 @if ($productAttributes)
                                     @foreach ($productAttributes as $attribute)
-                                        <tr class="hover:bg-gray-100 dark:hover:bg-gray-800">
+                                        <tr class="hover:bg-gray-100-800">
                                             <td
-                                                class="px-6 py-4 whitespace-nowrap uppercase text-sm font-medium text-gray-900 dark:text-gray-200">
+                                                class="px-6 py-4 whitespace-nowrap uppercase text-sm font-medium text-gray-900">
                                                 {{ $attribute['attribute_name'] }}</td>
                                             <td
-                                                class="px-6 py-4 whitespace-nowrap uppercase text-sm text-gray-500 dark:text-gray-400">
+                                                class="px-6 py-4 whitespace-nowrap uppercase text-sm text-gray-500">
                                                 {{ $attribute['attribute_value'] }}</td>
                                         </tr>
                                     @endforeach
