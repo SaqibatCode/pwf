@@ -20,7 +20,7 @@ class StoreFrontController extends Controller
 
     public function index()
     {
-        $products = Product::with('category', 'brand', 'user')->get();
+        $products = Product::with('category', 'brand', 'user', 'pictures')->get();
         $categoryNames = ['Graphic Cards', 'Monitors', 'Laptops', 'Storage', 'Processors'];
         $categories = Category::whereIn('name', $categoryNames)->get();
         // return response()->json($products);

@@ -209,7 +209,7 @@ class ProductController extends Controller
 
         // Get all categories for the dropdown
         $categories = Category::all();
-        return response()->json('Hello');
+
         // Return a view (you can name it however you like)
         // e.g. `edit-product.blade.php` inside the same folder structure
         return view('dashboard.seller.products.types.add-new-product.edit-new-product', compact('product', 'categories'));

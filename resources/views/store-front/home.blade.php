@@ -78,13 +78,15 @@
                                 @endif
                             </div>
                             <div class="img flex flex-col justify-center items-center mb-4 overflow-hidden">
-                                <img src="{{ asset('store-front/images/products/graphic-cards/image-1.png') }}"
-                                    alt="{{ $product->product_name }}" class="max-w-64">
+                                <div style="height: 160px; display: flex; align-items: center; justify-content: center;">
+                                    <img src="{{ asset($product->pictures[0]->image) }}" alt="{{ $product->product_name }}"
+                                         class="max-w-64 max-h-full object-contain" style="max-height: 100%; max-width: 100%;">
+                                </div>
                             </div>
                             <div>
                                 <div class="flex justify-between gap-4">
                                     <div class="flex flex-col gap-1">
-                                        <a href="{{ route('show.product', $product->slug)  }}">
+                                        <a href="{{ route('show.product', $product->slug) }}">
                                             <h4 class="font-semibold text-xl text-[#111928]">{{ $product->product_name }}
                                             </h4>
                                             <h6 class="text-base font-semibold">Rs. {{ number_format($product->price, 2) }}
@@ -113,11 +115,6 @@
                 </div>
                 <div class="swiper-pagination bottom-0"></div>
             </div>
-
-
-
-
-
         </div>
     </section>
 
@@ -136,7 +133,9 @@
                         </div>
 
                         <div class="font-unbounded text-center mt-4 flex flex-col gap-2">
-                            <h5 class="text-2xl">{{ $cat->name }}</h5>
+                           <a href="{{ route('show.single.categories', $cat->slug) }}">
+                                <h5 class="text-2xl">{{ $cat->name }}</h5>
+                           </a>
                             <span class="text-skin-gray text-base">8 Products Available</span>
                         </div>
 
@@ -179,13 +178,15 @@
                                     @endif
                                 </div>
                                 <div class="img flex flex-col justify-center items-center mb-4 overflow-hidden">
-                                    <img src="{{ asset('store-front/images/products/graphic-cards/image-1.png') }}"
-                                        alt="{{ $product->product_name }}" class="max-w-64">
+                                    <div style="height: 160px; display: flex; align-items: center; justify-content: center;">
+                                    <img src="{{ asset($product->pictures[0]->image) }}"
+                                         alt="{{ $product->product_name }}" class="max-w-64 max-h-full object-contain" style="max-height: 100%; max-width: 100%;">
+                                    </div>
                                 </div>
                                 <div>
                                     <div class="flex justify-between gap-4">
                                         <div class="flex flex-col gap-1">
-                                            <a href="{{ $product->slug }}">
+                                            <a href="{{ route('show.product', $product->slug) }}">
                                                 <h4 class="font-semibold text-xl text-[#111928]">
                                                     {{ $product->product_name }}
                                                 </h4>
@@ -245,14 +246,16 @@
                                             class="bg-skin-secondary py-1 px-2 rounded-md text-xs text-white font-unbounded">New</span>
                                     @endif
                                 </div>
-                                <div class="img flex flex-col justify-center items-center mb-4 overflow-hidden">
-                                    <img src="{{ asset('store-front/images/products/graphic-cards/image-1.png') }}"
-                                        alt="{{ $product->product_name }}" class="max-w-64">
+                                 <div class="img flex flex-col justify-center items-center mb-4 overflow-hidden">
+                                    <div style="height: 160px; display: flex; align-items: center; justify-content: center;">
+                                    <img src="{{ asset($product->pictures[0]->image) }}"
+                                         alt="{{ $product->product_name }}" class="max-w-64 max-h-full object-contain" style="max-height: 100%; max-width: 100%;">
+                                    </div>
                                 </div>
                                 <div>
                                     <div class="flex justify-between gap-4">
                                         <div class="flex flex-col gap-1">
-                                            <a href="{{ $product->slug }}">
+                                            <a href="{{ route('show.product', $product->slug) }}">
                                                 <h4 class="font-semibold text-xl text-[#111928]">
                                                     {{ $product->product_name }}
                                                 </h4>
@@ -281,11 +284,6 @@
                 </div>
                 <div class="swiper-pagination bottom-0"></div>
             </div>
-
-
-
-
-
         </div>
     </section>
 
@@ -313,13 +311,15 @@
                                     @endif
                                 </div>
                                 <div class="img flex flex-col justify-center items-center mb-4 overflow-hidden">
-                                    <img src="{{ asset('store-front/images/products/graphic-cards/image-1.png') }}"
-                                        alt="{{ $product->product_name }}" class="max-w-64">
+                                    <div style="height: 160px; display: flex; align-items: center; justify-content: center;">
+                                    <img src="{{ asset($product->pictures[0]->image) }}"
+                                         alt="{{ $product->product_name }}" class="max-w-64 max-h-full object-contain" style="max-height: 100%; max-width: 100%;">
+                                    </div>
                                 </div>
                                 <div>
                                     <div class="flex justify-between gap-4">
                                         <div class="flex flex-col gap-1">
-                                            <a href="{{ $product->slug }}">
+                                            <a href="{{ route('show.product', $product->slug) }}">
                                                 <h4 class="font-semibold text-xl text-[#111928]">
                                                     {{ $product->product_name }}
                                                 </h4>
@@ -357,8 +357,8 @@
     </section>
 
 
-     <!-- Motherboards -->
-     <section class="mb-20">
+    <!-- Motherboards -->
+    <section class="mb-20">
         <div class="px-12">
             <div class="max-w-lg mx-auto mb-12">
                 <h2 class="section-heading">Motherboards</h2>
@@ -381,13 +381,15 @@
                                     @endif
                                 </div>
                                 <div class="img flex flex-col justify-center items-center mb-4 overflow-hidden">
-                                    <img src="{{ asset('store-front/images/products/graphic-cards/image-1.png') }}"
-                                        alt="{{ $product->product_name }}" class="max-w-64">
+                                     <div style="height: 160px; display: flex; align-items: center; justify-content: center;">
+                                    <img src="{{ asset($product->pictures[0]->image) }}"
+                                         alt="{{ $product->product_name }}" class="max-w-64 max-h-full object-contain" style="max-height: 100%; max-width: 100%;">
+                                    </div>
                                 </div>
                                 <div>
                                     <div class="flex justify-between gap-4">
                                         <div class="flex flex-col gap-1">
-                                            <a href="{{ $product->slug }}">
+                                            <a href="{{ route('show.product', $product->slug) }}">
                                                 <h4 class="font-semibold text-xl text-[#111928]">
                                                     {{ $product->product_name }}
                                                 </h4>
@@ -416,11 +418,6 @@
                 </div>
                 <div class="swiper-pagination bottom-0"></div>
             </div>
-
-
-
-
-
         </div>
     </section>
 @endsection
