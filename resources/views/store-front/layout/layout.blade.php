@@ -20,7 +20,7 @@
             <div class="flex flex-col md:flex-row items-center justify-between h-20 md:h-16">
                 <div class="flex items-center">
                     <a href="{{ route('home') }}">
-                        <img class="min-h-12 max-h-12" src="{{ asset('store-front/images/logo/circuit.svg') }}"
+                        <img class="min-h-12 max-h-12" src="{{ asset('store-front/images/logo/logo.png') }}"
                             alt="Workflow">
                     </a>
                     <div class="ml-4">
@@ -60,25 +60,25 @@
                             Products</a>
                         <div
                             class="submenu absolute left-0 hidden group-hover:block bg-white shadow-lg rounded-lg py-2 z-50 min-w-56">
-                            <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Product 1</a>
-                            <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Product 2</a>
-                            <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Product 3</a>
+                            <a href="{{ route('show.shop') }}" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Product 1</a>
+                            <a href="{{ route('show.shop') }}" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Product 2</a>
+                            <a href="{{ route('show.shop') }}" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Product 3</a>
                         </div>
                     </div>
                     <div class="relative group">
-                        <a href="#" class="hover:text-skin-secondary">Complete Build</a>
+                        <a href="{{ route('show.shop') }}" class="hover:text-skin-secondary">Complete Build</a>
                         <div
                             class="submenu absolute left-0 hidden group-hover:block bg-white shadow-lg rounded-lg py-2 z-50 min-w-56">
-                            <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Build Option 1</a>
-                            <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Build Option 2</a>
+                            <a href="{{ route('show.shop') }}" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Build Option 1</a>
+                            <a href="{{ route('show.shop') }}" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Build Option 2</a>
                         </div>
                     </div>
                     <div class="relative group">
-                        <a href="#" class="hover:text-skin-secondary">Bundled Packages</a>
+                        <a href="{{ route('show.shop') }}" class="hover:text-skin-secondary">Bundled Packages</a>
                         <div
                             class="submenu absolute left-0 hidden group-hover:block bg-white shadow-lg rounded-lg py-2 z-50 min-w-56">
-                            <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Package 1</a>
-                            <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Package 2</a>
+                            <a href="{{ route('show.shop') }}" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Package 1</a>
+                            <a href="{{ route('show.shop') }}" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Package 2</a>
                         </div>
                     </div>
                     <a href="{{ route('become.seller') }}" class="text-skin-secondary flex gap-2 items-center">

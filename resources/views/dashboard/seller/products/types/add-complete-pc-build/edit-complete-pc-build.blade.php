@@ -336,133 +336,145 @@
                                                 <h4>Storage</h4>
                                                 <div id="storage-container">
                                                     @php
-                                                        $storages = collect();
-                                                        $storageKeys = [
-                                                            'storage_name',
-                                                            'storage_brand',
-                                                            'storage_type',
-                                                            'storage_capacity',
-                                                        ];
-                                                        foreach ($storageKeys as $key) {
-                                                            $storages = $storages->merge(
-                                                                $product->parts
-                                                                    ->where('key', $key)
-                                                                    ->pluck('value', 'key'),
-                                                            );
+                                                        // Retrieve each storage field from the product parts in the order they appear.
+                                                        $storage_names = $product->parts
+                                                            ->where('key', 'storage_name')
+                                                            ->pluck('value')
+                                                            ->values();
+                                                        $storage_brands = $product->parts
+                                                            ->where('key', 'storage_brand')
+                                                            ->pluck('value')
+                                                            ->values();
+                                                        $storage_types = $product->parts
+                                                            ->where('key', 'storage_type')
+                                                            ->pluck('value')
+                                                            ->values();
+                                                        $storage_capacities = $product->parts
+                                                            ->where('key', 'storage_capacity')
+                                                            ->pluck('value')
+                                                            ->values();
+
+                                                        // Determine the maximum number of storage entries available.
+                                                        $storageCount = max(
+                                                            $storage_names->count(),
+                                                            $storage_brands->count(),
+                                                            $storage_types->count(),
+                                                            $storage_capacities->count(),
+                                                        );
+
+                                                        // If no storage parts exist, default to one empty entry.
+                                                        if ($storageCount === 0) {
+                                                            $storageCount = 1;
                                                         }
-                                                        $storageGroups = $storages->groupBy(function ($item, $key) {
-                                                            $index = null;
-                                                            if (strpos($key, 'storage_name') === 0) {
-                                                                $index = substr($key, 12);
-                                                            }
-                                                            if (strpos($key, 'storage_brand') === 0) {
-                                                                $index = substr($key, 13);
-                                                            }
-                                                            if (strpos($key, 'storage_type') === 0) {
-                                                                $index = substr($key, 12);
-                                                            }
-                                                            if (strpos($key, 'storage_capacity') === 0) {
-                                                                $index = substr($key, 16);
-                                                            }
-                                                            return $index;
-                                                        });
                                                     @endphp
-                                                    @foreach ($storageGroups as $index => $storage)
-                                                        <div class="row storage" data-id="{{ (int) $index + 1 }}"
-                                                            id="storage_row_{{ (int) $index + 1 }}">
+
+                                                    @for ($i = 0; $i < $storageCount; $i++)
+                                                        <div class="row storage" data-id="{{ $i + 1 }}"
+                                                            id="storage_row_{{ $i + 1 }}">
+                                                            <!-- Storage Device Name -->
                                                             <div class="col-md-3">
                                                                 <div class="form-group">
-                                                                    <label for="storage_name_{{ (int) $index + 1 }}"
-                                                                        class="form-label">Storage
-                                                                        Device Name</label>
+                                                                    <label for="storage_name_{{ $i + 1 }}"
+                                                                        class="form-label">Storage Device Name</label>
                                                                     <input type="text" name="storage_name[]"
-                                                                        id="storage_name_{{ (int) $index + 1 }}"
+                                                                        id="storage_name_{{ $i + 1 }}"
                                                                         class="form-control"
-                                                                        value="{{ $storage['storage_name'] ?? '' }}">
+                                                                        value="{{ $storage_names->get($i) ?? '' }}">
                                                                 </div>
                                                             </div>
+
+                                                            <!-- Storage Brand -->
                                                             <div class="col-md-3">
                                                                 <div class="form-group">
-                                                                    <label for="storage_brand_{{ (int) $index + 1 }}"
-                                                                        class="form-label">Storage
-                                                                        Brand</label>
+                                                                    <label for="storage_brand_{{ $i + 1 }}"
+                                                                        class="form-label">Storage Brand</label>
                                                                     <select name="storage_brand[]"
-                                                                        id="storage_brand_{{ (int) $index + 1 }}"
+                                                                        id="storage_brand_{{ $i + 1 }}"
                                                                         class="form-control">
                                                                         <option value="">Select Brands</option>
+                                                                        <!--
+                                                                                            If you have a list of brand options, you can loop through them here.
+                                                                                            To pre-select the stored value, compare with $storage_brands->get($i)
+                                                                                        -->
                                                                     </select>
                                                                 </div>
                                                             </div>
+
+                                                            <!-- Storage Type -->
                                                             <div class="col-md-3">
                                                                 <div class="form-group">
-                                                                    <label for="storage_type_{{ (int) $index + 1 }}"
-                                                                        class="form-label">Storage
-                                                                        Type</label>
+                                                                    <label for="storage_type_{{ $i + 1 }}"
+                                                                        class="form-label">Storage Type</label>
                                                                     <select name="storage_type[]"
-                                                                        id="storage_type_{{ (int) $index + 1 }}"
+                                                                        id="storage_type_{{ $i + 1 }}"
                                                                         class="form-control">
                                                                         <option value="">Select Storage Type</option>
                                                                         <option value="NVMe"
-                                                                            {{ ($storage['storage_type'] ?? '') == 'NVMe' ? 'selected' : '' }}>
+                                                                            {{ ($storage_types->get($i) ?? '') == 'NVMe' ? 'selected' : '' }}>
                                                                             NVMe</option>
                                                                         <option value="SSD"
-                                                                            {{ ($storage['storage_type'] ?? '') == 'SSD' ? 'selected' : '' }}>
+                                                                            {{ ($storage_types->get($i) ?? '') == 'SSD' ? 'selected' : '' }}>
                                                                             SSD</option>
                                                                         <option value="HDD"
-                                                                            {{ ($storage['storage_type'] ?? '') == 'HDD' ? 'selected' : '' }}>
+                                                                            {{ ($storage_types->get($i) ?? '') == 'HDD' ? 'selected' : '' }}>
                                                                             HDD</option>
                                                                     </select>
                                                                 </div>
                                                             </div>
+
+                                                            <!-- Storage Capacity -->
                                                             <div class="col-md-2">
                                                                 <div class="form-group">
-                                                                    <label for="storage_capacity_{{ (int) $index + 1 }}"
-                                                                        class="form-label">Storage
-                                                                        Capacity</label>
+                                                                    <label for="storage_capacity_{{ $i + 1 }}"
+                                                                        class="form-label">Storage Capacity</label>
                                                                     <select name="storage_capacity[]"
-                                                                        id="storage_capacity_{{ (int) $index + 1 }}"
+                                                                        id="storage_capacity_{{ $i + 1 }}"
                                                                         class="form-control">
                                                                         <option value="">Select Storage Capacity
                                                                         </option>
                                                                         <option value="128GB"
-                                                                            {{ ($storage['storage_capacity'] ?? '') == '128GB' ? 'selected' : '' }}>
+                                                                            {{ ($storage_capacities->get($i) ?? '') == '128GB' ? 'selected' : '' }}>
                                                                             128GB</option>
                                                                         <option value="256GB"
-                                                                            {{ ($storage['storage_capacity'] ?? '') == '256GB' ? 'selected' : '' }}>
+                                                                            {{ ($storage_capacities->get($i) ?? '') == '256GB' ? 'selected' : '' }}>
                                                                             256GB</option>
                                                                         <option value="512GB"
-                                                                            {{ ($storage['storage_capacity'] ?? '') == '512GB' ? 'selected' : '' }}>
+                                                                            {{ ($storage_capacities->get($i) ?? '') == '512GB' ? 'selected' : '' }}>
                                                                             512GB</option>
                                                                         <option value="1TB"
-                                                                            {{ ($storage['storage_capacity'] ?? '') == '1TB' ? 'selected' : '' }}>
+                                                                            {{ ($storage_capacities->get($i) ?? '') == '1TB' ? 'selected' : '' }}>
                                                                             1TB</option>
                                                                         <option value="2TB"
-                                                                            {{ ($storage['storage_capacity'] ?? '') == '2TB' ? 'selected' : '' }}>
+                                                                            {{ ($storage_capacities->get($i) ?? '') == '2TB' ? 'selected' : '' }}>
                                                                             2TB</option>
                                                                         <option value="3TB"
-                                                                            {{ ($storage['storage_capacity'] ?? '') == '3TB' ? 'selected' : '' }}>
+                                                                            {{ ($storage_capacities->get($i) ?? '') == '3TB' ? 'selected' : '' }}>
                                                                             3TB</option>
                                                                         <option value="4TB"
-                                                                            {{ ($storage['storage_capacity'] ?? '') == '4TB' ? 'selected' : '' }}>
+                                                                            {{ ($storage_capacities->get($i) ?? '') == '4TB' ? 'selected' : '' }}>
                                                                             4TB</option>
                                                                     </select>
                                                                 </div>
                                                             </div>
-                                                            @if ($index != 0)
+
+                                                            <!-- Remove Button (only show if more than one storage row exists) -->
+                                                            @if ($i != 0)
                                                                 <div class="col-md-1 d-flex align-items-center">
                                                                     <button type="button"
                                                                         class="btn btn-danger remove-storage"
-                                                                        data-id="{{ (int) $index + 1 }}">X</button>
+                                                                        data-id="{{ $i + 1 }}">X</button>
                                                                 </div>
                                                             @endif
                                                         </div>
-                                                    @endforeach
+                                                    @endfor
                                                 </div>
-                                                @if (count($storageGroups) < 3)
+
+                                                @if ($storageCount < 3)
                                                     <button class="btn btn-success" id="add-more-storage">Add More
                                                         Storage</button>
                                                 @endif
                                             </div>
+
 
                                             <!-- Case -->
                                             <div class="col-md-12">
@@ -928,7 +940,8 @@
                                         <input type="file" class="filepond" name="file" id="images" multiple />
                                     </div>
                                     <div class="col-md-12">
-                                        <button type="submit" class="btn btn-success">Update Product</button>
+                                        <button type="submit" id="submitThisForm" class="btn btn-success">Update
+                                            Product</button>
                                     </div>
                                 </div>
                             </div>
@@ -940,6 +953,22 @@
     </div>
 @endsection
 @section('additionScript')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Select all buttons inside any form on the page
+            var formButtons = document.querySelectorAll('form button');
+
+            formButtons.forEach(function(button) {
+                button.addEventListener('click', function(event) {
+                    // If the clicked button's id is NOT 'submitThisForm'
+                    if (this.id !== 'submitThisForm') {
+                        // Prevent the default action (form submission)
+                        event.preventDefault();
+                    }
+                });
+            });
+        });
+    </script>
     {{-- Script To Render Year --}}
     <script>
         function renderYearSelectBox() {
@@ -973,6 +1002,8 @@
                 option2.text = year;
                 yearSelect2.appendChild(option2);
             }
+            yearSelect2.value = "{{ $product->parts->where('key', 'process_gen_year')->first()->value ?? '' }}";
+
         }
 
         // Call the function to render the year select boxes when the page loads
@@ -1051,80 +1082,92 @@
                         {{ $componentKey }}_brand_selected);
                 @endif
             @endforeach
+
+
+            // Check if any element with the name "keyboard_brand[]" exists
+            if ($('#keyboard_brand').length > 0) {
+                getCategoriesBySlug('keyboards', 'keyboard_brand', keyboard_brand_selected);
+            }
+            if ($('#monitor_brand').length > 0) {
+                getCategoriesBySlug('monitors', 'monitor_brand', monitor_brand_selected);
+            }
+
         });
     </script>
     {{-- Script For Storage --}}
     <script>
-        let storageCounter = {{ count($storageGroups) }}; // Counter to keep track of unique IDs
+        // Initialize storageCounter with the number of storage rows already rendered.
+        let storageCounter = {{ $storageCount }};
 
-        document.getElementById("add-more-storage").addEventListener("click", function(e) {
-            e.preventDefault();
+        document.getElementById("add-more-storage") &&
+            document.getElementById("add-more-storage").addEventListener("click", function(e) {
+                e.preventDefault();
 
-            // Check if the maximum limit of 3 rows is reached
-            const storageRows = document.querySelectorAll(".storage");
-            if (storageRows.length >= 3) {
-                alert("You can only add up to 3 storage options.");
-                return;
-            }
+                // Check if the maximum limit of 3 rows is reached.
+                const storageRows = document.querySelectorAll(".storage");
+                if (storageRows.length >= 3) {
+                    alert("You can only add up to 3 storage options.");
+                    return;
+                }
 
-            storageCounter++;
+                storageCounter++;
 
-            // Create a new storage row
-            const newStorageRow = `
-    <div class="row storage" data-id="${storageCounter}" id="storage_row_${storageCounter}">
-        <div class="col-md-3">
-            <div class="form-group">
-                <label for="storage_name_${storageCounter}" class="form-label">Storage Device Name</label>
-                <input type="text" name="storage_name[]" id="storage_name_${storageCounter}" class="form-control">
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="form-group">
-                <label for="storage_brand_${storageCounter}" class="form-label">Storage Brand</label>
-                <select name="storage_brand[]" id="storage_brand_${storageCounter}" class="form-control">
-                    <option value="">Select Brands</option>
-                </select>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="form-group">
-                <label for="storage_type_${storageCounter}" class="form-label">Storage Type</label>
-                <select name="storage_type[]" id="storage_type_${storageCounter}" class="form-control">
-                    <option value="">Select Storage Type</option>
-                    <option value="NVMe">NVMe</option>
-                    <option value="SSD">SSD</option>
-                    <option value="HDD">HDD</option>
-                </select>
-            </div>
-        </div>
-        <div class="col-md-2">
-            <div class="form-group">
-                <label for="storage_capacity_${storageCounter}" class="form-label">Storage Capacity</label>
-                <select name="storage_capacity[]" id="storage_capacity_${storageCounter}" class="form-control">
-                    <option value="">Select Storage Capacity</option>
-                    <option value="128GB">128GB</option>
-                    <option value="256GB">256GB</option>
-                    <option value="512GB">512GB</option>
-                    <option value="1TB">1TB</option>
-                    <option value="2TB">2TB</option>
-                    <option value="3TB">3TB</option>
-                    <option value="4TB">4TB</option>
-                </select>
-            </div>
-        </div>
-        <div class="col-md-1 d-flex align-items-center">
-            <button type="button" class="btn btn-danger remove-storage" data-id="${storageCounter}">X</button>
-        </div>
-    </div>`;
+                // Create a new storage row with empty fields.
+                const newStorageRow = `
+            <div class="row storage" data-id="${storageCounter}" id="storage_row_${storageCounter}">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="storage_name_${storageCounter}" class="form-label">Storage Device Name</label>
+                        <input type="text" name="storage_name[]" id="storage_name_${storageCounter}" class="form-control">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="storage_brand_${storageCounter}" class="form-label">Storage Brand</label>
+                        <select name="storage_brand[]" id="storage_brand_${storageCounter}" class="form-control">
+                            <option value="">Select Brands</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="storage_type_${storageCounter}" class="form-label">Storage Type</label>
+                        <select name="storage_type[]" id="storage_type_${storageCounter}" class="form-control">
+                            <option value="">Select Storage Type</option>
+                            <option value="NVMe">NVMe</option>
+                            <option value="SSD">SSD</option>
+                            <option value="HDD">HDD</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label for="storage_capacity_${storageCounter}" class="form-label">Storage Capacity</label>
+                        <select name="storage_capacity[]" id="storage_capacity_${storageCounter}" class="form-control">
+                            <option value="">Select Storage Capacity</option>
+                            <option value="128GB">128GB</option>
+                            <option value="256GB">256GB</option>
+                            <option value="512GB">512GB</option>
+                            <option value="1TB">1TB</option>
+                            <option value="2TB">2TB</option>
+                            <option value="3TB">3TB</option>
+                            <option value="4TB">4TB</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-1 d-flex align-items-center">
+                    <button type="button" class="btn btn-danger remove-storage" data-id="${storageCounter}">X</button>
+                </div>
+            </div>`;
 
-            // Append the new row to the container
-            document.getElementById("storage-container").insertAdjacentHTML("beforeend", newStorageRow);
+                // Append the new storage row to the container.
+                document.getElementById("storage-container").insertAdjacentHTML("beforeend", newStorageRow);
 
-            // Call getCategoriesBySlug for the new storage_brand select field
-            getCategoriesBySlug('storage', `storage_brand_${storageCounter}`);
-        });
+                // Optionally, if you have a function to load/select storage brand options, call it here:
+                getCategoriesBySlug('storage', `storage_brand_${storageCounter}`);
+            });
 
-        // Event delegation to handle dynamic "Remove" button clicks
+        // Event delegation to handle removal of dynamic rows.
         document.getElementById("storage-container").addEventListener("click", function(e) {
             if (e.target && e.target.classList.contains("remove-storage")) {
                 const rowId = e.target.getAttribute("data-id");

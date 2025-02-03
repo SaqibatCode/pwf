@@ -38,6 +38,8 @@
                             <th class="px-5 py-3 text-left text-sm font-semibold text-gray-600 uppercase tracking-wider">
                                 Tracking ID</th>
                             <th class="px-5 py-3 text-left text-sm font-semibold text-gray-600 uppercase tracking-wider">
+                                Order Reciept</th>
+                            <th class="px-5 py-3 text-left text-sm font-semibold text-gray-600 uppercase tracking-wider">
                                 Action</th>
                         </tr>
                     </thead>
@@ -53,15 +55,21 @@
                                 </td>
                                 <td class="px-5 py-4 text-sm">{{ ucfirst($childOrder->status) }}</td>
                                 <td class="px-5 py-4 text-sm">{{ $childOrder->tracking_id ?? 'N/A' }}</td>
+                                <td class="px-5 py-4 ">
+                                    <a href="/{{ $childOrder->tracking_img }}"
+                                        class="" target="_blank">
+                                        View  Reciept
+                                    </a>
+                                </td>
                                 <td>
                                     @if ($childOrder->status == 'Order Dispatched')
                                         <form action="{{ route('buyer.mark.delivered') }}" method="POST">
                                             @csrf
-                                            <input type="hidden" name="id" value="{{ $childOrder->id }}">
+
                                             <button type="submit"
-                                                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
-                                                Order Received
-                                            </button>
+                                            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                                            Order Received
+                                        </button>
                                         </form>
                                     @endif
                                 </td>

@@ -149,11 +149,11 @@
                                                 <span class="menu-text">Rejected Products</span>
                                             </a>
                                         </li>
-                                        <li class="menu-item">
+                                        {{-- <li class="menu-item">
                                             <a class="menu-link" href="#">
                                                 <span class="menu-text">Add Packages</span>
                                             </a>
-                                        </li>
+                                        </li> --}}
 
                                     </ul>
                                 </div>
@@ -349,6 +349,11 @@
                                         <li class="menu-item">
                                             <a class="menu-link" href="{{ route('admin.faqs.index') }}">
                                                 <span class="menu-text">Manage FAQS</span>
+                                            </a>
+                                        </li>
+                                        <li class="menu-item">
+                                            <a class="menu-link" href="{{ route('admin.bank_details.index') }}">
+                                                <span class="menu-text">Manage Bank Accounts</span>
                                             </a>
                                         </li>
                                     </ul>

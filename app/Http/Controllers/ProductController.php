@@ -676,6 +676,7 @@ class ProductController extends Controller
                 $status = 'approved';
             }
             // Store product data
+            $category = Category::where('slug', 'complete-pc-build')->first();
             $product = Product::create([
                 'product_name' => $validatedData['product_name'],
                 'slug' => $slug,
@@ -683,6 +684,7 @@ class ProductController extends Controller
                 'price' => $validatedData['price'],
                 'year_of_make' => $validatedData['year'],
                 'sale_price' => $validatedData['sp'],
+                'category_id' => $category->id,
                 'sku' => $validatedData['sku'],
                 'stock_quanity' => 1,
                 'description' => $validatedData['description'],
@@ -703,7 +705,7 @@ class ProductController extends Controller
 
                 ['key' => 'motherboard_name', 'value' => $validatedData['motherboard_name']],
                 ['key' => 'motherboard_brand', 'value' => $validatedData['motherboard_brand']],
-                ['key' => 'motherboard_condition', 'value' => $validatedData['graphics_card_memory']],
+                ['key' => 'motherboard_condition', 'value' => $validatedData['motherboard_condition']],
 
                 ['key' => 'ram_name', 'value' => $validatedData['ram_name']],
                 ['key' => 'ram_brand', 'value' => $validatedData['ram_brand']],
@@ -722,6 +724,7 @@ class ProductController extends Controller
                 ['key' => 'psu_name', 'value' => $validatedData['psu_name']],
                 ['key' => 'psu_brand', 'value' => $validatedData['psu_brand']],
                 ['key' => 'psu_condition', 'value' => $validatedData['psu_condition']],
+                ['key' => 'psu_watt', 'value' => $validatedData['psu_watt']],
             ];
 
 
@@ -972,7 +975,7 @@ class ProductController extends Controller
 
                 ['key' => 'motherboard_name', 'value' => $validatedData['motherboard_name']],
                 ['key' => 'motherboard_brand', 'value' => $validatedData['motherboard_brand']],
-                ['key' => 'motherboard_condition', 'value' => $validatedData['graphics_card_memory']],
+                ['key' => 'motherboard_condition', 'value' => $validatedData['motherboard_condition']],
 
                 ['key' => 'ram_name', 'value' => $validatedData['ram_name']],
                 ['key' => 'ram_brand', 'value' => $validatedData['ram_brand']],
@@ -991,6 +994,7 @@ class ProductController extends Controller
                 ['key' => 'psu_name', 'value' => $validatedData['psu_name']],
                 ['key' => 'psu_brand', 'value' => $validatedData['psu_brand']],
                 ['key' => 'psu_condition', 'value' => $validatedData['psu_condition']],
+                ['key' => 'psu_watt', 'value' => $validatedData['psu_watt']],
             ];
 
             $additionalPartsData = [];
@@ -1123,6 +1127,376 @@ class ProductController extends Controller
         }
     }
 
+
+    /*****************************************************
+     *
+     *
+     * Laptop Functions
+     *
+     *
+     *****************************************************/
+
+    public function show_add_laptop_page()
+    {
+        $category = Category::all();
+        return view('dashboard.seller.products.types.add-laptop.add-new-laptop', compact('category'));
+    }
+
+    public function store_laptop(Request $request)
+    {
+        DB::beginTransaction();
+
+        try {
+            // Validate input
+            $validatedData = $request->validate([
+                '_token' => 'required|string',
+                'product_name' => 'required|string|max:255',
+                'warranty' => 'required|string',
+                'sku' => 'required|string|max:255',
+                'year' => 'required|integer|min:1900|max:' . date('Y'),
+                'laptop_brand' => 'required',
+                'laptop_condition' => 'required',
+                'process_name' => 'required|string|max:255',
+                'process_brand' => 'required|string|max:255',
+                'process_gen_year' => 'required|integer|min:1900|max:' . date('Y'),
+                'process_condition' => 'required|string|max:255',
+                'graphics_card_name' => 'required|string|max:255',
+                'graphics_card_brand' => 'required|string|max:255',
+                'graphics_card_memory' => 'required|string|max:10',
+                'graphics_card_condition' => 'required|string|in:New,Used',
+                'ram_name' => 'required|string|max:255',
+                'ram_brand' => 'required|string|max:255',
+                'ram_memory' => 'required|string|max:10',
+                'ram_dimm' => 'required|string',
+                'storage_name' => 'required|array|min:1',
+                'storage_name.*' => 'required|string|max:255',
+                'storage_brand' => 'required|array|min:1',
+                'storage_brand.*' => 'required|string|max:255',
+                'storage_type' => 'required|array|min:1',
+                'storage_type.*' => 'required|string|in:HDD,SSD,NVMe',
+                'storage_capacity' => 'required|array|min:1',
+                'storage_capacity.*' => 'required|string|max:10',
+                'price' => 'required|numeric|min:0',
+                'sp' => 'nullable|numeric|min:0',
+                'reason' => 'nullable|string|max:500',
+                'description' => 'required|string|max:1000',
+                'file' => 'required|array|min:4|max:10',
+                'file.*' => 'file|mimes:jpeg,png,jpg|max:2048',
+            ]);
+
+
+            $sellerName = Auth::user()->first_name;
+            $slug = Product::generateSlug($validatedData['product_name'], $sellerName);
+            $status = 'pending';
+            if (Auth::user()->verification !== 'Unverified' && Auth::user()->verification !== 'pending') {
+                $status = 'approved';
+            }
+
+            $category = Category::where('slug', 'laptops')->first();
+            // Store product data
+            $product = Product::create([
+                'product_name' => $validatedData['product_name'],
+                'slug' => $slug,
+                'warranty' => $validatedData['warranty'],
+                'price' => $validatedData['price'],
+                'year_of_make' => $validatedData['year'],
+                'sale_price' => $validatedData['sp'],
+                'sku' => $validatedData['sku'],
+                'condition' => $validatedData['laptop_condition'],
+                'category_id' => $category->id,
+                'brand_id' => $validatedData['laptop_brand'],
+                'stock_quanity' => 1,
+                'description' => $validatedData['description'],
+                'product_type' => 'laptop',
+                'user_id' => Auth::user()->id,
+                'status' => $status
+            ]);
+            $pcPartsData = [
+                ['key' => 'process_name', 'value' => $validatedData['process_name']],
+                ['key' => 'process_brand', 'value' => $validatedData['process_brand']],
+                ['key' => 'process_condition', 'value' => $validatedData['process_condition']],
+                ['key' => 'process_gen_year', 'value' => $validatedData['process_gen_year']],
+
+                ['key' => 'graphics_card_name', 'value' => $validatedData['graphics_card_name']],
+                ['key' => 'graphics_card_brand', 'value' => $validatedData['graphics_card_brand']],
+                ['key' => 'graphics_card_condition', 'value' => $validatedData['graphics_card_condition']],
+                ['key' => 'graphics_card_memory', 'value' => $validatedData['graphics_card_memory']],
+
+
+                ['key' => 'ram_name', 'value' => $validatedData['ram_name']],
+                ['key' => 'ram_brand', 'value' => $validatedData['ram_brand']],
+                ['key' => 'ram_dimm', 'value' => $validatedData['ram_dimm']],
+                ['key' => 'ram_memory', 'value' => $validatedData['ram_memory']],
+            ];
+
+            $pcPartsData = array_merge($pcPartsData);
+
+
+
+            // For Storage
+
+            $storageData = [];
+
+            // Required first storage entry
+            $storageData[] = ['key' => 'storage_brand', 'value' => $validatedData['storage_brand'][0]];
+            $storageData[] = ['key' => 'storage_capacity', 'value' => $validatedData['storage_capacity'][0]];
+            $storageData[] = ['key' => 'storage_name', 'value' => $validatedData['storage_name'][0]];
+            $storageData[] = ['key' => 'storage_type', 'value' => $validatedData['storage_type'][0]];
+
+
+            // Check for second storage entry
+            if (!empty($validatedData['storage_brand'][1])) {
+                $storageData[] = ['key' => 'storage_brand', 'value' => $validatedData['storage_brand'][1]];
+                $storageData[] = ['key' => 'storage_capacity', 'value' => $validatedData['storage_capacity'][1]];
+                $storageData[] = ['key' => 'storage_name', 'value' => $validatedData['storage_name'][1]];
+                $storageData[] = ['key' => 'storage_type', 'value' => $validatedData['storage_type'][1]];
+            }
+
+            // Check for third storage entry
+            if (!empty($validatedData['storage_brand'][2])) {
+                $storageData[] = ['key' => 'storage_brand', 'value' => $validatedData['storage_brand'][2]];
+                $storageData[] = ['key' => 'storage_capacity', 'value' => $validatedData['storage_capacity'][2]];
+                $storageData[] = ['key' => 'storage_name', 'value' => $validatedData['storage_name'][2]];
+                $storageData[] = ['key' => 'storage_type', 'value' => $validatedData['storage_type'][2]];
+            }
+
+            $pcPartsData = array_merge($pcPartsData, $storageData);
+
+
+
+            $product->parts()->createMany($pcPartsData);
+
+
+            // Handle file uploads
+            if ($request->hasFile('file')) {
+                foreach ($request->file('file') as $file) {
+                    $path = public_path('images/products');
+
+                    // Create the directory if it doesn't exist
+                    if (!is_dir($path)) {
+                        mkdir($path, 0777, true);
+                    }
+
+                    $fileName = time() . '_' . $file->getClientOriginalName();
+                    $file->move($path, $fileName);
+
+                    // Attach the image path to the product
+                    $product->pictures()->create(['image' => 'images/products/' . $fileName]);
+                }
+            }
+
+            // Commit the transaction
+            DB::commit();
+
+            // Return success response
+            return response()->json([
+                'success' => true,
+                'message' => 'Laptop added successfully!',
+            ]);
+        } catch (\Exception $e) {
+            // Rollback the transaction if any exception occurs
+            DB::rollBack();
+
+            // Return error response
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred while adding the product.',
+                'error' => $e->getMessage(),
+            ], 500);
+            return response()->json($req->all());
+        }
+    }
+
+
+    public function edit_laptop($id)
+    {
+        $laptop = Product::with('parts', 'pictures')->findOrFail($id);
+
+        $category = Category::all();
+        return view('dashboard.seller.products.types.add-laptop.edit-laptop', compact('laptop', 'category'));
+    }
+
+
+     public function update_laptop(Request $request, $id)
+    {
+        DB::beginTransaction();
+
+        try {
+             // Validate input
+            $validatedData = $request->validate([
+                '_token' => 'required|string',
+                'product_name' => 'required|string|max:255',
+                'warranty' => 'required|string',
+                'sku' => 'required|string|max:255',
+                'year' => 'required|integer|min:1900|max:' . date('Y'),
+                'laptop_brand' => 'required',
+                'laptop_condition' => 'required',
+                'process_name' => 'required|string|max:255',
+                'process_brand' => 'required|string|max:255',
+                'process_gen_year' => 'required|integer|min:1900|max:' . date('Y'),
+                'process_condition' => 'required|string|max:255',
+                'graphics_card_name' => 'required|string|max:255',
+                'graphics_card_brand' => 'required|string|max:255',
+                'graphics_card_memory' => 'required|string|max:10',
+                'graphics_card_condition' => 'required|string|in:New,Used',
+                'ram_name' => 'required|string|max:255',
+                'ram_brand' => 'required|string|max:255',
+                'ram_memory' => 'required|string|max:10',
+                'ram_dimm' => 'required|string',
+                'storage_name' => 'required|array|min:1',
+                'storage_name.*' => 'required|string|max:255',
+                'storage_brand' => 'required|array|min:1',
+                'storage_brand.*' => 'required|string|max:255',
+                'storage_type' => 'required|array|min:1',
+                'storage_type.*' => 'required|string|in:HDD,SSD,NVMe',
+                'storage_capacity' => 'required|array|min:1',
+                'storage_capacity.*' => 'required|string|max:10',
+                'price' => 'required|numeric|min:0',
+                'sp' => 'nullable|numeric|min:0',
+                'reason' => 'nullable|string|max:500',
+                'description' => 'required|string|max:1000',
+                'file' => 'nullable|array',
+                'file.*' => 'file|mimes:jpeg,png,jpg|max:2048',
+            ]);
+
+
+            $sellerName = Auth::user()->first_name;
+            $slug = Product::generateSlug($validatedData['product_name'], $sellerName);
+            $status = 'pending';
+            if (Auth::user()->verification !== 'Unverified' && Auth::user()->verification !== 'pending') {
+                $status = 'approved';
+            }
+
+            $category = Category::where('slug', 'laptops')->first();
+
+            // Find the product to update
+            $product = Product::findOrFail($id);
+
+            // Update product data
+            $product->update([
+                'product_name' => $validatedData['product_name'],
+                'slug' => $slug,
+                'warranty' => $validatedData['warranty'],
+                'price' => $validatedData['price'],
+                'year_of_make' => $validatedData['year'],
+                'sale_price' => $validatedData['sp'],
+                'sku' => $validatedData['sku'],
+                'condition' => $validatedData['laptop_condition'],
+                'category_id' => $category->id,
+                'brand_id' => $validatedData['laptop_brand'],
+                'description' => $validatedData['description'],
+                'status' => $status
+            ]);
+
+             $pcPartsData = [
+                ['key' => 'process_name', 'value' => $validatedData['process_name']],
+                ['key' => 'process_brand', 'value' => $validatedData['process_brand']],
+                ['key' => 'process_condition', 'value' => $validatedData['process_condition']],
+                ['key' => 'process_gen_year', 'value' => $validatedData['process_gen_year']],
+
+                ['key' => 'graphics_card_name', 'value' => $validatedData['graphics_card_name']],
+                ['key' => 'graphics_card_brand', 'value' => $validatedData['graphics_card_brand']],
+                ['key' => 'graphics_card_condition', 'value' => $validatedData['graphics_card_condition']],
+                ['key' => 'graphics_card_memory', 'value' => $validatedData['graphics_card_memory']],
+
+
+                ['key' => 'ram_name', 'value' => $validatedData['ram_name']],
+                ['key' => 'ram_brand', 'value' => $validatedData['ram_brand']],
+                ['key' => 'ram_dimm', 'value' => $validatedData['ram_dimm']],
+                ['key' => 'ram_memory', 'value' => $validatedData['ram_memory']],
+            ];
+
+            $pcPartsData = array_merge($pcPartsData);
+
+
+
+            // For Storage
+
+            $storageData = [];
+
+            // Required first storage entry
+            $storageData[] = ['key' => 'storage_brand', 'value' => $validatedData['storage_brand'][0]];
+            $storageData[] = ['key' => 'storage_capacity', 'value' => $validatedData['storage_capacity'][0]];
+            $storageData[] = ['key' => 'storage_name', 'value' => $validatedData['storage_name'][0]];
+            $storageData[] = ['key' => 'storage_type', 'value' => $validatedData['storage_type'][0]];
+
+
+            // Check for second storage entry
+            if (!empty($validatedData['storage_brand'][1])) {
+                $storageData[] = ['key' => 'storage_brand', 'value' => $validatedData['storage_brand'][1]];
+                $storageData[] = ['key' => 'storage_capacity', 'value' => $validatedData['storage_capacity'][1]];
+                $storageData[] = ['key' => 'storage_name', 'value' => $validatedData['storage_name'][1]];
+                $storageData[] = ['key' => 'storage_type', 'value' => $validatedData['storage_type'][1]];
+            }
+
+            // Check for third storage entry
+            if (!empty($validatedData['storage_brand'][2])) {
+                $storageData[] = ['key' => 'storage_brand', 'value' => $validatedData['storage_brand'][2]];
+                $storageData[] = ['key' => 'storage_capacity', 'value' => $validatedData['storage_capacity'][2]];
+                $storageData[] = ['key' => 'storage_name', 'value' => $validatedData['storage_name'][2]];
+                $storageData[] = ['key' => 'storage_type', 'value' => $validatedData['storage_type'][2]];
+            }
+
+            $pcPartsData = array_merge($pcPartsData, $storageData);
+
+
+
+             // Delete existing parts associated with the product
+              $product->parts()->delete();
+
+            // Create new parts with updated data
+              $product->parts()->createMany($pcPartsData);
+
+
+
+             // Handle file uploads
+             if ($request->hasFile('file')) {
+                  // Delete existing images
+                    foreach($product->pictures as $picture){
+                        if(file_exists(public_path($picture->image))){
+                            unlink(public_path($picture->image));
+                        }
+
+                    }
+                     $product->pictures()->delete();
+
+
+                foreach ($request->file('file') as $file) {
+                    $path = public_path('images/products');
+
+                    // Create the directory if it doesn't exist
+                    if (!is_dir($path)) {
+                        mkdir($path, 0777, true);
+                    }
+
+                    $fileName = time() . '_' . $file->getClientOriginalName();
+                    $file->move($path, $fileName);
+
+                    // Attach the image path to the product
+                    $product->pictures()->create(['image' => 'images/products/' . $fileName]);
+                }
+            }
+
+            // Commit the transaction
+            DB::commit();
+
+            // Return success response
+            return response()->json([
+                'success' => true,
+                'message' => 'Laptop updated successfully!',
+            ]);
+        } catch (\Exception $e) {
+            // Rollback the transaction if any exception occurs
+            DB::rollBack();
+
+            // Return error response
+             return response()->json([
+                'success' => false,
+                'message' => 'An error occurred while updating the product.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
     /*****************************************************
      *
      *

@@ -1,7 +1,9 @@
 @extends('dashboard.layout.layout')
+
 @section('pageTitle')
     Admin Dashboard
 @endsection
+
 @section('main-content')
     <div class="page-content">
         <div class="container-fluid">
@@ -17,11 +19,38 @@
                                 <li class="breadcrumb-item active">Orders</li>
                             </ol>
                         </div>
-
                     </div>
                 </div>
             </div>
 
+            <!-- Filter Form -->
+            <form method="GET" action="{{ route('admin.all.orders') }}" class="mb-3">
+                <div class="row">
+                    <div class="col-md-3">
+                        <input type="text" name="seller_name" id="seller_name" placeholder="Seller Name"
+                            class="form-control" value="{{ request('seller_name') }}">
+                    </div>
+                    <div class="col-md-3">
+                        <input type="date" name="date_from" id="date_from" class="form-control"
+                            value="{{ request('date_from') }}">
+                    </div>
+                    <div class="col-md-3">
+                        <input type="date" name="date_to" id="date_to" class="form-control"
+                            value="{{ request('date_to') }}">
+                    </div>
+                    <div class="col-md-3">
+                        <button type="submit" class="btn btn-primary">Filter</button>
+                        <a href="{{ route('admin.all.orders') }}" class="btn btn-secondary">Reset</a>
+                    </div>
+                </div>
+            </form>
+
+            <!-- Export Button -->
+            <!-- Export Button -->
+            <button id="exportBtn" class="btn btn-success mb-3">Export to CSV</button>
+
+
+            <!-- Orders Table -->
             <div class="row">
                 <div class="col-md-12">
                     <table class="table table-striped table-hover">
@@ -39,6 +68,7 @@
                                 <th>Order Date</th>
                                 <th>Order Status</th>
                                 <th>Payment Type</th>
+                                <th>Price</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -85,17 +115,12 @@
                                                     <option value="Order Dispatched"
                                                         @if ($chorder->status == 'Order Dispatched') selected @endif>Order Dispatched
                                                     </option>
-
                                                     <option value="Delivered & Completed"
                                                         @if ($chorder->status == 'Delivered & Completed') selected @endif>Delivered &
                                                         Completed</option>
-
-
                                                 </select>
                                                 <button class="btn sm btn-info" type="submit">Update</button>
                                             </form>
-
-
                                         </td>
                                     </tr>
                                 @endforeach
@@ -120,30 +145,66 @@
                             </div>
                         </div>
                     </div>
+
+                    {{ $orders->links() }}
                 </div>
             </div>
 
         </div>
     </div>
 @endsection
+
 @section('additionScript')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const modal = document.getElementById('imageModal'); // Get the modal id
-            const modalImage = document.getElementById('modal-image'); // Get image id
+            const modal = document.getElementById('imageModal');
+            const modalImage = document.getElementById('modal-image');
             const openButtons = document.querySelectorAll('.open-modal-btn');
 
             openButtons.forEach(button => {
                 button.addEventListener('click', function(event) {
                     const imageUrl = this.getAttribute('data-image-url');
-                    modalImage.src = imageUrl; // set modal image source
+                    modalImage.src = imageUrl;
                 });
             });
 
-            // Use the "hidden.bs.modal" for Bootstrap 4 as well
             $(modal).on('hidden.bs.modal', function() {
-                modalImage.src = ""; // Reset the src to hide the previous image.
+                modalImage.src = "";
             });
+        });
+    </script>
+
+    <script>
+        document.getElementById('exportBtn').addEventListener('click', function() {
+            // Get the table
+            const table = document.querySelector('table');
+
+            // Prepare the CSV content
+            let csvContent =
+                "Order Id,Product Name,Product SKU,Seller,Quantity,Buyer Name,Address,Email,Phone,Order Date,Order Status,Payment Type\n";
+
+            // Loop through each row and extract data
+            const rows = table.querySelectorAll('tr');
+            rows.forEach((row, index) => {
+                const cols = row.querySelectorAll('td, th');
+                const rowData = [];
+                cols.forEach(col => {
+                    rowData.push(col.innerText.replace(/\n/g, '')
+                .trim()); // Remove extra spaces and newlines
+                });
+                if (rowData.length > 0) {
+                    csvContent += rowData.join(',') + "\n";
+                }
+            });
+
+            // Create a temporary link to download the CSV file
+            const link = document.createElement('a');
+            link.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csvContent);
+            link.target = '_blank';
+            link.download = 'orders.csv';
+
+            // Trigger the download
+            link.click();
         });
     </script>
 @endsection

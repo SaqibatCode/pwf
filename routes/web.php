@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AttributeController;
+use App\Http\Controllers\BankDetailController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\HomePageSliderController;
@@ -312,6 +313,16 @@ Route::middleware(['auth', 'admin'])->group(function () {
         // Category Brand Remove Route
         Route::delete('/category/{categoryId}/brand/{brandId}', 'removeBrand')->name('category.remove.brand'); // Removes a brand from category.
     });
+    Route::resource('admin/bank_details', BankDetailController::class)->names([
+        'index' => 'admin.bank_details.index',
+        'create' => 'admin.bank_details.create',
+        'store' => 'admin.bank_details.store',
+        'show' => 'admin.bank_details.show',
+        'edit' => 'admin.bank_details.edit',
+        'update' => 'admin.bank_details.update',
+        'destroy' => 'admin.bank_details.destroy',
+    ]);
+
 
     // =========================================================================
     //                  Brand Management Routes
@@ -409,5 +420,15 @@ Route::middleware(['auth', 'adminOrSeller'])->group(function () {
         Route::post('add-complete-pc', 'store_complete_pc')->name('product.add.complete.pc'); // Handle adding of complete pc product.
         Route::get('/product/{id}/edit-complete-pc', 'edit_complete_pc')->name('product.complete.pc.edit'); // Display edit page for a complete pc.
         Route::put('/update-complete-pc/{id}', 'update_complete_pc')->name('products.update-complete-pc');
+
+
+        // =========================================================================
+        //          Laptop Product Management Routes
+        // =========================================================================
+        // These routes are for managing Laptop products
+        Route::get('add-laptop', 'show_add_laptop_page')->name('product.add.laptop');
+        Route::post('add-laptop', 'store_laptop')->name('product.add.laptops');
+        Route::get('/edit-laptop/{id}', [ProductController::class, 'edit_laptop'])->name('product.edit.laptop');
+        Route::put('/update-laptop/{id}', [ProductController::class, 'update_laptop'])->name('product.update.laptop');
     });
 });

@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BankDetail;
 use Illuminate\Http\Request;
 use Session;
 use App\Models\Product;
 use App\Models\Order;
 use App\Models\ChildOrder;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -63,6 +65,7 @@ class OrderController extends Controller
         $groupedCartItems = [];
         foreach ($cart as $sellerId => $items) {
             $seller = User::with('payment_methods')->find($sellerId);
+
             $products = Product::whereIn('id', array_column($items, 'product_id'))->get();
             $groupedCartItems[] = [
                 'seller' => $seller,
@@ -71,7 +74,8 @@ class OrderController extends Controller
                 'payment_method' => 'cod' //default value
             ];
         }
-        return view('store-front.cart', compact('groupedCartItems'));
+        $adminPaymentMethod = BankDetail::get();
+        return view('store-front.cart', compact('groupedCartItems', 'adminPaymentMethod'));
     }
 
     public function updateCart(Request $request)
@@ -337,26 +341,82 @@ class OrderController extends Controller
 
     public function dispatchOrder(Request $request, $orderId)
     {
+        // Validate the inputs
         $request->validate([
             'tracking_id' => 'required|string',
+            'tracking_img' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048', // File validation (image or PDF with max size 2MB)
         ]);
 
+        // Find the order by ID
         $order = ChildOrder::findOrFail($orderId);
-        $order->status = 'Order Dispatched';
-        $order->tracking_id = $request->tracking_id;
-        $order->save();
 
-        return redirect()->back()->with('success', 'Order dispatched successfully.');
+        // Store the tracking image if it's uploaded
+        if ($request->hasFile('tracking_img')) {
+            try {
+                // Get the file from the request
+                $file = $request->file('tracking_img');
+
+                // Generate a unique name for the file
+                $fileName = uniqid('tracking_', true) . '.' . $file->getClientOriginalExtension();
+
+                // Ensure the directory exists
+                $directory = public_path('asset/courier_receipts');
+                if (!file_exists($directory)) {
+                    mkdir($directory, 0777, true);  // Create the directory if it doesn't exist
+                }
+
+                // Move the file to the public/asset/courier_receipts directory
+                $file->move($directory, $fileName);
+
+                // Save the relative file path in the database
+                $order->tracking_img = 'asset/courier_receipts/' . $fileName;
+                $order->status = 'Order Dispatched';
+                $order->tracking_id = $request->tracking_id;
+                $order->save();
+
+                // Success message
+                return redirect()->back()->with('success', 'Order dispatched successfully.');
+            } catch (\Exception $e) {
+                // Log any errors for debugging purposes
+                \Log::error('File upload error: ' . $e->getMessage());
+                // Error message
+                return redirect()->back()->with('error', 'Error uploading file.');
+            }
+        }
+
+        // If no file is uploaded
+        return redirect()->back()->with('error', 'Tracking image is required.');
     }
 
-    public function get_admin_order()
+
+
+
+    public function get_admin_order(Request $request)
     {
+        $query = Order::with('childOrders.seller', 'user');
 
-        $orders = Order::with('childOrders.seller', 'user')->latest()->paginate(10);
+        // Apply date range filter
+        if ($request->filled('date_from') && $request->filled('date_to')) {
+            $query->whereHas('childOrders', function ($q) use ($request) {
+                $q->whereBetween('created_at', [Carbon::parse($request->date_from), Carbon::parse($request->date_to)]);
+            });
+        }
 
-        // return response()->json($orders);
+        // Filter by seller name
+        if ($request->filled('seller_name')) {
+            $query->whereHas('childOrders.seller', function ($q) use ($request) {
+                $q->where('first_name', 'like', '%' . $request->seller_name . '%')
+                    ->orWhere('last_name', 'like', '%' . $request->seller_name . '%');
+            });
+        }
+
+        // Get the orders with pagination
+        $orders = $query->latest()->paginate(10);
+
         return view('dashboard.admin.order.all-orders', compact('orders'));
     }
+
+
 
     public function updateStatus(Request $request, $id)
     {

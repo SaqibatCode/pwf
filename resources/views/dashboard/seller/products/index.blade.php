@@ -62,7 +62,7 @@
 
                 </div>
                 <div class="col-md-6">
-                    <a href="">
+                    <a href="{{ route('product.add.laptop') }}">
                         <div class="card">
                             <div class="card-body d-flex justify-content-center align-items-center flex-column">
                                 <img src="{{ asset('assets/images/laptop.png') }}" width="150" alt=""
@@ -139,7 +139,7 @@
                                             @elseif($pro->product_type == 'complete_pc')
                                                 {{ route('product.complete.pc.edit', $pro->id) }}
                                             @elseif($pro->product_type == 'laptop')
-                                                TEST
+                                                {{ route('product.edit.laptop', $pro->id) }}
                                             @endif
                                         "><button class="btn btn-primary">Edit</button></a>
                                         <form class="d-inline" action="{{ route('product.destroy', $pro->id) }}" method="POST"

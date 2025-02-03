@@ -7,40 +7,56 @@
 
         <div class="swiper mySwiper min-h-[500px] text-white">
             <div class="swiper-wrapper min-h-[500px]">
-                <div class="swiper-slide min-h-[500px] max-h-[700px] object-contain relative">
-                    <div
-                        class="absolute left-0 w-full h-full flex flex-col justify-center items-center sm:items-start px-24">
-                        <h3 class="text-4xl md:text-6xl lg:text-7xl font-extralight">The New Collection</h3>
-                        <h2 class="text-5xl md:text-7xl lg:text-8xl font-semibold">Smartwatches</h2>
-                        <h2
-                            class="text-sm md:text-base lg:text-lg md:tracking-[8px] lg:tracking-[9px] font-semibold text-[#656565] uppercase my-4">
-                            Shop to get what
-                            you love
-                        </h2>
-                        <span class="text-xl md:text-3xl lg:text-4xl tracking-wider font-bold mb-4">$720.99</span>
-                        <button
-                            class="rounded-full border-2 border-[#FCCDC5] py-2 px-4 uppercase text-xs lg:text-sm font-bold tracking-[1.05px]">Start
-                            Buying</button>
+                @forelse($sliders as $slider)
+                    <div class="swiper-slide min-h-[500px] max-h-[700px] object-contain relative">
+                        <div
+                            class="absolute left-0 w-full h-full flex flex-col justify-center items-center sm:items-start px-24">
+                            <h3 class="text-4xl md:text-6xl lg:text-7xl font-extralight">
+                                {{ $slider->sub_heading ?? '' }}
+                            </h3>
+                            <h2 class="text-5xl md:text-7xl lg:text-8xl font-semibold">
+                                {{ $slider->heading ?? '' }}
+                            </h2>
+                            <h2
+                                class="text-sm md:text-base lg:text-lg md:tracking-[8px] lg:tracking-[9px] font-semibold text-[#656565] uppercase my-4">
+                                {{ $slider->description ?? '' }}
+                            </h2>
+                            @if (isset($slider->price))
+                                <span class="text-xl md:text-3xl lg:text-4xl tracking-wider font-bold mb-4">
+                                    {{ $slider->price }}
+                                </span>
+                            @endif
+                            @if (isset($slider->button_url) && isset($slider->button_text))
+                                <a href="{{ $slider->button_url }}"
+                                    class="rounded-full border-2 border-[#FCCDC5] py-2 px-4 uppercase text-xs lg:text-sm font-bold tracking-[1.05px]">
+                                    {{ $slider->button_text }}
+                                </a>
+                            @endif
+                        </div>
+                        <img src="{{ $slider->image_desktop ?? asset('store-front/images/banner-images/banner.png') }}"
+                            class="min-h-[500px] max-h-[700px] object-contain" alt="Banner Image">
                     </div>
-                    <img src="{{ asset('store-front/images/banner-images/banner.png') }}"
-                        class="min-h-[500px] max-h-[700px] object-contain" alt="">
-                </div>
-                <div class="swiper-slide flex items-center justify-center min-h-[500px] max-h-[700px] overflow-hidden">
-                    <img src="{{ asset('store-front/images/banner-images/banner.png') }}" alt=""
-                        class="min-h-[500px] max-h-[700px] object-contain">
-                </div>
-                <div class="swiper-slide min-h-[500px] max-h-[700px]">
-                    <img src="{{ asset('store-front/images/banner-images/banner.png') }}" alt=""
-                        class="min-h-[500px] max-h-[700px]">
-                </div>
-                <div class="swiper-slide min-h-[500px] max-h-[700px]">
-                    <img src="{{ asset('store-front/images/banner-images/banner.png') }}" alt=""
-                        class="min-h-[500px] max-h-[700px]">
-                </div>
-                <div class="swiper-slide min-h-[500px] max-h-[700px]">
-                    <img src="{{ asset('store-front/images/banner-images/banner.png') }}" alt=""
-                        class="min-h-[500px] max-h-[700px]">
-                </div>
+                @empty
+                    <!-- Static Slider Fallback if no data in DB -->
+                    <div class="swiper-slide min-h-[500px] max-h-[700px] object-contain relative">
+                        <div
+                            class="absolute left-0 w-full h-full flex flex-col justify-center items-center sm:items-start px-24">
+                            <h3 class="text-4xl md:text-6xl lg:text-7xl font-extralight">The New Collection</h3>
+                            <h2 class="text-5xl md:text-7xl lg:text-8xl font-semibold">Smartwatches</h2>
+                            <h2
+                                class="text-sm md:text-base lg:text-lg md:tracking-[8px] lg:tracking-[9px] font-semibold text-[#656565] uppercase my-4">
+                                Shop to get what you love
+                            </h2>
+                            <span class="text-xl md:text-3xl lg:text-4xl tracking-wider font-bold mb-4">$720.99</span>
+                            <a href="#"
+                                class="rounded-full border-2 border-[#FCCDC5] py-2 px-4 uppercase text-xs lg:text-sm font-bold tracking-[1.05px]">
+                                Start Buying
+                            </a>
+                        </div>
+                        <img src="{{ asset('store-front/images/banner-images/banner.png') }}"
+                            class="min-h-[500px] max-h-[700px] object-contain" alt="Static Banner Image">
+                    </div>
+                @endforelse
             </div>
 
             <div class="swiper-button-next custom-banner-button !right-3">
@@ -50,6 +66,8 @@
                 <img src="{{ asset('store-front/images/icons/left-arrow.png') }}" alt="" class="h-auto min-w-12">
             </div>
         </div>
+
+
 
     </section>
 
@@ -79,8 +97,9 @@
                             </div>
                             <div class="img flex flex-col justify-center items-center mb-4 overflow-hidden">
                                 <div style="height: 160px; display: flex; align-items: center; justify-content: center;">
-                                    <img src="{{ asset($product->pictures[0]->image) }}" alt="{{ $product->product_name }}"
-                                         class="max-w-64 max-h-full object-contain" style="max-height: 100%; max-width: 100%;">
+                                    <img src="{{ asset($product->pictures[0]->image) }}"
+                                        alt="{{ $product->product_name }}" class="max-w-64 max-h-full object-contain"
+                                        style="max-height: 100%; max-width: 100%;">
                                 </div>
                             </div>
                             <div>
@@ -133,9 +152,9 @@
                         </div>
 
                         <div class="font-unbounded text-center mt-4 flex flex-col gap-2">
-                           <a href="{{ route('show.single.categories', $cat->slug) }}">
+                            <a href="{{ route('show.single.categories', $cat->slug) }}">
                                 <h5 class="text-2xl">{{ $cat->name }}</h5>
-                           </a>
+                            </a>
                             <span class="text-skin-gray text-base">8 Products Available</span>
                         </div>
 
@@ -178,9 +197,11 @@
                                     @endif
                                 </div>
                                 <div class="img flex flex-col justify-center items-center mb-4 overflow-hidden">
-                                    <div style="height: 160px; display: flex; align-items: center; justify-content: center;">
-                                    <img src="{{ asset($product->pictures[0]->image) }}"
-                                         alt="{{ $product->product_name }}" class="max-w-64 max-h-full object-contain" style="max-height: 100%; max-width: 100%;">
+                                    <div
+                                        style="height: 160px; display: flex; align-items: center; justify-content: center;">
+                                        <img src="{{ asset($product->pictures[0]->image) }}"
+                                            alt="{{ $product->product_name }}" class="max-w-64 max-h-full object-contain"
+                                            style="max-height: 100%; max-width: 100%;">
                                     </div>
                                 </div>
                                 <div>
@@ -246,10 +267,12 @@
                                             class="bg-skin-secondary py-1 px-2 rounded-md text-xs text-white font-unbounded">New</span>
                                     @endif
                                 </div>
-                                 <div class="img flex flex-col justify-center items-center mb-4 overflow-hidden">
-                                    <div style="height: 160px; display: flex; align-items: center; justify-content: center;">
-                                    <img src="{{ asset($product->pictures[0]->image) }}"
-                                         alt="{{ $product->product_name }}" class="max-w-64 max-h-full object-contain" style="max-height: 100%; max-width: 100%;">
+                                <div class="img flex flex-col justify-center items-center mb-4 overflow-hidden">
+                                    <div
+                                        style="height: 160px; display: flex; align-items: center; justify-content: center;">
+                                        <img src="{{ asset($product->pictures[0]->image) }}"
+                                            alt="{{ $product->product_name }}" class="max-w-64 max-h-full object-contain"
+                                            style="max-height: 100%; max-width: 100%;">
                                     </div>
                                 </div>
                                 <div>
@@ -311,9 +334,11 @@
                                     @endif
                                 </div>
                                 <div class="img flex flex-col justify-center items-center mb-4 overflow-hidden">
-                                    <div style="height: 160px; display: flex; align-items: center; justify-content: center;">
-                                    <img src="{{ asset($product->pictures[0]->image) }}"
-                                         alt="{{ $product->product_name }}" class="max-w-64 max-h-full object-contain" style="max-height: 100%; max-width: 100%;">
+                                    <div
+                                        style="height: 160px; display: flex; align-items: center; justify-content: center;">
+                                        <img src="{{ asset($product->pictures[0]->image) }}"
+                                            alt="{{ $product->product_name }}" class="max-w-64 max-h-full object-contain"
+                                            style="max-height: 100%; max-width: 100%;">
                                     </div>
                                 </div>
                                 <div>
@@ -381,9 +406,11 @@
                                     @endif
                                 </div>
                                 <div class="img flex flex-col justify-center items-center mb-4 overflow-hidden">
-                                     <div style="height: 160px; display: flex; align-items: center; justify-content: center;">
-                                    <img src="{{ asset($product->pictures[0]->image) }}"
-                                         alt="{{ $product->product_name }}" class="max-w-64 max-h-full object-contain" style="max-height: 100%; max-width: 100%;">
+                                    <div
+                                        style="height: 160px; display: flex; align-items: center; justify-content: center;">
+                                        <img src="{{ asset($product->pictures[0]->image) }}"
+                                            alt="{{ $product->product_name }}" class="max-w-64 max-h-full object-contain"
+                                            style="max-height: 100%; max-width: 100%;">
                                     </div>
                                 </div>
                                 <div>

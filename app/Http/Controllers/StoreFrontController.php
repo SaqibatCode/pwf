@@ -5,11 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\ChildOrder;
+use App\Models\HomePageSlider;
 use App\Models\Product;
 use App\Models\User;
 use Dotenv\Exception\ValidationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class StoreFrontController extends Controller
@@ -23,8 +25,10 @@ class StoreFrontController extends Controller
         $products = Product::with('category', 'brand', 'user', 'pictures')->get();
         $categoryNames = ['Graphic Cards', 'Monitors', 'Laptops', 'Storage', 'Processors'];
         $categories = Category::whereIn('name', $categoryNames)->get();
+        $sliders = HomePageSlider::all();
+
         // return response()->json($products);
-        return view('store-front.home', compact('products', 'categories'));
+        return view('store-front.home', compact('products', 'categories', 'sliders'));
     }
 
     public function show_product($slug)
@@ -79,6 +83,15 @@ class StoreFrontController extends Controller
                 ->where('stock_quanity', '>=', 1);
         })->get();
 
+        // Get the minimum and maximum price from the products, considering sale price if it exists
+        $minPrice = Product::where('status', 'approved')
+            ->where('stock_quanity', '>=', 1)
+            ->min(DB::raw('IFNULL(sale_price, price)')); // Min sale or regular price
+
+        $maxPrice = Product::where('status', 'approved')
+            ->where('stock_quanity', '>=', 1)
+            ->max(DB::raw('IFNULL(sale_price, price)')); // Max sale or regular price
+
         // Start with the base query for fetching products
         $query = Product::with('pictures', 'user')
             ->where('status', 'approved')
@@ -87,6 +100,9 @@ class StoreFrontController extends Controller
         // Apply price filter if provided
         if ($request->has('min_price') && $request->has('max_price')) {
             $query->whereBetween('price', [$request->min_price, $request->max_price]);
+        } else {
+            // If no price filter is applied, use the minimum and maximum price from the database
+            $query->whereBetween('price', [$minPrice, $maxPrice]);
         }
 
         // Apply category filter if provided
@@ -107,8 +123,9 @@ class StoreFrontController extends Controller
         $products = $query->latest()->paginate(10);
 
         // Pass the filtered products, categories, and brands to the view
-        return view('store-front.products', compact('products', 'categories', 'brands'));
+        return view('store-front.products', compact('products', 'categories', 'brands', 'minPrice', 'maxPrice'));
     }
+
 
 
 

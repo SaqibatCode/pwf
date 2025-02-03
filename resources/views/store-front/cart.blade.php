@@ -107,7 +107,7 @@
                                             <tr class="border-b transition-colors duration-200 hover:bg-gray-50">
                                                 <td class="py-4 px-3 text-gray-800">{{ $product->product_name }}</td>
                                                 <td class="py-4 px-3 text-gray-800">
-                                                    ${{ number_format($product->price, 2) }}
+                                                    Rs.{{ number_format($product->price, 2) }}
                                                 </td>
                                                 <td class="py-4 px-3">
                                                     <form action="{{ route('cart.update') }}" method="POST"
@@ -123,7 +123,7 @@
                                                     </form>
                                                 </td>
                                                 <td class="py-4 px-3 text-gray-800 font-semibold">
-                                                    ${{ number_format($product->price * $item['quantity'], 2) }}</td>
+                                                    Rs.{{ number_format($product->price * $item['quantity'], 2) }}</td>
                                                 <td class="py-4 px-3">
                                                     <form action="{{ route('cart.remove') }}" method="POST"
                                                         class="inline-block">
@@ -142,7 +142,7 @@
                                             <td colspan="3" class="text-right py-4 px-3"><strong>Total Amount for this
                                                     Seller:</strong></td>
                                             <td class="py-4 px-3 font-bold">
-                                                ${{ number_format(
+                                                Rs.{{ number_format(
                                                     collect($cartItems['items'])->reduce(function ($total, $item) use ($cartItems) {
                                                         $product = $cartItems['products']->where('id', $item['product_id'])->first();
                                                         return $total + $product->price * $item['quantity'];
@@ -170,7 +170,7 @@
                                             class="form-radio h-5 w-5 text-indigo-600 payment-radio focus:ring-indigo-300"
                                             name="payment_method_{{ $cartItems['seller']->id }}" value="screenshot"
                                             {{ $cartItems['payment_method'] === 'screenshot' ? 'checked' : '' }}>
-                                        <span class="ml-3 text-gray-700 tracking-wide">Upload Screenshot</span>
+                                        <span class="ml-3 text-gray-700 tracking-wide">Bank Transfer</span>
                                     </label>
 
                                 </div>
@@ -181,40 +181,68 @@
                                         Screenshot:</label>
                                     <input type="file" name="payment_screenshot_{{ $cartItems['seller']->id }}"
                                         class="border rounded py-3 px-4 w-full focus:ring-2 focus:ring-indigo-300 focus:border-indigo-500 transition-all duration-200">
+
+                                    @if (
+                                        $cartItems['seller']->payment_methods->isNotEmpty() &&
+                                            $cartItems['seller']->verification !== 'Unverified' &&
+                                            $cartItems['seller']->verification !== 'Pending')
+                                        <div class="mt-8 border-t pt-5">
+                                            <p class="font-semibold text-gray-800 mb-3 tracking-wide">Available Payment
+                                                Methods</p>
+                                            <div class="flex flex-col gap-5">
+                                                @foreach ($cartItems['seller']->payment_methods as $paymentMethod)
+                                                    <div
+                                                        class="bg-gray-50 rounded-xl p-6 border border-gray-200 transition-all duration-300 shadow-sm hover:shadow-md">
+                                                        <h2 class="text-lg font-semibold text-gray-900 mb-3 tracking-wide">
+                                                            {{ $paymentMethod->bank_name }}</h2>
+                                                        <ul class="list-none pl-0 text-gray-700 space-y-1">
+                                                            <li class="mb-1"><span class="font-medium">Bank Name:</span>
+                                                                {{ $paymentMethod->bank_name }}</li>
+                                                            <li class="mb-1"><span class="font-medium">Account
+                                                                    Number:</span>
+                                                                {{ $paymentMethod->account_number }}</li>
+                                                            <li class="mb-1"><span class="font-medium">Branch
+                                                                    Code:</span>
+                                                                {{ $paymentMethod->branch_code }}</li>
+                                                            <li class="mb-1"><span class="font-medium">IBAN:</span>
+                                                                {{ $paymentMethod->iban }}</li>
+                                                            <li class="mb-1"><span class="font-medium">Swift
+                                                                    Code:</span>
+                                                                {{ $paymentMethod->swift_code }}</li>
+                                                        </ul>
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                    @else
+                                        <div class="flex flex-col gap-5">
+                                            @foreach ($adminPaymentMethod as $paymentMethod)
+                                            <p>This Seller Is Not Verified, The Payment Will Be Hold By Admin</p>
+                                                <div
+                                                    class="bg-gray-50 rounded-xl p-6 border border-gray-200 transition-all duration-300 shadow-sm hover:shadow-md">
+                                                    <h2 class="text-lg font-semibold text-gray-900 mb-3 tracking-wide">
+                                                        {{ $paymentMethod->bank_name }}</h2>
+                                                    <ul class="list-none pl-0 text-gray-700 space-y-1">
+                                                        <li class="mb-1"><span class="font-medium">Bank Name:</span>
+                                                            {{ $paymentMethod->bank_name }}</li>
+                                                        <li class="mb-1"><span class="font-medium">Account
+                                                                Number:</span>
+                                                            {{ $paymentMethod->account_number }}</li>
+                                                        <li class="mb-1"><span class="font-medium">Branch Code:</span>
+                                                            {{ $paymentMethod->branch_code }}</li>
+                                                        <li class="mb-1"><span class="font-medium">IBAN:</span>
+                                                            {{ $paymentMethod->iban }}</li>
+                                                        <li class="mb-1"><span class="font-medium">Swift Code:</span>
+                                                            {{ $paymentMethod->swift_code }}</li>
+                                                    </ul>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
 
-                            @if (
-                                $cartItems['seller']->payment_methods->isNotEmpty() &&
-                                    $cartItems['seller']->verification !== 'Unverified' &&
-                                    $cartItems['seller']->verification !== 'Pending')
-                                <div class="mt-8 border-t pt-5">
-                                    <p class="font-semibold text-gray-800 mb-3 tracking-wide">Available Payment Methods</p>
-                                    <div class="flex flex-col gap-5">
-                                        @foreach ($cartItems['seller']->payment_methods as $paymentMethod)
-                                            <div
-                                                class="bg-gray-50 rounded-xl p-6 border border-gray-200 transition-all duration-300 shadow-sm hover:shadow-md">
-                                                <h2 class="text-lg font-semibold text-gray-900 mb-3 tracking-wide">
-                                                    {{ $paymentMethod->bank_name }}</h2>
-                                                <ul class="list-none pl-0 text-gray-700 space-y-1">
-                                                    <li class="mb-1"><span class="font-medium">Bank Name:</span>
-                                                        {{ $paymentMethod->bank_name }}</li>
-                                                    <li class="mb-1"><span class="font-medium">Account Number:</span>
-                                                        {{ $paymentMethod->account_number }}</li>
-                                                    <li class="mb-1"><span class="font-medium">Branch Code:</span>
-                                                        {{ $paymentMethod->branch_code }}</li>
-                                                    <li class="mb-1"><span class="font-medium">IBAN:</span>
-                                                        {{ $paymentMethod->iban }}</li>
-                                                    <li class="mb-1"><span class="font-medium">Swift Code:</span>
-                                                        {{ $paymentMethod->swift_code }}</li>
-                                                </ul>
-                                            </div>
-                                        @endforeach
-                                    </div>
-                                </div>
-                            @else
-                                Admin Payment
-                            @endif
+
                         </div>
                     </div>
                 @endforeach

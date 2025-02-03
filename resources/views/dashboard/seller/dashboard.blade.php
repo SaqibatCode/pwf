@@ -154,7 +154,7 @@
 
                 </div>
                 <div class="col-md-6">
-                    <a href="">
+                    <a href="{{ route('product.add.laptop') }}">
                         <div class="card">
                             <div class="card-body d-flex justify-content-center align-items-center flex-column">
                                 <img src="{{ asset('assets/images/laptop.png') }}" width="150" alt=""

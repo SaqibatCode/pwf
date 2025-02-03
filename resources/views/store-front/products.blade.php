@@ -1,6 +1,12 @@
 @extends('store-front.layout.layout')
 
 @section('main-content')
+    <!-- noUiSlider CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nouislider@14.0.3/dist/nouislider.min.css" />
+
+    <!-- noUiSlider JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/nouislider@14.0.3/dist/nouislider.min.js"></script>
+
     <section class="px-4 sm:px-12">
 
         <div class="mx-auto py-12">
@@ -14,9 +20,9 @@
                             <div class="flex flex-col gap-3">
                                 <h3 class="filter-heading">Price</h3>
                                 <input class="product-form-inp" placeholder="Lowest" type="number" name="min_price"
-                                    value="{{ request('min_price') }}">
+                                    value="{{ request('min_price', $minPrice) }}">
                                 <input class="product-form-inp" placeholder="Highest" type="number" name="max_price"
-                                    value="{{ request('max_price') }}">
+                                    value="{{ request('max_price', $maxPrice) }}">
 
                                 <button type="submit"
                                     class="mt-3 rounded-md w-full py-1 text-sm border border-blue-700 font-semibold bg-white text-skin-primary hover:border-blue-700 hover:bg-skin-secondary hover:text-skin-inverted transition-all duration-300 font-unbounded">
@@ -58,54 +64,10 @@
                                     @endforeach
                                 </ul>
                             </div>
-
-                            <!-- Optional Filters for Color, Size, Tags (If applicable to your products) -->
-                            <div class="flex flex-col gap-3">
-                                <h3 class="filter-heading">Color</h3>
-                                <ul class="flex flex-col gap-2">
-                                    <li><label class="flex items-center color-li group"><input class="filter-checkbox"
-                                                type="checkbox" name="color[]" value="white"><span
-                                                class="color-text">White</span></label></li>
-                                    <li><label class="flex items-center color-li group"><input class="filter-checkbox"
-                                                type="checkbox" name="color[]" value="black"><span
-                                                class="color-text">Black</span></label></li>
-                                    <!-- Add more colors as needed -->
-                                </ul>
-                            </div>
-
-                            <!-- Size Filter -->
-                            <div class="flex flex-col gap-3">
-                                <h3 class="filter-heading">Size</h3>
-                                <ul class="flex flex-col gap-2">
-                                    <li><label class="flex items-center color-li group"><input class="filter-checkbox"
-                                                type="checkbox" name="size[]" value="big"><span
-                                                class="color-text">Big</span></label></li>
-                                    <li><label class="flex items-center color-li group"><input class="filter-checkbox"
-                                                type="checkbox" name="size[]" value="medium"><span
-                                                class="color-text">Medium</span></label></li>
-                                    <li><label class="flex items-center color-li group"><input class="filter-checkbox"
-                                                type="checkbox" name="size[]" value="small"><span
-                                                class="color-text">Small</span></label></li>
-                                </ul>
-                            </div>
-
-                            <!-- Tags Filter -->
-                            <div class="flex flex-col gap-3">
-                                <h3 class="filter-heading">Tags</h3>
-                                <ul class="flex flex-wrap gap-2 w-full">
-                                    <li><label class="tags-check-label group"><input class="tags-checkbox" type="checkbox"
-                                                name="tags[]" value="smartphone"><span
-                                                class="tags-text">Smartphone</span></label></li>
-                                    <li><label class="tags-check-label group"><input class="tags-checkbox" type="checkbox"
-                                                name="tags[]" value="laptop"><span class="tags-text">Laptop</span></label>
-                                    </li>
-                                    <li><label class="tags-check-label group"><input class="tags-checkbox" type="checkbox"
-                                                name="tags[]" value="tv"><span class="tags-text">TV</span></label></li>
-                                </ul>
-                            </div>
                         </div>
                     </div>
                 </form>
+
 
 
 
@@ -134,9 +96,8 @@
 
                         <button
                             class="lg:hidden rounded-md w-max py-1 px-2 sm:px-8 text-xs border border-blue-700 font-bold bg-white text-skin-primary  hover:bg-skin-secondary hover:text-skin-inverted duration-300 font-unbounded"
-                            type="button" data-drawer-target="drawer-right-example"
-                            data-drawer-show="drawer-right-example" data-drawer-placement="right"
-                            aria-controls="drawer-right-example">
+                            type="button" data-drawer-target="drawer-right-example" data-drawer-show="drawer-right-example"
+                            data-drawer-placement="right" aria-controls="drawer-right-example">
                             < Filter</button>
 
                     </div>

@@ -21,7 +21,19 @@
                     </div>
                 </div>
             </div>
+            {{-- Display success message --}}
+            @if (session('success'))
+                <div class="alert alert-success">
+                    {{ session('success') }}
+                </div>
+            @endif
 
+            {{-- Display error message --}}
+            @if (session('error'))
+                <div class="alert alert-danger">
+                    {{ session('error') }}
+                </div>
+            @endif
             <div class="row">
                 <div class="col-md-12">
                     <table class="table table-striped table-hover">
@@ -88,10 +100,11 @@
                                                                 </form>
                                                             @elseif ($chorder->status == 'Payment Received')
                                                                 <form action="{{ route('orders.dispatch', $chorder->id) }}"
-                                                                    class="d-inline" method="POST">
+                                                                    class="d-inline" method="POST" enctype="multipart/form-data">
                                                                     @csrf
                                                                     <input type="text" name="tracking_id"
                                                                         placeholder="Enter Order Tracking Id" required>
+                                                                    <input type="file" name="tracking_img" required>
                                                                     <button class="btn sm btn-info" type="submit">Dispatch
                                                                         Order</button>
                                                                 </form>
@@ -114,10 +127,12 @@
                                                                 </form>
                                                             @elseif ($chorder->status == 'Payment Received')
                                                                 <form action="{{ route('orders.dispatch', $chorder->id) }}"
-                                                                    class="d-inline" method="POST">
+                                                                    class="d-inline" method="POST"
+                                                                    enctype="multipart/form-data">
                                                                     @csrf
                                                                     <input type="text" name="tracking_id"
                                                                         placeholder="Enter Order Tracking Id" required>
+                                                                    <input type="text" name="tracking_img" required>
                                                                     <button class="btn sm btn-info" type="submit">Dispatch
                                                                         Order</button>
                                                                 </form>
