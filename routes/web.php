@@ -7,6 +7,7 @@ use App\Http\Controllers\BrandController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\HomePageSliderController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SellerPaymentMethodController;
 use App\Http\Controllers\StaticPageController;
@@ -17,13 +18,24 @@ use App\Http\Controllers\VerificationController;
 use Illuminate\Support\Facades\Route;
 
 
+Route::controller(UserController::class)->group(function(){
+    Route::get('test-mail', 'sendTestMail');
+});
+Route::get('password/reset', [PasswordResetController::class, 'showLinkRequestForm'])->name('password.request');
+Route::post('password/email', [PasswordResetController::class, 'sendPasswordResetLink'])->name('password.email');
+Route::get('password/reset/{token}', [PasswordResetController::class, 'showResetForm'])->name('password.reset');
+Route::post('password/reset', [PasswordResetController::class, 'reset'])->name('password.update');
+
 // =========================================================================
 //                       STOREFRONT (PUBLIC) ROUTES
 // =========================================================================
 // These routes are for the main storefront, accessible by all users.
 Route::controller(StoreFrontController::class)->group(function () {
     // Home Page Route
-    Route::get('/', 'index')->name('home');  // Displays the main landing page.
+    Route::get('/', function(){
+        return redirect(route('become.seller'));
+    });  // Displays the main landing page.
+    Route::get('/home', 'index')->name('home');  // Displays the main landing page.
 
     // Product Details Page Route
     Route::get('product/{slug}', 'show_product')->name('show.product'); // Displays details of a specific product.

@@ -7,12 +7,16 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Support\Str;
+use Illuminate\Contracts\Auth\CanResetPassword;
+use Illuminate\Auth\Passwords\CanResetPassword as CanResetPasswordTrait;
+use Illuminate\Notifications\Notifiable;
 
-class User extends Model implements AuthenticatableContract
+class User extends Model implements AuthenticatableContract, CanResetPassword
 {
     use Authenticatable;
     use HasFactory;
-
+    use CanResetPasswordTrait;
+    use Notifiable;
     /**
      * Boot the model.
      */

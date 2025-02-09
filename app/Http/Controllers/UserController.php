@@ -2,18 +2,38 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\AccountCreated;
 use App\Models\ChildOrder;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 class UserController extends Controller
 {
 
+
+    public function sendTestMail()
+    {
+        $user = User::findorFail(Auth::user()->id);
+        try {
+            // Attempt to send the email
+            Mail::mailer('account_smtp')
+                ->to('saqib75ahmed@gmail.com')
+                ->send(new AccountCreated($user));
+
+            // If successful, return a success message
+            return 'Test email sent successfully!';
+        } catch (Exception $e) {
+            // If an error occurs, return the error message to the browser
+            return 'Failed to send test email: ' . $e->getMessage();
+        }
+    }
 
     /** Login */
     public function index()
@@ -116,7 +136,10 @@ class UserController extends Controller
         ]);
 
         Auth::login($user);
-
+        // Send the account creation email using the account_smtp mailer
+        Mail::mailer('account_smtp')
+            ->to($user->email)
+            ->send(new AccountCreated($user));
         return redirect()
             ->route('portal')
             ->with('success', 'Registration successful! Please Proceed To Verfication');
